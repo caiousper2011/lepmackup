@@ -19,7 +19,7 @@ export async function generateMetadata({
   if (!product) return {};
 
   return {
-    title: `${product.name} — R$ 7,99 | L&P Makeup`,
+    title: `${product.name} — R$ 7,99 | L&PMakeUp`,
     description: `${product.description} Compre agora por apenas R$ 7,99. Leve 4+ itens e pague R$ 6,99 cada!`,
     openGraph: {
       title: `${product.name} — R$ 7,99`,
@@ -54,7 +54,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       priceCurrency: "BRL",
       availability: "https://schema.org/InStock",
       url: `https://lpmakeup.com.br/produto/${product.slug}`,
-      seller: { "@type": "Organization", name: "L&P Makeup" },
+      seller: { "@type": "Organization", name: "L&PMakeUp" },
     },
     category: product.category,
   };

@@ -23,7 +23,6 @@ export default function CartDrawer() {
   } = useCart();
 
   const [paymentMethod, setPaymentMethod] = useState<"pix" | "cartao">("pix");
-  const [installments, setInstallments] = useState(1);
   const [showCheckout, setShowCheckout] = useState(false);
 
   const handleCheckout = () => {
@@ -32,7 +31,6 @@ export default function CartDrawer() {
       unitPrice,
       totalPrice,
       paymentMethod,
-      installments,
     );
     const url = getWhatsAppURL(message);
     window.open(url, "_blank", "noopener,noreferrer");
@@ -263,38 +261,19 @@ export default function CartDrawer() {
                     className={`p-3 rounded-xl border-2 text-center transition-all ${paymentMethod === "cartao" ? "border-blue-500 bg-blue-50" : "border-gray-200 bg-white hover:border-gray-300"}`}
                   >
                     <span className="text-lg">💳</span>
-                    <p className="text-xs font-semibold mt-1">Cartão</p>
+                    <p className="text-xs font-semibold mt-1">Crédito</p>
                     <p className="text-[10px] text-gray-500">
-                      Crédito / Débito
+                      À vista (link de pagamento)
                     </p>
                   </button>
                 </div>
 
-                {/* Installments */}
+                {/* Credit card info */}
                 {paymentMethod === "cartao" && (
-                  <div>
-                    <label className="text-xs text-gray-600 font-medium mb-1 block">
-                      Parcelas
-                    </label>
-                    <select
-                      value={installments}
-                      onChange={(e) => setInstallments(Number(e.target.value))}
-                      className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-300 focus:border-rose-400"
-                    >
-                      <option value={1}>
-                        1x de {formatPrice(totalPrice)} (à vista)
-                      </option>
-                      {totalPrice >= 20 && (
-                        <option value={2}>
-                          2x de {formatPrice(totalPrice / 2)}
-                        </option>
-                      )}
-                      {totalPrice >= 30 && (
-                        <option value={3}>
-                          3x de {formatPrice(totalPrice / 3)}
-                        </option>
-                      )}
-                    </select>
+                  <div className="bg-blue-50 rounded-xl p-3 text-center">
+                    <p className="text-xs text-blue-700 font-medium">
+                      💳 O link de pagamento será enviado pelo WhatsApp
+                    </p>
                   </div>
                 )}
 

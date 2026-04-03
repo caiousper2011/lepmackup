@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "L&P Makeup | Maquiagem Profissional a partir de R$ 6,99",
-    template: "%s | L&P Makeup",
+    default: "L&PMakeUp | Maquiagem Profissional a partir de R$ 6,99",
+    template: "%s | L&PMakeUp",
   },
   description:
     "Loja online de maquiagem com preços imbatíveis. Cílios postiços, delineadores, gloss, paletas e mais — tudo por R$ 7,99. Acima de 4 itens: R$ 6,99 cada. Entrega via WhatsApp.",
@@ -29,15 +29,15 @@ export const metadata: Metadata = {
     "paleta maquiagem",
     "maquiagem profissional",
     "makeup",
-    "L&P Makeup",
+    "L&PMakeUp",
   ],
   openGraph: {
-    title: "L&P Makeup | Maquiagem Profissional a partir de R$ 6,99",
+    title: "L&PMakeUp | Maquiagem Profissional a partir de R$ 6,99",
     description:
       "Os melhores produtos de maquiagem por preços incríveis. Todos os itens por R$ 7,99 — acima de 4 itens, R$ 6,99 cada!",
     type: "website",
     locale: "pt_BR",
-    siteName: "L&P Makeup",
+    siteName: "L&PMakeUp",
   },
   robots: {
     index: true,

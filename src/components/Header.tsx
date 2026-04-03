@@ -25,7 +25,7 @@ export default function Header() {
             </div>
             <div className="flex flex-col">
               <span className="text-lg font-bold bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">
-                L&P Makeup
+                L&PMakeUp
               </span>
               <span className="text-[10px] text-rose-400 -mt-1 tracking-widest uppercase">
                 Beauty Store

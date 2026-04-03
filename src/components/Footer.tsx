@@ -12,7 +12,7 @@ export default function Footer() {
                 <span className="text-white font-bold text-sm">L&P</span>
               </div>
               <span className="text-lg font-bold bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">
-                L&P Makeup
+                L&PMakeUp
               </span>
             </div>
             <p className="text-sm text-gray-600 leading-relaxed">
@@ -79,7 +79,7 @@ export default function Footer() {
 
         <div className="border-t border-rose-200 mt-8 pt-6 text-center">
           <p className="text-xs text-gray-500">
-            © {new Date().getFullYear()} L&P Makeup. Todos os direitos
+            © {new Date().getFullYear()} L&PMakeUp. Todos os direitos
             reservados.
           </p>
         </div>

@@ -125,9 +125,8 @@ export function buildWhatsAppMessage(
   unitPrice: number,
   totalPrice: number,
   paymentMethod: "pix" | "cartao",
-  installments?: number,
 ): string {
-  let msg = "🛍️ *Novo Pedido — L&P Makeup*\n\n";
+  let msg = "🛍️ *Novo Pedido — L&PMakeUp*\n\n";
   msg += "━━━━━━━━━━━━━━━━━━\n";
 
   items.forEach((item) => {
@@ -143,11 +142,7 @@ export function buildWhatsAppMessage(
   if (paymentMethod === "pix") {
     msg += "💳 Forma de pagamento: *PIX*\n";
   } else {
-    msg += `💳 Forma de pagamento: *Cartão de Crédito*\n`;
-    if (installments && installments > 1) {
-      const installmentValue = totalPrice / installments;
-      msg += `📋 Parcelamento: ${installments}x de R$ ${installmentValue.toFixed(2)}\n`;
-    }
+    msg += "💳 Forma de pagamento: *Crédito à Vista (link de pagamento)*\n";
   }
 
   msg += "\n⏳ Aguardo o link de pagamento. Obrigada! 💖";

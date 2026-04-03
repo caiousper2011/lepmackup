@@ -3,7 +3,7 @@ import { products, getAllCategories } from "@/data/products";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "L&P Makeup | Maquiagem Profissional a partir de R$ 6,99",
+  title: "L&PMakeUp | Maquiagem Profissional a partir de R$ 6,99",
   description:
     "Loja online de maquiagem com os melhores preços. Cílios postiços, delineadores, gloss, paletas — tudo por R$ 7,99. Compre 4+ itens e pague apenas R$ 6,99 cada!",
 };
@@ -16,14 +16,14 @@ export default function HomePage() {
     "@graph": [
       {
         "@type": "WebSite",
-        name: "L&P Makeup",
+        name: "L&PMakeUp",
         url: "https://lpmakeup.com.br",
         description:
           "Loja online de maquiagem profissional com preços imbatíveis",
       },
       {
         "@type": "Organization",
-        name: "L&P Makeup",
+        name: "L&PMakeUp",
         url: "https://lpmakeup.com.br",
         logo: "https://lpmakeup.com.br/logo.png",
         contactPoint: {
