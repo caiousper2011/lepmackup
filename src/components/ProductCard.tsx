@@ -1,0 +1,75 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { Product, formatPrice } from "@/data/products";
+import { useCart } from "@/context/CartContext";
+
+export default function ProductCard({ product }: { product: Product }) {
+  const { addToCart, totalQuantity } = useCart();
+  const currentPrice =
+    totalQuantity >= 4 ? product.bulkPrice : product.promoPrice;
+
+  return (
+    <div className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-rose-50 overflow-hidden flex flex-col">
+      {/* Badge */}
+      <div className="relative">
+        <Link href={`/produto/${product.slug}`}>
+          <div className="aspect-square overflow-hidden bg-gradient-to-br from-rose-50 to-pink-50 relative">
+            <Image
+              src={product.images[0]}
+              alt={product.name}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              className="object-cover group-hover:scale-110 transition-transform duration-500"
+            />
+          </div>
+        </Link>
+
+        {/* Discount badge */}
+        <div className="absolute top-3 left-3 bg-rose-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-lg">
+          {Math.round(
+            ((product.originalPrice - product.promoPrice) /
+              product.originalPrice) *
+              100,
+          )}
+          % OFF
+        </div>
+
+        {/* Category badge */}
+        <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-rose-600 text-[10px] font-medium px-2.5 py-1 rounded-full shadow-sm">
+          {product.category}
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="p-4 flex flex-col flex-1">
+        <Link href={`/produto/${product.slug}`}>
+          <h3 className="font-semibold text-sm text-gray-900 line-clamp-2 group-hover:text-rose-600 transition-colors mb-1">
+            {product.name}
+          </h3>
+        </Link>
+        <p className="text-xs text-gray-500 mb-3">{product.brand}</p>
+
+        {/* Price */}
+        <div className="mt-auto">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-xs text-gray-400 line-through">
+              {formatPrice(product.originalPrice)}
+            </span>
+            <span className="text-lg font-bold text-rose-600">
+              {formatPrice(currentPrice)}
+            </span>
+          </div>
+
+          <button
+            onClick={() => addToCart(product)}
+            className="w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white text-sm font-semibold py-2.5 rounded-xl transition-all duration-200 active:scale-95 shadow-md hover:shadow-lg"
+          >
+            Adicionar ao Carrinho
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
