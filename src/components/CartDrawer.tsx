@@ -246,7 +246,6 @@ export default function CartDrawer() {
                   <button
                     onClick={() => {
                       setPaymentMethod("pix");
-                      setInstallments(1);
                     }}
                     className={`p-3 rounded-xl border-2 text-center transition-all ${paymentMethod === "pix" ? "border-green-500 bg-green-50" : "border-gray-200 bg-white hover:border-gray-300"}`}
                   >
