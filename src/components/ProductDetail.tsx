@@ -19,7 +19,14 @@ export default function ProductDetail({
 }: ProductDetailProps) {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const { addToCart, totalQuantity, setIsOpen } = useCart();
+  const [cartMessage, setCartMessage] = useState("");
+  const { addToCart, totalQuantity, setIsOpen, getProductQuantityInCart } =
+    useCart();
+
+  const quantityInCart = getProductQuantityInCart(product.id);
+  const stockLimit = Math.max(0, product.stockQuantity ?? 0);
+  const availableToAdd = Math.max(0, stockLimit - quantityInCart);
+  const isOutOfStock = stockLimit <= 0;
 
   const willHaveBulk = totalQuantity + quantity >= 4;
   const currentPrice = willHaveBulk ? product.bulkPrice : product.promoPrice;
@@ -29,10 +36,30 @@ export default function ProductDetail({
   );
 
   const handleAddToCart = () => {
-    for (let i = 0; i < quantity; i++) {
-      addToCart(product);
+    const result = addToCart(product, quantity);
+    if (!result.ok) {
+      setCartMessage(
+        result.message || "Não foi possível adicionar ao carrinho.",
+      );
+      return;
     }
+    setCartMessage(result.message || "");
     setIsOpen(true);
+  };
+
+  const decreaseQuantity = () => {
+    setQuantity((prev) => Math.max(1, prev - 1));
+  };
+
+  const increaseQuantity = () => {
+    if (quantity >= availableToAdd) {
+      setCartMessage(
+        "A quantidade adicionada ao carrinho foi ajustada ao limite de estoque disponível.",
+      );
+      return;
+    }
+    setCartMessage("");
+    setQuantity((prev) => prev + 1);
   };
 
   return (
@@ -180,7 +207,7 @@ export default function ProductDetail({
           <div className="flex items-center gap-4 mb-4">
             <div className="flex items-center border border-rose-200 rounded-xl overflow-hidden">
               <button
-                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                onClick={decreaseQuantity}
                 className="w-10 h-10 flex items-center justify-center text-rose-600 hover:bg-rose-50 transition-colors text-lg"
               >
                 −
@@ -189,7 +216,8 @@ export default function ProductDetail({
                 {quantity}
               </span>
               <button
-                onClick={() => setQuantity(quantity + 1)}
+                onClick={increaseQuantity}
+                disabled={isOutOfStock || quantity >= availableToAdd}
                 className="w-10 h-10 flex items-center justify-center text-rose-600 hover:bg-rose-50 transition-colors text-lg"
               >
                 +
@@ -197,11 +225,17 @@ export default function ProductDetail({
             </div>
             <button
               onClick={handleAddToCart}
-              className="flex-1 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold py-3 rounded-xl transition-all active:scale-[0.98] shadow-lg hover:shadow-xl text-sm"
+              disabled={isOutOfStock || availableToAdd <= 0}
+              className="flex-1 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold py-3 rounded-xl transition-all active:scale-[0.98] shadow-lg hover:shadow-xl text-sm disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              Adicionar ao Carrinho — {formatPrice(quantity * currentPrice)}
+              {isOutOfStock
+                ? "Produto indisponível"
+                : `Adicionar ao Carrinho — ${formatPrice(quantity * currentPrice)}`}
             </button>
           </div>
+          {cartMessage && (
+            <p className="text-xs text-amber-700 mb-4">{cartMessage}</p>
+          )}
 
           {/* Share */}
           <div className="flex items-center gap-3">

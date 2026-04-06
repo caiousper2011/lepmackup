@@ -1,6 +1,8 @@
 import HomeClient from "@/components/HomeClient";
-import { products, getAllCategories } from "@/data/products";
+import { prisma } from "@/lib/prisma";
 import type { Metadata } from "next";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "L&PMakeUp | Maquiagem Profissional a partir de R$ 6,99",
@@ -8,8 +10,13 @@ export const metadata: Metadata = {
     "Loja online de maquiagem com os melhores preços. Cílios postiços, delineadores, gloss, paletas — tudo por R$ 7,99. Compre 4+ itens e pague apenas R$ 6,99 cada!",
 };
 
-export default function HomePage() {
-  const categories = getAllCategories();
+export default async function HomePage() {
+  const products = await prisma.product.findMany({
+    where: { active: true },
+    orderBy: { createdAt: "desc" },
+  });
+
+  const categories = [...new Set(products.map((p) => p.category))];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -44,13 +51,16 @@ export default function HomePage() {
             "@type": "Product",
             name: p.name,
             description: p.description,
-            image: `https://lpmakeup.com.br${p.images[0]}`,
+            image: `https://lpmakeup.com.br${p.images[0] || ""}`,
             brand: { "@type": "Brand", name: p.brand },
             offers: {
               "@type": "Offer",
-              price: "7.99",
+              price: p.promoPrice.toFixed(2),
               priceCurrency: "BRL",
-              availability: "https://schema.org/InStock",
+              availability:
+                (p.stockQuantity ?? 0) > 0
+                  ? "https://schema.org/InStock"
+                  : "https://schema.org/OutOfStock",
               url: `https://lpmakeup.com.br/produto/${p.slug}`,
             },
           },

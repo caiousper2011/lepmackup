@@ -1,0 +1,301 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================
+// USERS & AUTH
+// ============================================
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  phone     String?
+  role      UserRole @default(CUSTOMER)
+  referralCode String @unique
+  referredById String?
+  referredBy   User?    @relation("Referrals", fields: [referredById], references: [id])
+  referrals    User[]   @relation("Referrals")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  addresses Address[]
+  orders    Order[]
+  sessions  Session[]
+  referralRewards ReferralReward[] @relation("ReferrerRewards")
+  referredRewards ReferralReward[] @relation("ReferredRewards")
+
+  @@map("users")
+}
+
+enum UserRole {
+  CUSTOMER
+  ADMIN
+}
+
+model Address {
+  id           String  @id @default(cuid())
+  userId       String
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  label        String  @default("Casa")
+  street       String
+  number       String
+  complement   String?
+  neighborhood String
+  city         String
+  state        String
+  cep          String
+  lat          Float?
+  lng          Float?
+  isDefault    Boolean @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  orders Order[]
+
+  @@map("addresses")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([token])
+  @@map("sessions")
+}
+
+model OtpCode {
+  id        String   @id @default(cuid())
+  email     String
+  code      String
+  attempts  Int      @default(0)
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([email, code])
+  @@map("otp_codes")
+}
+
+// ============================================
+// ADMIN AUTH
+// ============================================
+
+model AdminUser {
+  id                 String  @id @default(cuid())
+  email              String  @unique
+  passwordHash       String
+  mustChangePassword Boolean @default(true)
+  active             Boolean @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@map("admin_users")
+}
+
+// ============================================
+// PRODUCTS
+// ============================================
+
+model Product {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  name           String
+  shortName      String
+  brand          String
+  category       String
+  description    String
+  details        String[]
+  originalPrice  Float
+  promoPrice     Float
+  bulkPrice      Float
+  stockQuantity  Int      @default(0)
+  shippingWeightGrams Int  @default(50)
+  images         String[]
+  imageExtension String
+  tags           String[]
+  active         Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  orderItems OrderItem[]
+
+  @@index([slug])
+  @@index([category])
+  @@map("products")
+}
+
+model ShippingPackageRule {
+  id        String   @id @default(cuid())
+  name      String
+  maxItems  Int
+  widthCm   Int
+  heightCm  Int
+  lengthCm  Int
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([active])
+  @@index([maxItems])
+  @@unique([maxItems])
+  @@map("shipping_package_rules")
+}
+
+// ============================================
+// ORDERS
+// ============================================
+
+model Order {
+  id             String      @id @default(cuid())
+  orderNumber    Int         @unique @default(autoincrement())
+  userId         String
+  user           User        @relation(fields: [userId], references: [id])
+  addressId      String?
+  address        Address?    @relation(fields: [addressId], references: [id])
+  status         OrderStatus @default(PENDING)
+  subtotal       Float
+  shipping       Float       @default(0)
+  discount       Float       @default(0)
+  total          Float
+  couponId       String?
+  coupon         Coupon?     @relation(fields: [couponId], references: [id])
+  paymentId      String?
+  paymentStatus  PaymentStatus @default(PENDING)
+  paymentMethod  String?
+  mercadoPagoId  String?
+  trackingCode   String?
+  shippingMethod String?
+  addressSnapshot Json?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  items OrderItem[]
+  webhookLogs WebhookLog[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([mercadoPagoId])
+  @@map("orders")
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  APPROVED
+  IN_PROCESS
+  REJECTED
+  CANCELLED
+  REFUNDED
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  unitPrice Float
+  productSnapshot Json?
+
+  @@map("order_items")
+}
+
+// ============================================
+// COUPONS
+// ============================================
+
+model Coupon {
+  id        String     @id @default(cuid())
+  code      String     @unique
+  type      CouponType
+  value     Float
+  minItems  Int        @default(0)
+  minValue  Float      @default(0)
+  maxUses   Int?
+  usedCount Int        @default(0)
+  expiresAt DateTime?
+  active    Boolean    @default(true)
+  isReferral Boolean   @default(false)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  orders Order[]
+
+  @@index([code])
+  @@map("coupons")
+}
+
+enum CouponType {
+  PERCENT
+  FIXED
+}
+
+// ============================================
+// REFERRALS
+// ============================================
+
+model ReferralReward {
+  id          String  @id @default(cuid())
+  referrerId  String
+  referrer    User    @relation("ReferrerRewards", fields: [referrerId], references: [id])
+  referredId  String
+  referred    User    @relation("ReferredRewards", fields: [referredId], references: [id])
+  couponCode  String?
+  rewardType  String  @default("COUPON")
+  granted     Boolean @default(false)
+  createdAt   DateTime @default(now())
+
+  @@map("referral_rewards")
+}
+
+// ============================================
+// WEBHOOKS & LOGS
+// ============================================
+
+model WebhookLog {
+  id          String   @id @default(cuid())
+  eventType   String
+  externalId  String?
+  orderId     String?
+  order       Order?   @relation(fields: [orderId], references: [id])
+  payload     Json
+  processed   Boolean  @default(false)
+  error       String?
+  createdAt   DateTime @default(now())
+
+  @@index([externalId])
+  @@map("webhook_logs")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  adminId   String
+  action    String
+  entity    String
+  entityId  String?
+  details   Json?
+  createdAt DateTime @default(now())
+
+  @@index([adminId])
+  @@map("audit_logs")
+}

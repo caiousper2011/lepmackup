@@ -1,14 +1,21 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Product, formatPrice } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 
 export default function ProductCard({ product }: { product: Product }) {
-  const { addToCart, totalQuantity } = useCart();
-  const currentPrice =
-    totalQuantity >= 4 ? product.bulkPrice : product.promoPrice;
+  const { addToCart, getItemUnitPrice } = useCart();
+  const [cartMessage, setCartMessage] = useState("");
+  const currentPrice = getItemUnitPrice(product);
+  const isOutOfStock = (product.stockQuantity ?? 0) <= 0;
+
+  const handleAddToCart = () => {
+    const result = addToCart(product);
+    setCartMessage(result.message || "");
+  };
 
   return (
     <div className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-rose-50 overflow-hidden flex flex-col">
@@ -63,11 +70,15 @@ export default function ProductCard({ product }: { product: Product }) {
           </div>
 
           <button
-            onClick={() => addToCart(product)}
-            className="w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white text-sm font-semibold py-2.5 rounded-xl transition-all duration-200 active:scale-95 shadow-md hover:shadow-lg"
+            onClick={handleAddToCart}
+            disabled={isOutOfStock}
+            className="w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white text-sm font-semibold py-2.5 rounded-xl transition-all duration-200 active:scale-95 shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            Adicionar ao Carrinho
+            {isOutOfStock ? "Indisponível" : "Adicionar ao Carrinho"}
           </button>
+          {cartMessage && (
+            <p className="text-[11px] text-amber-700 mt-2">{cartMessage}</p>
+          )}
         </div>
       </div>
     </div>

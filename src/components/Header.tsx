@@ -2,11 +2,31 @@
 
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
-import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { useLoginModal } from "@/components/LoginModal";
+import { useState, useRef, useEffect } from "react";
 
 export default function Header() {
   const { totalQuantity, setIsOpen } = useCart();
+  const { user, logout } = useAuth();
+  const { open: openLogin } = useLoginModal();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close user menu on outside click
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(e.target as Node)
+      ) {
+        setUserMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-rose-100">
@@ -61,8 +81,98 @@ export default function Header() {
             </Link>
           </nav>
 
-          {/* Cart button */}
-          <div className="flex items-center gap-3">
+          {/* User & Cart buttons */}
+          <div className="flex items-center gap-2">
+            {/* User menu */}
+            {user ? (
+              <div className="relative" ref={userMenuRef}>
+                <button
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  className="p-2.5 rounded-full bg-rose-50 hover:bg-rose-100 transition-colors group"
+                  aria-label="Minha conta"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-rose-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
+                  </svg>
+                </button>
+                {userMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50">
+                    <div className="px-4 py-2 border-b border-gray-100">
+                      <p className="text-sm font-medium text-gray-900 truncate">
+                        {user.name || user.email}
+                      </p>
+                      <p className="text-xs text-gray-500 truncate">
+                        {user.email}
+                      </p>
+                    </div>
+                    <Link
+                      href="/minha-conta"
+                      onClick={() => setUserMenuOpen(false)}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-rose-50 hover:text-rose-600 transition-colors"
+                    >
+                      Minha Conta
+                    </Link>
+                    <Link
+                      href="/minha-conta/pedidos"
+                      onClick={() => setUserMenuOpen(false)}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-rose-50 hover:text-rose-600 transition-colors"
+                    >
+                      Meus Pedidos
+                    </Link>
+                    <Link
+                      href="/minha-conta/indicacoes"
+                      onClick={() => setUserMenuOpen(false)}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-rose-50 hover:text-rose-600 transition-colors"
+                    >
+                      Indicar Amigas
+                    </Link>
+                    <hr className="my-1 border-gray-100" />
+                    <button
+                      onClick={() => {
+                        setUserMenuOpen(false);
+                        logout();
+                      }}
+                      className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                    >
+                      Sair
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button
+                onClick={() => openLogin()}
+                className="hidden md:flex items-center gap-1.5 px-4 py-2 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-600 text-sm font-medium transition-colors"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+                Entrar
+              </button>
+            )}
+
             <button
               onClick={() => setIsOpen(true)}
               className="relative p-2.5 rounded-full bg-rose-50 hover:bg-rose-100 transition-colors group"
@@ -152,6 +262,17 @@ export default function Header() {
             >
               🔥 Promoção
             </Link>
+            {!user && (
+              <button
+                onClick={() => {
+                  setMobileOpen(false);
+                  openLogin();
+                }}
+                className="text-sm font-medium text-rose-600 bg-rose-50 rounded-xl px-4 py-2.5 text-center hover:bg-rose-100 transition-colors"
+              >
+                Entrar / Criar Conta
+              </button>
+            )}
           </nav>
         )}
       </div>

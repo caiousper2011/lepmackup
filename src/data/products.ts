@@ -10,6 +10,8 @@ export interface Product {
   originalPrice: number;
   promoPrice: number;
   bulkPrice: number;
+  stockQuantity?: number;
+  shippingWeightGrams?: number;
   images: string[];
   imageExtension: string;
   tags: string[];
@@ -359,4 +361,13 @@ export function formatPrice(price: number): string {
     style: "currency",
     currency: "BRL",
   });
+}
+
+export function getProductUnitPrice(
+  product: Pick<Product, "promoPrice" | "bulkPrice">,
+  totalQuantity: number,
+): number {
+  return totalQuantity >= BULK_THRESHOLD
+    ? product.bulkPrice
+    : product.promoPrice;
 }

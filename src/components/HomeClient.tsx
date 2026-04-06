@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductCard from "@/components/ProductCard";
 import { Product } from "@/data/products";
 import { useCart } from "@/context/CartContext";
@@ -8,6 +8,45 @@ import { useCart } from "@/context/CartContext";
 interface HomeClientProps {
   products: Product[];
   categories: string[];
+}
+
+function CountdownTimer() {
+  function getTimeLeft() {
+    const now = new Date();
+    const endOfDay = new Date(now);
+    endOfDay.setHours(23, 59, 59, 999);
+    const diff = endOfDay.getTime() - now.getTime();
+    return {
+      hours: Math.floor(diff / (1000 * 60 * 60)),
+      minutes: Math.floor((diff / (1000 * 60)) % 60),
+      seconds: Math.floor((diff / 1000) % 60),
+    };
+  }
+
+  const [timeLeft, setTimeLeft] = useState(getTimeLeft);
+
+  useEffect(() => {
+    const interval = setInterval(() => setTimeLeft(getTimeLeft()), 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="flex items-center gap-1.5">
+      {[
+        { value: timeLeft.hours, label: "h" },
+        { value: timeLeft.minutes, label: "m" },
+        { value: timeLeft.seconds, label: "s" },
+      ].map((t, i) => (
+        <span
+          key={i}
+          className="bg-gray-900 text-white font-mono font-bold text-lg px-2.5 py-1 rounded-lg min-w-[44px] text-center"
+        >
+          {String(t.value).padStart(2, "0")}
+          <span className="text-xs text-rose-300">{t.label}</span>
+        </span>
+      ))}
+    </div>
+  );
 }
 
 export default function HomeClient({ products, categories }: HomeClientProps) {
@@ -20,46 +59,70 @@ export default function HomeClient({ products, categories }: HomeClientProps) {
 
   return (
     <>
-      {/* Hero Section */}
+      {/* Urgency top bar */}
+      <div className="bg-gray-900 text-white py-2 px-4 text-center text-xs sm:text-sm font-medium">
+        🔥 <span className="text-rose-400 font-bold">ÚLTIMA CHANCE</span> —
+        Promoção acaba hoje! Frete grátis perto de SP
+      </div>
+
+      {/* Hero Section - More aggressive */}
       <section className="relative overflow-hidden bg-gradient-to-br from-rose-50 via-pink-50 to-fuchsia-50">
-        {/* Decorative blobs */}
         <div className="absolute top-10 left-10 w-72 h-72 bg-rose-200/30 rounded-full blur-3xl" />
         <div className="absolute bottom-10 right-10 w-96 h-96 bg-pink-200/20 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-fuchsia-100/20 rounded-full blur-3xl" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-28">
           <div className="text-center max-w-3xl mx-auto">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-5 py-2 mb-6 shadow-sm border border-rose-100">
-              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-xs font-semibold text-gray-700">
-                MEGA PROMOÇÃO ATIVA
+            {/* Live badge */}
+            <div className="inline-flex items-center gap-2 bg-red-600 text-white rounded-full px-4 py-1.5 mb-5 shadow-lg animate-pulse">
+              <span className="w-2 h-2 rounded-full bg-white" />
+              <span className="text-xs font-bold uppercase tracking-wider">
+                Oferta ao vivo — vagas limitadas
               </span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4">
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tight mb-3">
               <span className="bg-gradient-to-r from-rose-600 via-pink-600 to-fuchsia-600 bg-clip-text text-transparent">
                 Maquiagem Profissional
               </span>
               <br />
-              <span className="text-gray-900">por preços incríveis</span>
+              <span className="text-gray-900">a partir de</span>{" "}
+              <span className="relative inline-block">
+                <span className="text-rose-600">R$6,99</span>
+                <span className="absolute -top-3 -right-8 bg-yellow-400 text-gray-900 text-xs font-bold px-2 py-0.5 rounded-full rotate-12 shadow">
+                  -63%
+                </span>
+              </span>
             </h1>
 
-            <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-xl mx-auto leading-relaxed">
-              Todos os produtos por apenas{" "}
-              <span className="font-bold text-rose-600 text-2xl">R$ 7,99</span>.
-              Leve 4 ou mais e pague só{" "}
-              <span className="font-bold text-rose-600 text-2xl">R$ 6,99</span>{" "}
+            <p className="text-lg sm:text-xl text-gray-600 mb-6 max-w-xl mx-auto leading-relaxed">
+              <span className="line-through text-gray-400">De R$18,99</span> por
+              apenas{" "}
+              <span className="font-extrabold text-rose-600 text-2xl">
+                R$7,99
+              </span>
+              . Leve 4+ e pague{" "}
+              <span className="font-extrabold text-rose-600 text-2xl">
+                R$6,99
+              </span>{" "}
               cada!
             </p>
 
-            {/* CTA Buttons */}
+            {/* Countdown */}
+            <div className="flex items-center justify-center gap-3 mb-8">
+              <span className="text-sm font-medium text-gray-500">
+                Acaba em:
+              </span>
+              <CountdownTimer />
+            </div>
+
+            {/* CTAs */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
                 href="#produtos"
-                className="w-full sm:w-auto bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold px-8 py-4 rounded-2xl shadow-xl hover:shadow-2xl transition-all active:scale-95 text-lg"
+                className="w-full sm:w-auto bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold px-10 py-4.5 rounded-2xl shadow-xl hover:shadow-2xl transition-all active:scale-95 text-lg relative overflow-hidden group"
               >
-                Ver Produtos
+                <span className="relative z-10">Comprar Agora</span>
+                <span className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
               </a>
               <a
                 href="https://wa.me/5511970196558"
@@ -75,62 +138,80 @@ export default function HomeClient({ products, categories }: HomeClientProps) {
                 >
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                 </svg>
-                Fale Conosco
+                Dúvidas? WhatsApp
               </a>
             </div>
 
-            {/* Trust badges */}
-            <div className="flex flex-wrap items-center justify-center gap-6 mt-10">
-              <div className="flex items-center gap-2 text-xs text-gray-500">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-green-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                  />
-                </svg>
-                Compra Segura
+            {/* Social proof + trust */}
+            <div className="mt-8 space-y-4">
+              <div className="flex items-center justify-center gap-1">
+                {[1, 2, 3, 4, 5].map((s) => (
+                  <svg
+                    key={s}
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-yellow-400"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z" />
+                  </svg>
+                ))}
+                <span className="text-sm text-gray-600 ml-2">
+                  4.9/5 — mais de 500 clientes satisfeitas
+                </span>
               </div>
-              <div className="flex items-center gap-2 text-xs text-gray-500">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-rose-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                Resposta Rápida via WhatsApp
-              </div>
-              <div className="flex items-center gap-2 text-xs text-gray-500">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-amber-500"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"
-                  />
-                </svg>
-                Qualidade Profissional
+              <div className="flex flex-wrap items-center justify-center gap-6">
+                <div className="flex items-center gap-2 text-xs text-gray-500">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-green-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                    />
+                  </svg>
+                  Pagamento Seguro via Mercado Pago
+                </div>
+                <div className="flex items-center gap-2 text-xs text-gray-500">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-blue-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                    />
+                  </svg>
+                  Entrega pra SP e todo Brasil
+                </div>
+                <div className="flex items-center gap-2 text-xs text-gray-500">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-amber-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  Envio em até 24h após pagamento
+                </div>
               </div>
             </div>
           </div>
@@ -146,10 +227,11 @@ export default function HomeClient({ products, categories }: HomeClientProps) {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="text-white text-center md:text-left">
               <h2 className="text-xl sm:text-2xl font-bold">
-                🔥 Promoção Especial
+                🔥 Quanto mais leva, mais economiza
               </h2>
               <p className="text-rose-100 text-sm mt-1">
-                Todos os produtos por R$ 7,99 — Acima de 4 itens: R$ 6,99 cada!
+                Todos por R$7,99 — Leve 4+ e pague R$6,99 cada! PIX, cartão e
+                boleto.
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -167,6 +249,56 @@ export default function HomeClient({ products, categories }: HomeClientProps) {
                 <div className="text-xs text-gray-500">4+ itens</div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Social proof testimonials */}
+      <section className="py-10 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {[
+              {
+                name: "Ana P.",
+                text: "Melhor custo-benefício! Comprei 6 produtos e paguei menos de R$42. Qualidade incrível!",
+                stars: 5,
+              },
+              {
+                name: "Camila S.",
+                text: "Entrega super rápida aqui em SP. Maquiagem linda e pagamento pelo Mercado Pago muito prático.",
+                stars: 5,
+              },
+              {
+                name: "Juliana R.",
+                text: "Indiquei pra 3 amigas e já ganhei 3 cupons de desconto! Amando essa loja 💕",
+                stars: 5,
+              },
+            ].map((t, i) => (
+              <div
+                key={i}
+                className="bg-rose-50/50 rounded-2xl p-5 border border-rose-100"
+              >
+                <div className="flex gap-0.5 mb-2">
+                  {[...Array(t.stars)].map((_, j) => (
+                    <svg
+                      key={j}
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 text-yellow-400"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z" />
+                    </svg>
+                  ))}
+                </div>
+                <p className="text-sm text-gray-600 italic">
+                  &quot;{t.text}&quot;
+                </p>
+                <p className="text-xs font-semibold text-gray-900 mt-2">
+                  — {t.name}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -258,10 +390,10 @@ export default function HomeClient({ products, categories }: HomeClientProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
-              Como Funciona
+              Compre em 3 Passos Rápidos
             </h2>
             <p className="text-gray-500 text-sm mt-2">
-              Compre em 3 passos simples
+              Simples, rápido e seguro — sem complicação
             </p>
           </div>
 
@@ -270,20 +402,20 @@ export default function HomeClient({ products, categories }: HomeClientProps) {
               {
                 step: "1",
                 icon: "🛒",
-                title: "Escolha seus produtos",
-                desc: "Navegue pelo catálogo e adicione ao carrinho. Leve 4+ itens e pague R$ 6,99 cada!",
+                title: "Escolha e adicione ao carrinho",
+                desc: "Navegue pelo catálogo, adicione seus favoritos e leve 4+ itens para pagar apenas R$6,99 cada!",
               },
               {
                 step: "2",
-                icon: "📱",
-                title: "Finalize via WhatsApp",
-                desc: "Revise o carrinho, escolha PIX ou cartão, e envie o pedido diretamente para nosso WhatsApp.",
+                icon: "💳",
+                title: "Pague com Mercado Pago",
+                desc: "PIX, cartão de crédito ou boleto — pagamento 100% seguro pelo Mercado Pago. Sem complicação!",
               },
               {
                 step: "3",
-                icon: "💳",
-                title: "Receba o link de pagamento",
-                desc: "Enviaremos o link de pagamento seguro pelo WhatsApp. Pague e pronto!",
+                icon: "📦",
+                title: "Receba na sua casa",
+                desc: "Enviamos em até 24h após pagamento. Perto de SP? Frete grátis até 1km ou a partir de R$12!",
               },
             ].map((item) => (
               <div
@@ -320,11 +452,11 @@ export default function HomeClient({ products, categories }: HomeClientProps) {
             {[
               {
                 q: "Como faço para comprar?",
-                a: "Adicione os produtos ao carrinho, clique em Finalizar Compra, escolha a forma de pagamento e envie o pedido para nosso WhatsApp. Enviaremos o link de pagamento na hora!",
+                a: "Adicione os produtos ao carrinho, clique em Finalizar Compra, escolha seu endereço e pague diretamente pelo Mercado Pago — aceita PIX, cartão e boleto!",
               },
               {
                 q: "Quais formas de pagamento vocês aceitam?",
-                a: "PIX (pagamento instantâneo) e Cartão de Crédito (com opção de parcelamento). O link de pagamento seguro é enviado pelo WhatsApp.",
+                a: "Aceitamos PIX (aprovação instantânea), Cartão de Crédito (com parcelamento) e Boleto Bancário — tudo pelo Mercado Pago com total segurança.",
               },
               {
                 q: "Como funciona o desconto para 4+ itens?",
@@ -336,7 +468,11 @@ export default function HomeClient({ products, categories }: HomeClientProps) {
               },
               {
                 q: "Como funciona a entrega?",
-                a: "Após confirmação do pagamento, combinamos a entrega diretamente pelo WhatsApp, garantindo praticidade e agilidade.",
+                a: "Entregamos em São Paulo (frete grátis até 1km, a partir de R$12 localmente) e para todo o Brasil via transportadoras. Enviamos em até 24h após confirmação do pagamento!",
+              },
+              {
+                q: "Como funciona a indicação de amigas?",
+                a: "Compartilhe seu link de indicação com suas amigas. Quando elas fizerem a primeira compra, vocês duas ganham um cupom de desconto! Acesse Minha Conta → Indicar Amigas.",
               },
             ].map((faq, i) => (
               <details
