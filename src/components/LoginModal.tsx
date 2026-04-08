@@ -55,7 +55,6 @@ export default function LoginModal() {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [error, setError] = useState("");
   const [info, setInfo] = useState("");
-  const [devCode, setDevCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -81,7 +80,6 @@ export default function LoginModal() {
     e.preventDefault();
     setError("");
     setInfo("");
-    setDevCode("");
     setLoading(true);
 
     const result = await login(email);
@@ -89,7 +87,6 @@ export default function LoginModal() {
 
     if (result.success) {
       if (result.message) setInfo(result.message);
-      if (result.devCode) setDevCode(result.devCode);
       setStep("code");
       setCountdown(60);
       setTimeout(() => inputRefs.current[0]?.focus(), 100);
@@ -157,13 +154,11 @@ export default function LoginModal() {
     if (countdown > 0) return;
     setError("");
     setInfo("");
-    setDevCode("");
     setLoading(true);
     const result = await login(email);
     setLoading(false);
     if (result.success) {
       if (result.message) setInfo(result.message);
-      if (result.devCode) setDevCode(result.devCode);
       setCountdown(60);
     } else {
       setError(result.error || "Erro ao reenviar.");
@@ -179,7 +174,6 @@ export default function LoginModal() {
       setCode(["", "", "", "", "", ""]);
       setError("");
       setInfo("");
-      setDevCode("");
       setLoading(false);
     }, 300);
   };
@@ -242,15 +236,6 @@ export default function LoginModal() {
           {info && (
             <div className="bg-blue-50 border border-blue-200 text-blue-700 text-sm rounded-xl p-3 mb-4">
               {info}
-            </div>
-          )}
-
-          {devCode && (
-            <div className="bg-amber-50 border border-amber-200 text-amber-800 text-sm rounded-xl p-3 mb-4">
-              <p className="font-semibold">Código (modo desenvolvimento):</p>
-              <p className="mt-1 font-mono text-base tracking-widest">
-                {devCode}
-              </p>
             </div>
           )}
 
@@ -331,7 +316,6 @@ export default function LoginModal() {
                   setCode(["", "", "", "", "", ""]);
                   setError("");
                   setInfo("");
-                  setDevCode("");
                 }}
                 className="w-full py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
               >

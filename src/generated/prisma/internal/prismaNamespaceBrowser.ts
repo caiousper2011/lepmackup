@@ -58,6 +58,7 @@ export const ModelName = {
   AdminUser: 'AdminUser',
   Product: 'Product',
   ShippingPackageRule: 'ShippingPackageRule',
+  ShippingSettings: 'ShippingSettings',
   Order: 'Order',
   OrderItem: 'OrderItem',
   Coupon: 'Coupon',
@@ -193,6 +194,18 @@ export const ShippingPackageRuleScalarFieldEnum = {
 } as const
 
 export type ShippingPackageRuleScalarFieldEnum = (typeof ShippingPackageRuleScalarFieldEnum)[keyof typeof ShippingPackageRuleScalarFieldEnum]
+
+
+export const ShippingSettingsScalarFieldEnum = {
+  id: 'id',
+  pickupEnabled: 'pickupEnabled',
+  pickupAddress: 'pickupAddress',
+  pickupInstructions: 'pickupInstructions',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ShippingSettingsScalarFieldEnum = (typeof ShippingSettingsScalarFieldEnum)[keyof typeof ShippingSettingsScalarFieldEnum]
 
 
 export const OrderScalarFieldEnum = {

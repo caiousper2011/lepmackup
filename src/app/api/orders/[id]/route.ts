@@ -3,16 +3,49 @@ import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 
 export async function GET(
-  _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const user = await getCurrentUser();
-    if (!user) {
-      return NextResponse.json({ error: "Não autorizado." }, { status: 401 });
-    }
-
     const { id } = await params;
+
+    if (!user) {
+      const paymentIdFromQuery =
+        request.nextUrl.searchParams.get("payment_id") ||
+        request.nextUrl.searchParams.get("collection_id") ||
+        "";
+
+      if (!paymentIdFromQuery) {
+        return NextResponse.json({ error: "Não autorizado." }, { status: 401 });
+      }
+
+      const order = await prisma.order.findFirst({
+        where: { id, paymentId: paymentIdFromQuery },
+        select: {
+          id: true,
+          orderNumber: true,
+          total: true,
+          status: true,
+          paymentStatus: true,
+          items: {
+            select: {
+              quantity: true,
+              productSnapshot: true,
+            },
+          },
+        },
+      });
+
+      if (!order) {
+        return NextResponse.json(
+          { error: "Pedido não encontrado." },
+          { status: 404 },
+        );
+      }
+
+      return NextResponse.json({ order });
+    }
 
     const order = await prisma.order.findFirst({
       where: { id, userId: user.id },
@@ -23,12 +56,18 @@ export async function GET(
     });
 
     if (!order) {
-      return NextResponse.json({ error: "Pedido não encontrado." }, { status: 404 });
+      return NextResponse.json(
+        { error: "Pedido não encontrado." },
+        { status: 404 },
+      );
     }
 
     return NextResponse.json({ order });
   } catch (error) {
     console.error("Get order detail error:", error);
-    return NextResponse.json({ error: "Erro ao buscar pedido." }, { status: 500 });
+    return NextResponse.json(
+      { error: "Erro ao buscar pedido." },
+      { status: 500 },
+    );
   }
 }

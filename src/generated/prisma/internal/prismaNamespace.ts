@@ -391,6 +391,7 @@ export const ModelName = {
   AdminUser: 'AdminUser',
   Product: 'Product',
   ShippingPackageRule: 'ShippingPackageRule',
+  ShippingSettings: 'ShippingSettings',
   Order: 'Order',
   OrderItem: 'OrderItem',
   Coupon: 'Coupon',
@@ -412,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "address" | "session" | "otpCode" | "adminUser" | "product" | "shippingPackageRule" | "order" | "orderItem" | "coupon" | "referralReward" | "webhookLog" | "auditLog"
+    modelProps: "user" | "address" | "session" | "otpCode" | "adminUser" | "product" | "shippingPackageRule" | "shippingSettings" | "order" | "orderItem" | "coupon" | "referralReward" | "webhookLog" | "auditLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -931,6 +932,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ShippingPackageRuleCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ShippingPackageRuleCountAggregateOutputType> | number
+        }
+      }
+    }
+    ShippingSettings: {
+      payload: Prisma.$ShippingSettingsPayload<ExtArgs>
+      fields: Prisma.ShippingSettingsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ShippingSettingsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShippingSettingsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ShippingSettingsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShippingSettingsPayload>
+        }
+        findFirst: {
+          args: Prisma.ShippingSettingsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShippingSettingsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ShippingSettingsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShippingSettingsPayload>
+        }
+        findMany: {
+          args: Prisma.ShippingSettingsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShippingSettingsPayload>[]
+        }
+        create: {
+          args: Prisma.ShippingSettingsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShippingSettingsPayload>
+        }
+        createMany: {
+          args: Prisma.ShippingSettingsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ShippingSettingsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShippingSettingsPayload>[]
+        }
+        delete: {
+          args: Prisma.ShippingSettingsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShippingSettingsPayload>
+        }
+        update: {
+          args: Prisma.ShippingSettingsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShippingSettingsPayload>
+        }
+        deleteMany: {
+          args: Prisma.ShippingSettingsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ShippingSettingsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ShippingSettingsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShippingSettingsPayload>[]
+        }
+        upsert: {
+          args: Prisma.ShippingSettingsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShippingSettingsPayload>
+        }
+        aggregate: {
+          args: Prisma.ShippingSettingsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateShippingSettings>
+        }
+        groupBy: {
+          args: Prisma.ShippingSettingsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ShippingSettingsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ShippingSettingsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ShippingSettingsCountAggregateOutputType> | number
         }
       }
     }
@@ -1530,6 +1605,18 @@ export const ShippingPackageRuleScalarFieldEnum = {
 export type ShippingPackageRuleScalarFieldEnum = (typeof ShippingPackageRuleScalarFieldEnum)[keyof typeof ShippingPackageRuleScalarFieldEnum]
 
 
+export const ShippingSettingsScalarFieldEnum = {
+  id: 'id',
+  pickupEnabled: 'pickupEnabled',
+  pickupAddress: 'pickupAddress',
+  pickupInstructions: 'pickupInstructions',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ShippingSettingsScalarFieldEnum = (typeof ShippingSettingsScalarFieldEnum)[keyof typeof ShippingSettingsScalarFieldEnum]
+
+
 export const OrderScalarFieldEnum = {
   id: 'id',
   orderNumber: 'orderNumber',
@@ -1914,6 +2001,7 @@ export type GlobalOmitConfig = {
   adminUser?: Prisma.AdminUserOmit
   product?: Prisma.ProductOmit
   shippingPackageRule?: Prisma.ShippingPackageRuleOmit
+  shippingSettings?: Prisma.ShippingSettingsOmit
   order?: Prisma.OrderOmit
   orderItem?: Prisma.OrderItemOmit
   coupon?: Prisma.CouponOmit

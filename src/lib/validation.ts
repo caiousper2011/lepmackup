@@ -83,6 +83,12 @@ export const shippingPackageRuleSchema = z.object({
   active: z.boolean().optional(),
 });
 
+export const shippingSettingsSchema = z.object({
+  pickupEnabled: z.boolean(),
+  pickupAddress: z.string().min(5, "Endereço de retirada obrigatório").max(255),
+  pickupInstructions: z.string().max(500).optional().nullable(),
+});
+
 // ============================================
 // COUPON (admin)
 // ============================================
@@ -102,20 +108,32 @@ export const couponSchema = z.object({
 // ORDER / CHECKOUT
 // ============================================
 
-export const checkoutSchema = z.object({
-  addressId: z.string().min(1, "Endereço obrigatório"),
-  shippingMethod: z.string().min(1),
-  shippingPrice: z.number().min(0),
-  couponCode: z.string().max(30).optional(),
-  items: z
-    .array(
-      z.object({
-        productId: z.string().min(1),
-        quantity: z.number().int().positive().max(100),
-      }),
-    )
-    .min(1, "Carrinho vazio"),
-});
+export const checkoutSchema = z
+  .object({
+    addressId: z.string().min(1, "Endereço obrigatório").optional(),
+    shippingMethod: z.string().min(1),
+    shippingPrice: z.number().min(0),
+    couponCode: z.string().max(30).optional(),
+    items: z
+      .array(
+        z.object({
+          productId: z.string().min(1),
+          quantity: z.number().int().positive().max(100),
+        }),
+      )
+      .min(1, "Carrinho vazio"),
+  })
+  .superRefine((data, ctx) => {
+    const isPickup = data.shippingMethod === "PICKUP_STORE";
+
+    if (!isPickup && !data.addressId) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Endereço obrigatório",
+        path: ["addressId"],
+      });
+    }
+  });
 
 // ============================================
 // SHIPPING

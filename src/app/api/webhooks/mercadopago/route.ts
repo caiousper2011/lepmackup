@@ -134,14 +134,10 @@ export async function POST(request: NextRequest) {
 
     // Send notifications for approved payments
     if (confirmation.mpStatus === "approved" && confirmation.order.userEmail) {
-      try {
-        await sendPaymentApprovedEmail(
-          confirmation.order.userEmail,
-          confirmation.order.orderNumber,
-        );
-      } catch {
-        // Don't fail webhook for email errors
-      }
+      await sendPaymentApprovedEmail(
+        confirmation.order.userEmail,
+        confirmation.order.orderNumber,
+      );
     }
 
     return NextResponse.json({
@@ -151,7 +147,7 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("Webhook error:", error);
-    // Always return 200 to MP to prevent retries on our errors
-    return NextResponse.json({ received: true, error: "processing_error" });
+    // Return non-2xx so Mercado Pago retries and notification is not lost
+    return NextResponse.json({ error: "processing_error" }, { status: 500 });
   }
 }

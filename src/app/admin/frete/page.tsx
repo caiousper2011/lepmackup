@@ -12,13 +12,26 @@ interface ShippingRule {
   active: boolean;
 }
 
+interface ShippingSettings {
+  pickupEnabled: boolean;
+  pickupAddress: string;
+  pickupInstructions: string;
+}
+
 export default function AdminFretePage() {
   const [rules, setRules] = useState<ShippingRule[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [savingSettings, setSavingSettings] = useState(false);
   const [error, setError] = useState("");
+
+  const [settings, setSettings] = useState<ShippingSettings>({
+    pickupEnabled: false,
+    pickupAddress: "Retirada no endereço da loja",
+    pickupInstructions: "",
+  });
 
   const emptyForm = {
     name: "",
@@ -35,14 +48,27 @@ export default function AdminFretePage() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch("/api/admin/shipping-rules");
-      const data = await res.json();
+      const [rulesRes, settingsRes] = await Promise.all([
+        fetch("/api/admin/shipping-rules"),
+        fetch("/api/admin/shipping-settings"),
+      ]);
+      const data = await rulesRes.json();
 
-      if (!res.ok) {
+      if (!rulesRes.ok) {
         throw new Error(data.error || "Erro ao buscar regras.");
       }
 
+      const settingsData = settingsRes.ok ? await settingsRes.json() : null;
+
       setRules(data.rules || []);
+
+      if (settingsData?.settings) {
+        setSettings({
+          pickupEnabled: settingsData.settings.pickupEnabled,
+          pickupAddress: settingsData.settings.pickupAddress,
+          pickupInstructions: settingsData.settings.pickupInstructions || "",
+        });
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro ao carregar regras.");
     } finally {
@@ -134,6 +160,40 @@ export default function AdminFretePage() {
     }
   };
 
+  const handleSaveSettings = async () => {
+    setSavingSettings(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/admin/shipping-settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          pickupEnabled: settings.pickupEnabled,
+          pickupAddress: settings.pickupAddress,
+          pickupInstructions: settings.pickupInstructions,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Erro ao salvar configuração.");
+      }
+
+      setSettings({
+        pickupEnabled: data.settings.pickupEnabled,
+        pickupAddress: data.settings.pickupAddress,
+        pickupInstructions: data.settings.pickupInstructions || "",
+      });
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Erro ao salvar configuração.",
+      );
+    } finally {
+      setSavingSettings(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -156,6 +216,58 @@ export default function AdminFretePage() {
           {error}
         </div>
       )}
+
+      <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
+        <div>
+          <h2 className="text-base font-semibold text-gray-900">
+            Retirada no Endereço
+          </h2>
+          <p className="text-sm text-gray-500 mt-1">
+            Permita que clientes retirem o pedido no endereço configurado.
+          </p>
+        </div>
+
+        <label className="flex items-center gap-2 text-sm text-gray-700">
+          <input
+            type="checkbox"
+            checked={settings.pickupEnabled}
+            onChange={(e) =>
+              setSettings({ ...settings, pickupEnabled: e.target.checked })
+            }
+          />
+          Ativar retirada no endereço
+        </label>
+
+        <Input
+          label="Endereço de retirada"
+          value={settings.pickupAddress}
+          onChange={(v) => setSettings({ ...settings, pickupAddress: v })}
+          required
+        />
+
+        <div>
+          <label className="block text-xs text-gray-500 mb-1">
+            Instruções (opcional)
+          </label>
+          <textarea
+            value={settings.pickupInstructions}
+            onChange={(e) =>
+              setSettings({ ...settings, pickupInstructions: e.target.value })
+            }
+            rows={3}
+            className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
+            placeholder="Ex.: Retirada das 09h às 18h, apresentar número do pedido."
+          />
+        </div>
+
+        <button
+          onClick={handleSaveSettings}
+          disabled={savingSettings}
+          className="bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors disabled:opacity-50"
+        >
+          {savingSettings ? "Salvando..." : "Salvar Configuração"}
+        </button>
+      </div>
 
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">

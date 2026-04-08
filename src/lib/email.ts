@@ -1,9 +1,10 @@
-import { Resend } from "resend";
+import sgMail from "@sendgrid/mail";
 
-const resendApiKey = process.env.RESEND_API_KEY ?? "";
-const resend = resendApiKey ? new Resend(resendApiKey) : null;
+const sendGridApiKey = process.env.SENDGRID_API_KEY?.trim() ?? "";
+if (sendGridApiKey) {
+  sgMail.setApiKey(sendGridApiKey);
+}
 const FROM = process.env.EMAIL_FROM || "L&PMakeUp <noreply@lepmakeup.com.br>";
-const RESEND_FALLBACK_FROM = "L&PMakeUp <onboarding@resend.dev>";
 
 type EmailPayload = {
   from: string;
@@ -12,55 +13,86 @@ type EmailPayload = {
   html: string;
 };
 
-export type EmailDeliveryMode = "resend" | "resend-fallback" | "simulated";
+type SendGridApiErrorDetail = {
+  message?: string;
+  field?: string;
+  help?: string;
+};
+
+type SendGridLikeError = Error & {
+  code?: number;
+  response?: {
+    body?: {
+      errors?: SendGridApiErrorDetail[];
+    };
+  };
+};
+
+export type EmailDeliveryMode = "sendgrid";
 
 export interface EmailDeliveryInfo {
   mode: EmailDeliveryMode;
   from: string;
 }
 
-function canUseResend() {
-  return (
-    resend &&
-    resendApiKey.startsWith("re_") &&
-    !resendApiKey.includes("xxxxxxxx")
-  );
+function assertSendGridConfigured() {
+  if (!sendGridApiKey) {
+    throw new Error("SENDGRID_API_KEY não configurada");
+  }
+}
+
+function mapSendGridError(error: unknown): Error {
+  const sendGridError = error as SendGridLikeError;
+  const statusCode = sendGridError?.code;
+  const details = sendGridError?.response?.body?.errors ?? [];
+  const detailsText = details
+    .map((item) => item.message)
+    .filter((value): value is string => Boolean(value))
+    .join(" | ");
+
+  if (statusCode === 403) {
+    const lowerDetails = detailsText.toLowerCase();
+
+    if (lowerDetails.includes("sender identity")) {
+      return new Error(
+        "SENDGRID_FORBIDDEN: EMAIL_FROM não está verificado no SendGrid (Single Sender ou Domain Authentication).",
+      );
+    }
+
+    return new Error(
+      "SENDGRID_FORBIDDEN: API Key sem permissão de Mail Send ou conta/billing bloqueado no SendGrid.",
+    );
+  }
+
+  if (statusCode === 401) {
+    return new Error("SENDGRID_UNAUTHORIZED: API Key inválida ou revogada.");
+  }
+
+  if (detailsText) {
+    return new Error(`SENDGRID_ERROR: ${detailsText}`);
+  }
+
+  if (sendGridError instanceof Error) {
+    return sendGridError;
+  }
+
+  return new Error("SENDGRID_ERROR: Falha desconhecida ao enviar e-mail.");
 }
 
 async function sendEmail(payload: EmailPayload): Promise<EmailDeliveryInfo> {
-  if (!canUseResend()) {
-    if (process.env.NODE_ENV !== "production") {
-      console.warn(
-        `[email:dev] RESEND_API_KEY não configurada. E-mail simulado para ${payload.to} (${payload.subject})`,
-      );
-      return { mode: "simulated", from: payload.from };
-    }
-
-    throw new Error("RESEND_API_KEY não configurada");
-  }
+  assertSendGridConfigured();
 
   try {
-    await resend!.emails.send(payload);
-    return { mode: "resend", from: payload.from };
-  } catch (error) {
-    const isAlreadyUsingFallback = payload.from
-      .toLowerCase()
-      .includes("onboarding@resend.dev");
-
-    if (isAlreadyUsingFallback) {
-      throw error;
-    }
-
-    console.warn(
-      `[email] Falha ao enviar com remetente \"${payload.from}\". Tentando fallback \"${RESEND_FALLBACK_FROM}\".`,
+    await sgMail.send(payload);
+    return { mode: "sendgrid", from: payload.from };
+  } catch (error: unknown) {
+    const mappedError = mapSendGridError(error);
+    console.error(
+      `[email] Falha ao enviar via SendGrid para ${payload.to} (${payload.subject})`,
+      mappedError.message,
+      (error as SendGridLikeError)?.response?.body,
     );
-
-    await resend!.emails.send({
-      ...payload,
-      from: RESEND_FALLBACK_FROM,
-    });
-
-    return { mode: "resend-fallback", from: RESEND_FALLBACK_FROM };
+    throw mappedError;
   }
 }
 

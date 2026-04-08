@@ -10,6 +10,18 @@ const PROTECTED_ADMIN_ROUTES = ["/admin"];
 const ADMIN_PUBLIC_ROUTES = ["/admin/login"];
 const PUBLIC_ONLY_ROUTES = ["/login"];
 
+function isUserProtectedPath(pathname: string) {
+  const isOrderConfirmationPath = /^\/pedido\/[^/]+\/confirmacao\/?$/.test(
+    pathname,
+  );
+
+  if (isOrderConfirmationPath) {
+    return false;
+  }
+
+  return PROTECTED_USER_ROUTES.some((route) => pathname.startsWith(route));
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -52,7 +64,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // User protected routes
-  if (PROTECTED_USER_ROUTES.some((route) => pathname.startsWith(route))) {
+  if (isUserProtectedPath(pathname)) {
     const userToken = request.cookies.get("lep-session")?.value;
     if (!userToken) {
       const loginUrl = new URL("/login", request.url);

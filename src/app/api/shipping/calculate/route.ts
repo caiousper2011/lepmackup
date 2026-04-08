@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { shippingCalcSchema } from "@/lib/validation";
 import { calculateNationalShipping } from "@/lib/shipping";
 import { prisma } from "@/lib/prisma";
+import { getOrCreateShippingSettings } from "@/lib/shipping-settings";
 
 export async function POST(request: NextRequest) {
   try {
@@ -51,7 +52,29 @@ export async function POST(request: NextRequest) {
       totalItems,
       totalWeightGrams,
     });
-    return NextResponse.json({ quotes: nationalQuotes });
+
+    const settings = await getOrCreateShippingSettings();
+
+    const quotes = settings.pickupEnabled
+      ? [
+          {
+            method: "PICKUP_STORE",
+            price: 0,
+            estimatedDays: 0,
+            description: `Retirada no endereço — ${settings.pickupAddress}`,
+          },
+          ...nationalQuotes,
+        ]
+      : nationalQuotes;
+
+    return NextResponse.json({
+      quotes,
+      settings: {
+        pickupEnabled: settings.pickupEnabled,
+        pickupAddress: settings.pickupAddress,
+        pickupInstructions: settings.pickupInstructions,
+      },
+    });
   } catch (error) {
     console.error("Shipping calc error:", error);
     return NextResponse.json(

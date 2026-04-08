@@ -24,8 +24,7 @@ interface AuthContextType {
     success: boolean;
     error?: string;
     message?: string;
-    deliveryMode?: "resend" | "resend-fallback" | "simulated";
-    devCode?: string;
+    deliveryMode?: "sendgrid";
   }>;
   verifyCode: (
     email: string,
@@ -77,7 +76,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         success: true,
         message: data.message,
         deliveryMode: data.deliveryMode,
-        devCode: data.devCode,
       };
     } catch {
       return { success: false, error: "Erro de conexão. Tente novamente." };

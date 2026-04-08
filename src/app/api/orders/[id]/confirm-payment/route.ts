@@ -8,12 +8,46 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const user = await getCurrentUser();
-    if (!user) {
-      return NextResponse.json({ error: "Não autorizado." }, { status: 401 });
+    let paymentIdFromBody: string | undefined;
+
+    try {
+      const body = (await request.json()) as { paymentId?: unknown };
+      if (typeof body.paymentId === "string" && body.paymentId.trim()) {
+        paymentIdFromBody = body.paymentId.trim();
+      }
+    } catch {
+      // optional body
     }
 
+    const user = await getCurrentUser();
     const { id } = await params;
+
+    if (!user) {
+      if (!paymentIdFromBody) {
+        return NextResponse.json({ error: "Não autorizado." }, { status: 401 });
+      }
+
+      const confirmation = await confirmOrderPaymentByPaymentId(
+        paymentIdFromBody,
+        id,
+      );
+
+      if (!confirmation.ok) {
+        return NextResponse.json({
+          confirmed: false,
+          message: confirmation.message,
+          code: confirmation.code,
+        });
+      }
+
+      return NextResponse.json({
+        confirmed: confirmation.order.paymentStatus === "APPROVED",
+        updated: confirmation.updated,
+        mpStatus: confirmation.mpStatus,
+        orderStatus: confirmation.order.status,
+        paymentStatus: confirmation.order.paymentStatus,
+      });
+    }
 
     const order = await prisma.order.findFirst({
       where: { id, userId: user.id },
@@ -25,17 +59,6 @@ export async function POST(
         { error: "Pedido não encontrado." },
         { status: 404 },
       );
-    }
-
-    let paymentIdFromBody: string | undefined;
-
-    try {
-      const body = (await request.json()) as { paymentId?: unknown };
-      if (typeof body.paymentId === "string" && body.paymentId.trim()) {
-        paymentIdFromBody = body.paymentId.trim();
-      }
-    } catch {
-      // optional body
     }
 
     const paymentId = paymentIdFromBody || order.paymentId || undefined;

@@ -136,15 +136,11 @@ export async function PUT(
 
     // If status changed to SHIPPED and tracking code provided, send email
     if (data.status === "SHIPPED" && data.trackingCode && existing.user) {
-      try {
-        await sendShippingEmail(
-          existing.user.email,
-          existing.orderNumber,
-          data.trackingCode,
-        );
-      } catch {
-        // Don't fail update for email errors
-      }
+      await sendShippingEmail(
+        existing.user.email,
+        existing.orderNumber,
+        data.trackingCode,
+      );
     }
 
     await prisma.auditLog.create({

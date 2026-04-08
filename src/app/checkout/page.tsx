@@ -26,6 +26,12 @@ interface ShippingOption {
   estimatedDays: string;
 }
 
+interface PickupSettings {
+  pickupEnabled: boolean;
+  pickupAddress: string;
+  pickupInstructions?: string | null;
+}
+
 interface CouponResult {
   valid: boolean;
   discount: number;
@@ -53,6 +59,9 @@ export default function CheckoutPage() {
   const [selectedShipping, setSelectedShipping] = useState<string>("");
   const [shippingPrice, setShippingPrice] = useState(0);
   const [loadingShipping, setLoadingShipping] = useState(false);
+  const [pickupSettings, setPickupSettings] = useState<PickupSettings | null>(
+    null,
+  );
 
   const [couponCode, setCouponCode] = useState("");
   const [couponResult, setCouponResult] = useState<CouponResult | null>(null);
@@ -77,6 +86,46 @@ export default function CheckoutPage() {
       }
     }
     fetchAddresses();
+  }, []);
+
+  useEffect(() => {
+    async function fetchPickupSettings() {
+      try {
+        const res = await fetch("/api/shipping/settings");
+        if (!res.ok) return;
+
+        const data = await res.json();
+        const settings: PickupSettings | undefined = data.settings;
+        if (!settings) return;
+
+        setPickupSettings(settings);
+
+        if (settings.pickupEnabled) {
+          setShippingOptions((prev) => {
+            const withoutPickup = prev.filter(
+              (option) => option.method !== "PICKUP_STORE",
+            );
+
+            return [
+              {
+                method: "PICKUP_STORE",
+                name: "Retirada no endereço",
+                price: 0,
+                estimatedDays: "Retirada combinada após confirmação",
+              },
+              ...withoutPickup,
+            ];
+          });
+
+          setSelectedShipping((prev) => prev || "PICKUP_STORE");
+          setShippingPrice((prev) => (prev === 0 ? prev : 0));
+        }
+      } catch {
+        // ignore
+      }
+    }
+
+    fetchPickupSettings();
   }, []);
 
   // Calculate shipping when address changes
@@ -110,7 +159,10 @@ export default function CheckoutPage() {
                   method: quote.method,
                   name: quote.description,
                   price: quote.price,
-                  estimatedDays: `${quote.estimatedDays} dias úteis`,
+                  estimatedDays:
+                    quote.estimatedDays > 0
+                      ? `${quote.estimatedDays} dias úteis`
+                      : "Retirada combinada após confirmação",
                 }),
               )
             : [];
@@ -124,28 +176,65 @@ export default function CheckoutPage() {
             });
           }
 
-          setShippingOptions(options);
-          if (options.length > 0) {
-            setSelectedShipping(options[0].method);
-            setShippingPrice(options[0].price);
+          const pickupOption =
+            pickupSettings?.pickupEnabled &&
+            !options.some((opt) => opt.method === "PICKUP_STORE")
+              ? [
+                  {
+                    method: "PICKUP_STORE",
+                    name: "Retirada no endereço",
+                    price: 0,
+                    estimatedDays: "Retirada combinada após confirmação",
+                  },
+                ]
+              : [];
+
+          const mergedOptions = [...pickupOption, ...options];
+
+          setShippingOptions(mergedOptions);
+          if (mergedOptions.length > 0) {
+            const current = mergedOptions.find(
+              (option) => option.method === selectedShipping,
+            );
+
+            if (current) {
+              setShippingPrice(current.price);
+            } else {
+              setSelectedShipping(mergedOptions[0].method);
+              setShippingPrice(mergedOptions[0].price);
+            }
           }
         }
       } catch {
-        setShippingOptions([
+        const fallbackOptions: ShippingOption[] = [
           {
             method: "standard",
             name: "Entrega padrão",
             price: 15,
             estimatedDays: "5-10 dias úteis",
           },
-        ]);
-        setSelectedShipping("standard");
-        setShippingPrice(15);
+        ];
+
+        const mergedFallback = pickupSettings?.pickupEnabled
+          ? [
+              {
+                method: "PICKUP_STORE",
+                name: "Retirada no endereço",
+                price: 0,
+                estimatedDays: "Retirada combinada após confirmação",
+              },
+              ...fallbackOptions,
+            ]
+          : fallbackOptions;
+
+        setShippingOptions(mergedFallback);
+        setSelectedShipping(mergedFallback[0].method);
+        setShippingPrice(mergedFallback[0].price);
       } finally {
         setLoadingShipping(false);
       }
     },
-    [items],
+    [items, pickupSettings, selectedShipping],
   );
 
   const lookupCepInCheckout = async (cep: string) => {
@@ -237,7 +326,9 @@ export default function CheckoutPage() {
   };
 
   const handleCheckout = async () => {
-    if (!selectedAddress) {
+    const isPickup = selectedShipping === "PICKUP_STORE";
+
+    if (!isPickup && !selectedAddress) {
       setError("Selecione um endereço de entrega.");
       return;
     }
@@ -254,9 +345,9 @@ export default function CheckoutPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          addressId: selectedAddress,
+          addressId: isPickup ? undefined : selectedAddress,
           shippingMethod: selectedShipping,
-          shippingPrice,
+          shippingPrice: isPickup ? 0 : shippingPrice,
           couponCode: couponResult?.valid ? couponCode : undefined,
           items: items.map((item) => ({
             productId: item.product.id,
@@ -335,6 +426,13 @@ export default function CheckoutPage() {
             <h2 className="text-lg font-semibold text-gray-900 mb-4">
               Endereço de Entrega
             </h2>
+
+            {pickupSettings?.pickupEnabled && (
+              <p className="text-xs text-gray-500 mb-3">
+                Se preferir, você também pode escolher retirada no endereço da
+                loja no método de envio.
+              </p>
+            )}
 
             {addresses.length > 0 && (
               <div className="space-y-2 mb-4">
@@ -537,6 +635,22 @@ export default function CheckoutPage() {
                   Calculando frete...
                 </p>
               )}
+
+              {selectedShipping === "PICKUP_STORE" && pickupSettings && (
+                <div className="mt-3 bg-emerald-50 border border-emerald-200 rounded-xl p-3">
+                  <p className="text-sm font-medium text-emerald-800">
+                    Retirada no endereço
+                  </p>
+                  <p className="text-xs text-emerald-700 mt-1">
+                    {pickupSettings.pickupAddress}
+                  </p>
+                  {pickupSettings.pickupInstructions && (
+                    <p className="text-xs text-emerald-700 mt-1">
+                      {pickupSettings.pickupInstructions}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           )}
 
@@ -583,7 +697,7 @@ export default function CheckoutPage() {
             <div className="space-y-3 mb-4">
               {items.map((item) => (
                 <div key={item.product.id} className="flex gap-3">
-                  <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 relative">
+                  <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 relative">
                     <Image
                       src={item.product.images[0]}
                       alt={item.product.shortName}
@@ -660,8 +774,12 @@ export default function CheckoutPage() {
 
             <button
               onClick={handleCheckout}
-              disabled={loading || !selectedAddress || !selectedShipping}
-              className="w-full mt-4 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold py-4 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg text-base"
+              disabled={
+                loading ||
+                !selectedShipping ||
+                (selectedShipping !== "PICKUP_STORE" && !selectedAddress)
+              }
+              className="w-full mt-4 bg-linear-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold py-4 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg text-base"
             >
               {loading ? "Processando..." : `Pagar ${formatPrice(finalTotal)}`}
             </button>

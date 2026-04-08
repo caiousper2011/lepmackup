@@ -151,6 +151,17 @@ model ShippingPackageRule {
   @@map("shipping_package_rules")
 }
 
+model ShippingSettings {
+  id                 String   @id @default("default")
+  pickupEnabled      Boolean  @default(false)
+  pickupAddress      String   @default("Retirada no endereço da loja")
+  pickupInstructions String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@map("shipping_settings")
+}
+
 // ============================================
 // ORDERS
 // ============================================

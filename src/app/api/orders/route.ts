@@ -8,6 +8,7 @@ import {
 } from "@/lib/mercadopago";
 import { sendOrderConfirmationEmail } from "@/lib/email";
 import { getProductUnitPrice } from "@/data/products";
+import { getOrCreateShippingSettings } from "@/lib/shipping-settings";
 
 export async function POST(request: NextRequest) {
   try {
@@ -32,11 +33,26 @@ export async function POST(request: NextRequest) {
     const { addressId, shippingMethod, shippingPrice, couponCode, items } =
       parsed.data;
 
-    // Verify address belongs to user
-    const address = await prisma.address.findFirst({
-      where: { id: addressId, userId: user.id },
-    });
-    if (!address) {
+    const isPickup = shippingMethod === "PICKUP_STORE";
+
+    const shippingSettings = isPickup
+      ? await getOrCreateShippingSettings()
+      : null;
+
+    if (isPickup && !shippingSettings?.pickupEnabled) {
+      return NextResponse.json(
+        { error: "Retirada no endereço está indisponível no momento." },
+        { status: 400 },
+      );
+    }
+
+    // Verify address belongs to user (not required for pickup)
+    const address = isPickup
+      ? null
+      : await prisma.address.findFirst({
+          where: { id: addressId, userId: user.id },
+        });
+    if (!isPickup && !address) {
       return NextResponse.json(
         { error: "Endereço inválido." },
         { status: 400 },
@@ -118,7 +134,7 @@ export async function POST(request: NextRequest) {
     }
 
     discount = Math.round(discount * 100) / 100;
-    const shipping = Math.round(shippingPrice * 100) / 100;
+    const shipping = isPickup ? 0 : Math.round(shippingPrice * 100) / 100;
     const total = Math.round((subtotal + shipping - discount) * 100) / 100;
 
     if (total <= 0) {
@@ -153,22 +169,27 @@ export async function POST(request: NextRequest) {
         return tx.order.create({
           data: {
             userId: user.id,
-            addressId,
+            addressId: address?.id,
             subtotal,
             shipping,
             discount,
             total,
             couponId,
             shippingMethod,
-            addressSnapshot: {
-              street: address.street,
-              number: address.number,
-              complement: address.complement,
-              neighborhood: address.neighborhood,
-              city: address.city,
-              state: address.state,
-              cep: address.cep,
-            },
+            addressSnapshot: isPickup
+              ? {
+                  pickupAddress: shippingSettings?.pickupAddress,
+                  pickupInstructions: shippingSettings?.pickupInstructions,
+                }
+              : {
+                  street: address!.street,
+                  number: address!.number,
+                  complement: address!.complement,
+                  neighborhood: address!.neighborhood,
+                  city: address!.city,
+                  state: address!.state,
+                  cep: address!.cep,
+                },
             items: {
               create: validItems.map((item) => ({
                 productId: item.product.id,
@@ -252,11 +273,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Send order confirmation email
-    try {
-      await sendOrderConfirmationEmail(user.email, order.orderNumber, total);
-    } catch {
-      // Don't fail order if email fails
-    }
+    await sendOrderConfirmationEmail(user.email, order.orderNumber, total);
 
     const isTestMode = (process.env.MERCADOPAGO_ACCESS_TOKEN || "").startsWith(
       "TEST-",

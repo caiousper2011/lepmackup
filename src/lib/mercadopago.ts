@@ -93,9 +93,6 @@ export async function createPaymentPreference(
           requiredSellerUserId: "",
         };
 
-  const isMercadoPagoTestUserEmail =
-    TEST_USER_EMAIL_REGEX.test(effectivePayerEmail);
-
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
   const isLocalEnvironmentUrl = /localhost|127\.0\.0\.1|\[::1\]/i.test(appUrl);
   const notificationUrlFromEnv =
@@ -138,14 +135,10 @@ export async function createPaymentPreference(
 
   const preferenceBody = {
     items: preferenceItems,
-    ...(!isTestMode || isMercadoPagoTestUserEmail
-      ? {
-          payer: {
-            email: effectivePayerEmail,
-            name: payer.name,
-          },
-        }
-      : {}),
+    payer: {
+      email: effectivePayerEmail,
+      name: payer.name,
+    },
     external_reference: externalReference,
     back_urls: {
       success: `${appUrl}/pedido/${externalReference}/confirmacao?status=approved`,
@@ -154,11 +147,7 @@ export async function createPaymentPreference(
     },
     statement_descriptor: "LEPMAKEUP",
     auto_return: "approved" as const,
-    ...(notificationUrl
-      ? {
-          notification_url: notificationUrl,
-        }
-      : {}),
+    notification_url: notificationUrl,
   };
 
   const result = await preference.create({
@@ -171,11 +160,10 @@ export async function createPaymentPreference(
     sandbox_init_point?: string | null;
   };
 
+  // Mesmo em TEST, priorizamos a URL produtiva retornada pela API para evitar
+  // inconsistências entre contas/credenciais de teste e fluxo de pagamento.
   const checkoutUrl =
-    (isTestMode ? parsedResult.sandbox_init_point : parsedResult.init_point) ||
-    parsedResult.init_point ||
-    parsedResult.sandbox_init_point ||
-    null;
+    parsedResult.init_point || parsedResult.sandbox_init_point || null;
 
   return {
     ...result,

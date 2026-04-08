@@ -47,7 +47,11 @@ export default function OrderConfirmationPage() {
           });
         }
 
-        const res = await fetch(`/api/orders/${orderId}`, {
+        const detailUrl = paymentIdFromQuery
+          ? `/api/orders/${orderId}?payment_id=${encodeURIComponent(paymentIdFromQuery)}`
+          : `/api/orders/${orderId}`;
+
+        const res = await fetch(detailUrl, {
           cache: "no-store",
         });
         if (res.ok) {
@@ -70,7 +74,11 @@ export default function OrderConfirmationPage() {
     const pollForApproval = setInterval(async () => {
       if (!orderId) return;
       try {
-        const res = await fetch(`/api/orders/${orderId}`, {
+        const detailUrl = paymentIdFromQuery
+          ? `/api/orders/${orderId}?payment_id=${encodeURIComponent(paymentIdFromQuery)}`
+          : `/api/orders/${orderId}`;
+
+        const res = await fetch(detailUrl, {
           cache: "no-store",
         });
         if (!res.ok) return;

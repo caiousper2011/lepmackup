@@ -28,42 +28,61 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Invalidate previous unused codes
-    await prisma.otpCode.updateMany({
-      where: { email, used: false },
-      data: { used: true },
-    });
-
     // Generate and save OTP
     const code = generateOTPCode();
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 min
 
-    await prisma.otpCode.create({
+    const otpRecord = await prisma.otpCode.create({
       data: { email, code, expiresAt },
     });
 
-    // Send email
-    const delivery = await sendOTPEmail(email, code);
+    let delivery;
+    try {
+      // Send email
+      delivery = await sendOTPEmail(email, code);
+    } catch (sendError) {
+      // Prevent stale OTP when delivery fails
+      await prisma.otpCode.update({
+        where: { id: otpRecord.id },
+        data: { used: true },
+      });
+      throw sendError;
+    }
 
-    const response: Record<string, unknown> = {
+    // Invalidate previous unused codes after successful delivery
+    await prisma.otpCode.updateMany({
+      where: {
+        email,
+        used: false,
+        id: { not: otpRecord.id },
+      },
+      data: { used: true },
+    });
+
+    const response = {
       message: "Código enviado para seu e-mail.",
       deliveryMode: delivery.mode,
     };
 
-    if (
-      process.env.NODE_ENV !== "production" &&
-      delivery.mode === "simulated"
-    ) {
-      response.message =
-        "Ambiente de desenvolvimento: e-mail simulado. Use o código abaixo para entrar.";
-      response.devCode = code;
-    }
-
     return NextResponse.json(response);
-  } catch (error) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "";
     console.error("Send code error:", error);
+
+    const isConfigError =
+      message.includes("SENDGRID_FORBIDDEN") ||
+      message.includes("SENDGRID_UNAUTHORIZED") ||
+      message.includes("SENDGRID_API_KEY não configurada");
+
     return NextResponse.json(
-      { error: "Erro ao enviar código. Tente novamente." },
+      {
+        error: isConfigError
+          ? "Falha na configuração do envio de e-mail. Verifique remetente e credenciais do SendGrid."
+          : "Erro ao enviar código. Tente novamente.",
+        ...(process.env.NODE_ENV !== "production" && message
+          ? { details: message }
+          : {}),
+      },
       { status: 500 },
     );
   }

@@ -77,6 +77,11 @@ export type Product = Prisma.ProductModel
  */
 export type ShippingPackageRule = Prisma.ShippingPackageRuleModel
 /**
+ * Model ShippingSettings
+ * 
+ */
+export type ShippingSettings = Prisma.ShippingSettingsModel
+/**
  * Model Order
  * 
  */
