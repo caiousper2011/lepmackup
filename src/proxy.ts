@@ -22,7 +22,7 @@ function isUserProtectedPath(pathname: string) {
   return PROTECTED_USER_ROUTES.some((route) => pathname.startsWith(route));
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Security headers for all responses
