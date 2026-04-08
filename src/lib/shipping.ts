@@ -34,6 +34,17 @@ export interface ShippingQuote {
   description: string;
 }
 
+export interface MelhorEnvioTrackingInfo {
+  trackingCode: string | null;
+  trackingUrl: string | null;
+}
+
+export interface MelhorEnvioLabelResult {
+  labelUrl: string;
+  trackingCode: string | null;
+  trackingUrl: string | null;
+}
+
 interface PackageDimensions {
   widthCm: number;
   heightCm: number;
@@ -198,6 +209,175 @@ export async function calculateNationalShipping(
       },
     ];
   }
+}
+
+function getMelhorEnvioToken(): string {
+  const token = (process.env.MELHOR_ENVIO_TOKEN || "").trim();
+  if (!token) {
+    throw new Error("MELHOR_ENVIO_TOKEN não configurado.");
+  }
+  return token;
+}
+
+function buildMelhorEnvioHeaders() {
+  const token = getMelhorEnvioToken();
+
+  return {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+    Accept: "application/json",
+    "User-Agent": "LPMakeUp/1.0",
+  };
+}
+
+function pickFirstString(
+  input: Record<string, unknown> | undefined,
+  keys: string[],
+): string | null {
+  if (!input) return null;
+
+  for (const key of keys) {
+    const value = input[key];
+    if (typeof value === "string" && value.trim()) {
+      return value.trim();
+    }
+  }
+
+  return null;
+}
+
+function extractObjects(payload: unknown): Record<string, unknown>[] {
+  if (Array.isArray(payload)) {
+    return payload.filter(
+      (item): item is Record<string, unknown> =>
+        typeof item === "object" && item !== null,
+    );
+  }
+
+  if (typeof payload === "object" && payload !== null) {
+    const asRecord = payload as Record<string, unknown>;
+
+    if (Array.isArray(asRecord.data)) {
+      return asRecord.data.filter(
+        (item): item is Record<string, unknown> =>
+          typeof item === "object" && item !== null,
+      );
+    }
+
+    return [asRecord];
+  }
+
+  return [];
+}
+
+function fallbackTrackingUrlFromCode(
+  trackingCode: string | null,
+): string | null {
+  if (!trackingCode) return null;
+  return `https://rastreamento.correios.com.br/app/index.php?objetos=${encodeURIComponent(trackingCode)}`;
+}
+
+export async function fetchMelhorEnvioTrackingInfo(
+  shipmentId: string,
+): Promise<MelhorEnvioTrackingInfo> {
+  const cleanShipmentId = shipmentId.trim();
+
+  if (!cleanShipmentId) {
+    return { trackingCode: null, trackingUrl: null };
+  }
+
+  try {
+    const response = await fetch(
+      "https://melhorenvio.com.br/api/v2/me/shipment/tracking",
+      {
+        method: "POST",
+        headers: buildMelhorEnvioHeaders(),
+        body: JSON.stringify({ orders: [cleanShipmentId] }),
+      },
+    );
+
+    if (!response.ok) {
+      return { trackingCode: null, trackingUrl: null };
+    }
+
+    const payload = (await response.json()) as unknown;
+    const entries = extractObjects(payload);
+    const match =
+      entries.find((entry) => {
+        const entryId =
+          pickFirstString(entry, ["id", "order", "shipment_id"]) || "";
+        return entryId === cleanShipmentId;
+      }) || entries[0];
+
+    if (!match) {
+      return { trackingCode: null, trackingUrl: null };
+    }
+
+    const trackingCode = pickFirstString(match, [
+      "tracking",
+      "tracking_code",
+      "protocol",
+      "code",
+    ]);
+    const trackingUrl =
+      pickFirstString(match, ["tracking_url", "url", "link"]) ||
+      fallbackTrackingUrlFromCode(trackingCode);
+
+    return { trackingCode, trackingUrl };
+  } catch {
+    return { trackingCode: null, trackingUrl: null };
+  }
+}
+
+export async function generateMelhorEnvioShippingLabel(
+  shipmentId: string,
+): Promise<MelhorEnvioLabelResult> {
+  const cleanShipmentId = shipmentId.trim();
+
+  if (!cleanShipmentId) {
+    throw new Error("Shipment ID inválido para gerar etiqueta.");
+  }
+
+  const response = await fetch(
+    "https://melhorenvio.com.br/api/v2/me/shipment/print",
+    {
+      method: "POST",
+      headers: buildMelhorEnvioHeaders(),
+      body: JSON.stringify({
+        mode: "public",
+        orders: [cleanShipmentId],
+      }),
+    },
+  );
+
+  if (!response.ok) {
+    const details = await response.text();
+    throw new Error(`Falha ao gerar etiqueta no Melhor Envio: ${details}`);
+  }
+
+  const payload = (await response.json()) as unknown;
+  const entries = extractObjects(payload);
+  const rootRecord =
+    typeof payload === "object" && payload !== null
+      ? (payload as Record<string, unknown>)
+      : undefined;
+
+  const first = entries[0] || rootRecord;
+  const labelUrl = pickFirstString(first, ["url", "link", "label", "pdf"]);
+
+  if (!labelUrl) {
+    throw new Error(
+      "Melhor Envio não retornou URL da etiqueta para impressão.",
+    );
+  }
+
+  const trackingInfo = await fetchMelhorEnvioTrackingInfo(cleanShipmentId);
+
+  return {
+    labelUrl,
+    trackingCode: trackingInfo.trackingCode,
+    trackingUrl: trackingInfo.trackingUrl,
+  };
 }
 
 export async function geocodeAddress(

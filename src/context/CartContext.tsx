@@ -9,12 +9,8 @@ import React, {
   useMemo,
   useSyncExternalStore,
 } from "react";
-import {
-  Product,
-  BULK_THRESHOLD,
-  WHATSAPP_NUMBER,
-  getProductUnitPrice,
-} from "@/data/products";
+import { Product, BULK_THRESHOLD, getProductUnitPrice } from "@/data/products";
+import { getWhatsAppHref } from "@/lib/whatsapp-config";
 
 export interface CartItem {
   product: Product;
@@ -264,5 +260,5 @@ export function buildWhatsAppMessage(
 }
 
 export function getWhatsAppURL(message: string): string {
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  return getWhatsAppHref(message);
 }

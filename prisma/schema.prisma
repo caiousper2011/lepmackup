@@ -185,6 +185,9 @@ model Order {
   paymentMethod  String?
   mercadoPagoId  String?
   trackingCode   String?
+  trackingUrl    String?
+  shippingLabelUrl String?
+  melhorEnvioShipmentId String?
   shippingMethod String?
   addressSnapshot Json?
   createdAt      DateTime    @default(now())
@@ -196,6 +199,7 @@ model Order {
   @@index([userId])
   @@index([status])
   @@index([mercadoPagoId])
+  @@index([melhorEnvioShipmentId])
   @@map("orders")
 }
 

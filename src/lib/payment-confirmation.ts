@@ -1,5 +1,6 @@
 import { getPaymentById } from "@/lib/mercadopago";
 import { prisma } from "@/lib/prisma";
+import { sendPaidOrderWhatsAppNotification } from "@/lib/whatsapp";
 
 const PAYMENT_STATUS_MAP = {
   approved: { order: "PAID", payment: "APPROVED" },
@@ -84,7 +85,16 @@ export async function confirmOrderPaymentByPaymentId(
 
   const order = await prisma.order.findUnique({
     where: { id: externalRef },
-    include: { user: { select: { email: true } } },
+    include: {
+      user: { select: { email: true, name: true, phone: true } },
+      items: {
+        select: {
+          quantity: true,
+          unitPrice: true,
+          productSnapshot: true,
+        },
+      },
+    },
   });
 
   if (!order) {
@@ -122,7 +132,16 @@ export async function confirmOrderPaymentByPaymentId(
           paymentId,
           paymentMethod,
         },
-        include: { user: { select: { email: true } } },
+        include: {
+          user: { select: { email: true, name: true, phone: true } },
+          items: {
+            select: {
+              quantity: true,
+              unitPrice: true,
+              productSnapshot: true,
+            },
+          },
+        },
       })
     : order;
 
@@ -131,6 +150,41 @@ export async function confirmOrderPaymentByPaymentId(
       where: { id: order.couponId },
       data: { usedCount: { increment: 1 } },
     });
+  }
+
+  if (isApprovingNow) {
+    try {
+      await sendPaidOrderWhatsAppNotification({
+        id: persistedOrder.id,
+        orderNumber: persistedOrder.orderNumber,
+        status: persistedOrder.status,
+        paymentStatus: persistedOrder.paymentStatus,
+        paymentId: persistedOrder.paymentId,
+        paymentMethod: persistedOrder.paymentMethod,
+        subtotal: persistedOrder.subtotal,
+        shipping: persistedOrder.shipping,
+        discount: persistedOrder.discount,
+        total: persistedOrder.total,
+        shippingMethod: persistedOrder.shippingMethod,
+        addressSnapshot: persistedOrder.addressSnapshot,
+        createdAt: persistedOrder.createdAt,
+        user: {
+          name: persistedOrder.user?.name || null,
+          email: persistedOrder.user?.email || "",
+          phone: persistedOrder.user?.phone || null,
+        },
+        items: persistedOrder.items.map((item) => ({
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+          productSnapshot: item.productSnapshot,
+        })),
+      });
+    } catch (error) {
+      console.error(
+        "[payment-confirmation] WhatsApp notification error:",
+        error,
+      );
+    }
   }
 
   return {

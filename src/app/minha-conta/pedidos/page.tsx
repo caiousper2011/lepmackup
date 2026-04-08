@@ -17,6 +17,7 @@ interface Order {
   paymentStatus: string;
   total: number;
   trackingCode: string | null;
+  trackingUrl: string | null;
   createdAt: string;
   items: OrderItem[];
 }
@@ -64,6 +65,12 @@ export default function MeusPedidosPage() {
 
   const fmt = (v: number) =>
     v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+  const canViewDetails = (order: Order) =>
+    order.paymentStatus === "APPROVED" ||
+    ["PAID", "PROCESSING", "SHIPPED", "DELIVERED", "REFUNDED"].includes(
+      order.status,
+    );
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 space-y-6">
@@ -155,6 +162,27 @@ export default function MeusPedidosPage() {
                       {order.trackingCode}
                     </span>
                   </p>
+                  {order.trackingUrl && (
+                    <a
+                      href={order.trackingUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-1 inline-flex text-xs font-medium text-blue-600 hover:text-blue-700"
+                    >
+                      Acompanhar encomenda ↗
+                    </a>
+                  )}
+                </div>
+              )}
+
+              {canViewDetails(order) && (
+                <div className="mt-3 pt-3 border-t border-gray-100 flex justify-end">
+                  <Link
+                    href={`/minha-conta/pedidos/${order.id}`}
+                    className="text-sm font-medium text-rose-600 hover:text-rose-700"
+                  >
+                    Ver detalhes do pedido
+                  </Link>
                 </div>
               )}
             </div>

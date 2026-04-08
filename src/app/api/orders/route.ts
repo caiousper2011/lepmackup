@@ -4,6 +4,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { checkoutSchema } from "@/lib/validation";
 import {
   createPaymentPreference,
+  getMercadoPagoRuntimeConfig,
   MercadoPagoConfigurationError,
 } from "@/lib/mercadopago";
 import { sendOrderConfirmationEmail } from "@/lib/email";
@@ -275,9 +276,7 @@ export async function POST(request: NextRequest) {
     // Send order confirmation email
     await sendOrderConfirmationEmail(user.email, order.orderNumber, total);
 
-    const isTestMode = (process.env.MERCADOPAGO_ACCESS_TOKEN || "").startsWith(
-      "TEST-",
-    );
+    const isTestMode = getMercadoPagoRuntimeConfig().mode === "test";
 
     return NextResponse.json({
       orderId: order.id,

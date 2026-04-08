@@ -17,7 +17,20 @@ const updateOrderSchema = z.object({
     ])
     .optional(),
   trackingCode: z.string().max(100).optional(),
+  trackingUrl: z.string().max(500).optional(),
+  shippingLabelUrl: z.string().max(1000).optional(),
+  melhorEnvioShipmentId: z.string().max(100).optional(),
 });
+
+function emptyToNull(value: string | undefined): string | null {
+  if (value === undefined) return null;
+  const normalized = value.trim();
+  return normalized ? normalized : null;
+}
+
+function buildDefaultTrackingUrl(trackingCode: string): string {
+  return `https://rastreamento.correios.com.br/app/index.php?objetos=${encodeURIComponent(trackingCode)}`;
+}
 
 export async function GET(
   _request: NextRequest,
@@ -101,6 +114,35 @@ export async function PUT(
 
     const data = parsed.data;
 
+    const updateData: Record<string, unknown> = {};
+    if (data.status !== undefined) updateData.status = data.status;
+    if (data.trackingCode !== undefined) {
+      updateData.trackingCode = emptyToNull(data.trackingCode);
+    }
+    if (data.trackingUrl !== undefined) {
+      updateData.trackingUrl = emptyToNull(data.trackingUrl);
+    }
+    if (data.shippingLabelUrl !== undefined) {
+      updateData.shippingLabelUrl = emptyToNull(data.shippingLabelUrl);
+    }
+    if (data.melhorEnvioShipmentId !== undefined) {
+      updateData.melhorEnvioShipmentId = emptyToNull(
+        data.melhorEnvioShipmentId,
+      );
+    }
+
+    const normalizedTrackingCode =
+      (updateData.trackingCode as string | null | undefined) ??
+      existing.trackingCode;
+
+    if (
+      normalizedTrackingCode &&
+      data.trackingUrl === undefined &&
+      !existing.trackingUrl
+    ) {
+      updateData.trackingUrl = buildDefaultTrackingUrl(normalizedTrackingCode);
+    }
+
     if (data.status === "CANCELLED" && existing.status !== "PENDING") {
       return NextResponse.json(
         { error: "Somente pedidos pendentes podem ser cancelados." },
@@ -113,7 +155,7 @@ export async function PUT(
         ? await prisma.$transaction(async (tx) => {
             const updatedOrder = await tx.order.update({
               where: { id },
-              data,
+              data: updateData,
             });
 
             for (const item of existing.items) {
@@ -131,15 +173,32 @@ export async function PUT(
           })
         : await prisma.order.update({
             where: { id },
-            data,
+            data: updateData,
           });
 
-    // If status changed to SHIPPED and tracking code provided, send email
-    if (data.status === "SHIPPED" && data.trackingCode && existing.user) {
+    const nextStatus =
+      (updateData.status as string | undefined) || existing.status;
+    const nextTrackingCode =
+      (updateData.trackingCode as string | null | undefined) ??
+      existing.trackingCode;
+    const nextTrackingUrl =
+      (updateData.trackingUrl as string | null | undefined) ||
+      existing.trackingUrl;
+
+    const shouldSendShippingEmail =
+      Boolean(existing.user) &&
+      Boolean(nextTrackingCode) &&
+      nextStatus === "SHIPPED" &&
+      (existing.status !== "SHIPPED" ||
+        data.trackingCode !== undefined ||
+        data.trackingUrl !== undefined);
+
+    if (shouldSendShippingEmail && existing.user && nextTrackingCode) {
       await sendShippingEmail(
         existing.user.email,
         existing.orderNumber,
-        data.trackingCode,
+        nextTrackingCode,
+        nextTrackingUrl,
       );
     }
 
@@ -150,7 +209,7 @@ export async function PUT(
         entity: "order",
         entityId: order.id,
         details: {
-          updatedFields: Object.keys(data),
+          updatedFields: Object.keys(updateData),
           previousStatus: existing.status,
         },
       },

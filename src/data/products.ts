@@ -20,7 +20,6 @@ export interface Product {
 export const PROMO_PRICE = 7.99;
 export const BULK_PRICE = 6.99;
 export const BULK_THRESHOLD = 4;
-export const WHATSAPP_NUMBER = "5511970196558";
 
 export const products: Product[] = [
   {

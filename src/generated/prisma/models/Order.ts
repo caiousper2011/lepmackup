@@ -58,6 +58,9 @@ export type OrderMinAggregateOutputType = {
   paymentMethod: string | null
   mercadoPagoId: string | null
   trackingCode: string | null
+  trackingUrl: string | null
+  shippingLabelUrl: string | null
+  melhorEnvioShipmentId: string | null
   shippingMethod: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -79,6 +82,9 @@ export type OrderMaxAggregateOutputType = {
   paymentMethod: string | null
   mercadoPagoId: string | null
   trackingCode: string | null
+  trackingUrl: string | null
+  shippingLabelUrl: string | null
+  melhorEnvioShipmentId: string | null
   shippingMethod: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -100,6 +106,9 @@ export type OrderCountAggregateOutputType = {
   paymentMethod: number
   mercadoPagoId: number
   trackingCode: number
+  trackingUrl: number
+  shippingLabelUrl: number
+  melhorEnvioShipmentId: number
   shippingMethod: number
   addressSnapshot: number
   createdAt: number
@@ -140,6 +149,9 @@ export type OrderMinAggregateInputType = {
   paymentMethod?: true
   mercadoPagoId?: true
   trackingCode?: true
+  trackingUrl?: true
+  shippingLabelUrl?: true
+  melhorEnvioShipmentId?: true
   shippingMethod?: true
   createdAt?: true
   updatedAt?: true
@@ -161,6 +173,9 @@ export type OrderMaxAggregateInputType = {
   paymentMethod?: true
   mercadoPagoId?: true
   trackingCode?: true
+  trackingUrl?: true
+  shippingLabelUrl?: true
+  melhorEnvioShipmentId?: true
   shippingMethod?: true
   createdAt?: true
   updatedAt?: true
@@ -182,6 +197,9 @@ export type OrderCountAggregateInputType = {
   paymentMethod?: true
   mercadoPagoId?: true
   trackingCode?: true
+  trackingUrl?: true
+  shippingLabelUrl?: true
+  melhorEnvioShipmentId?: true
   shippingMethod?: true
   addressSnapshot?: true
   createdAt?: true
@@ -291,6 +309,9 @@ export type OrderGroupByOutputType = {
   paymentMethod: string | null
   mercadoPagoId: string | null
   trackingCode: string | null
+  trackingUrl: string | null
+  shippingLabelUrl: string | null
+  melhorEnvioShipmentId: string | null
   shippingMethod: string | null
   addressSnapshot: runtime.JsonValue | null
   createdAt: Date
@@ -336,6 +357,9 @@ export type OrderWhereInput = {
   paymentMethod?: Prisma.StringNullableFilter<"Order"> | string | null
   mercadoPagoId?: Prisma.StringNullableFilter<"Order"> | string | null
   trackingCode?: Prisma.StringNullableFilter<"Order"> | string | null
+  trackingUrl?: Prisma.StringNullableFilter<"Order"> | string | null
+  shippingLabelUrl?: Prisma.StringNullableFilter<"Order"> | string | null
+  melhorEnvioShipmentId?: Prisma.StringNullableFilter<"Order"> | string | null
   shippingMethod?: Prisma.StringNullableFilter<"Order"> | string | null
   addressSnapshot?: Prisma.JsonNullableFilter<"Order">
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
@@ -363,6 +387,9 @@ export type OrderOrderByWithRelationInput = {
   paymentMethod?: Prisma.SortOrderInput | Prisma.SortOrder
   mercadoPagoId?: Prisma.SortOrderInput | Prisma.SortOrder
   trackingCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  trackingUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  shippingLabelUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  melhorEnvioShipmentId?: Prisma.SortOrderInput | Prisma.SortOrder
   shippingMethod?: Prisma.SortOrderInput | Prisma.SortOrder
   addressSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -393,6 +420,9 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   paymentMethod?: Prisma.StringNullableFilter<"Order"> | string | null
   mercadoPagoId?: Prisma.StringNullableFilter<"Order"> | string | null
   trackingCode?: Prisma.StringNullableFilter<"Order"> | string | null
+  trackingUrl?: Prisma.StringNullableFilter<"Order"> | string | null
+  shippingLabelUrl?: Prisma.StringNullableFilter<"Order"> | string | null
+  melhorEnvioShipmentId?: Prisma.StringNullableFilter<"Order"> | string | null
   shippingMethod?: Prisma.StringNullableFilter<"Order"> | string | null
   addressSnapshot?: Prisma.JsonNullableFilter<"Order">
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
@@ -420,6 +450,9 @@ export type OrderOrderByWithAggregationInput = {
   paymentMethod?: Prisma.SortOrderInput | Prisma.SortOrder
   mercadoPagoId?: Prisma.SortOrderInput | Prisma.SortOrder
   trackingCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  trackingUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  shippingLabelUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  melhorEnvioShipmentId?: Prisma.SortOrderInput | Prisma.SortOrder
   shippingMethod?: Prisma.SortOrderInput | Prisma.SortOrder
   addressSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -450,6 +483,9 @@ export type OrderScalarWhereWithAggregatesInput = {
   paymentMethod?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   mercadoPagoId?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   trackingCode?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  trackingUrl?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  shippingLabelUrl?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  melhorEnvioShipmentId?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   shippingMethod?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   addressSnapshot?: Prisma.JsonNullableWithAggregatesFilter<"Order">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Order"> | Date | string
@@ -469,6 +505,9 @@ export type OrderCreateInput = {
   paymentMethod?: string | null
   mercadoPagoId?: string | null
   trackingCode?: string | null
+  trackingUrl?: string | null
+  shippingLabelUrl?: string | null
+  melhorEnvioShipmentId?: string | null
   shippingMethod?: string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -496,6 +535,9 @@ export type OrderUncheckedCreateInput = {
   paymentMethod?: string | null
   mercadoPagoId?: string | null
   trackingCode?: string | null
+  trackingUrl?: string | null
+  shippingLabelUrl?: string | null
+  melhorEnvioShipmentId?: string | null
   shippingMethod?: string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -516,6 +558,9 @@ export type OrderUpdateInput = {
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mercadoPagoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shippingLabelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  melhorEnvioShipmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shippingMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -543,6 +588,9 @@ export type OrderUncheckedUpdateInput = {
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mercadoPagoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shippingLabelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  melhorEnvioShipmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shippingMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -567,6 +615,9 @@ export type OrderCreateManyInput = {
   paymentMethod?: string | null
   mercadoPagoId?: string | null
   trackingCode?: string | null
+  trackingUrl?: string | null
+  shippingLabelUrl?: string | null
+  melhorEnvioShipmentId?: string | null
   shippingMethod?: string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -585,6 +636,9 @@ export type OrderUpdateManyMutationInput = {
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mercadoPagoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shippingLabelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  melhorEnvioShipmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shippingMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -607,6 +661,9 @@ export type OrderUncheckedUpdateManyInput = {
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mercadoPagoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shippingLabelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  melhorEnvioShipmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shippingMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -639,6 +696,9 @@ export type OrderCountOrderByAggregateInput = {
   paymentMethod?: Prisma.SortOrder
   mercadoPagoId?: Prisma.SortOrder
   trackingCode?: Prisma.SortOrder
+  trackingUrl?: Prisma.SortOrder
+  shippingLabelUrl?: Prisma.SortOrder
+  melhorEnvioShipmentId?: Prisma.SortOrder
   shippingMethod?: Prisma.SortOrder
   addressSnapshot?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -669,6 +729,9 @@ export type OrderMaxOrderByAggregateInput = {
   paymentMethod?: Prisma.SortOrder
   mercadoPagoId?: Prisma.SortOrder
   trackingCode?: Prisma.SortOrder
+  trackingUrl?: Prisma.SortOrder
+  shippingLabelUrl?: Prisma.SortOrder
+  melhorEnvioShipmentId?: Prisma.SortOrder
   shippingMethod?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -690,6 +753,9 @@ export type OrderMinOrderByAggregateInput = {
   paymentMethod?: Prisma.SortOrder
   mercadoPagoId?: Prisma.SortOrder
   trackingCode?: Prisma.SortOrder
+  trackingUrl?: Prisma.SortOrder
+  shippingLabelUrl?: Prisma.SortOrder
+  melhorEnvioShipmentId?: Prisma.SortOrder
   shippingMethod?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -890,6 +956,9 @@ export type OrderCreateWithoutUserInput = {
   paymentMethod?: string | null
   mercadoPagoId?: string | null
   trackingCode?: string | null
+  trackingUrl?: string | null
+  shippingLabelUrl?: string | null
+  melhorEnvioShipmentId?: string | null
   shippingMethod?: string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -915,6 +984,9 @@ export type OrderUncheckedCreateWithoutUserInput = {
   paymentMethod?: string | null
   mercadoPagoId?: string | null
   trackingCode?: string | null
+  trackingUrl?: string | null
+  shippingLabelUrl?: string | null
+  melhorEnvioShipmentId?: string | null
   shippingMethod?: string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -968,6 +1040,9 @@ export type OrderScalarWhereInput = {
   paymentMethod?: Prisma.StringNullableFilter<"Order"> | string | null
   mercadoPagoId?: Prisma.StringNullableFilter<"Order"> | string | null
   trackingCode?: Prisma.StringNullableFilter<"Order"> | string | null
+  trackingUrl?: Prisma.StringNullableFilter<"Order"> | string | null
+  shippingLabelUrl?: Prisma.StringNullableFilter<"Order"> | string | null
+  melhorEnvioShipmentId?: Prisma.StringNullableFilter<"Order"> | string | null
   shippingMethod?: Prisma.StringNullableFilter<"Order"> | string | null
   addressSnapshot?: Prisma.JsonNullableFilter<"Order">
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
@@ -987,6 +1062,9 @@ export type OrderCreateWithoutAddressInput = {
   paymentMethod?: string | null
   mercadoPagoId?: string | null
   trackingCode?: string | null
+  trackingUrl?: string | null
+  shippingLabelUrl?: string | null
+  melhorEnvioShipmentId?: string | null
   shippingMethod?: string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -1012,6 +1090,9 @@ export type OrderUncheckedCreateWithoutAddressInput = {
   paymentMethod?: string | null
   mercadoPagoId?: string | null
   trackingCode?: string | null
+  trackingUrl?: string | null
+  shippingLabelUrl?: string | null
+  melhorEnvioShipmentId?: string | null
   shippingMethod?: string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -1059,6 +1140,9 @@ export type OrderCreateWithoutItemsInput = {
   paymentMethod?: string | null
   mercadoPagoId?: string | null
   trackingCode?: string | null
+  trackingUrl?: string | null
+  shippingLabelUrl?: string | null
+  melhorEnvioShipmentId?: string | null
   shippingMethod?: string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -1085,6 +1169,9 @@ export type OrderUncheckedCreateWithoutItemsInput = {
   paymentMethod?: string | null
   mercadoPagoId?: string | null
   trackingCode?: string | null
+  trackingUrl?: string | null
+  shippingLabelUrl?: string | null
+  melhorEnvioShipmentId?: string | null
   shippingMethod?: string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -1120,6 +1207,9 @@ export type OrderUpdateWithoutItemsInput = {
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mercadoPagoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shippingLabelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  melhorEnvioShipmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shippingMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1146,6 +1236,9 @@ export type OrderUncheckedUpdateWithoutItemsInput = {
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mercadoPagoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shippingLabelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  melhorEnvioShipmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shippingMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1166,6 +1259,9 @@ export type OrderCreateWithoutCouponInput = {
   paymentMethod?: string | null
   mercadoPagoId?: string | null
   trackingCode?: string | null
+  trackingUrl?: string | null
+  shippingLabelUrl?: string | null
+  melhorEnvioShipmentId?: string | null
   shippingMethod?: string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -1191,6 +1287,9 @@ export type OrderUncheckedCreateWithoutCouponInput = {
   paymentMethod?: string | null
   mercadoPagoId?: string | null
   trackingCode?: string | null
+  trackingUrl?: string | null
+  shippingLabelUrl?: string | null
+  melhorEnvioShipmentId?: string | null
   shippingMethod?: string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -1238,6 +1337,9 @@ export type OrderCreateWithoutWebhookLogsInput = {
   paymentMethod?: string | null
   mercadoPagoId?: string | null
   trackingCode?: string | null
+  trackingUrl?: string | null
+  shippingLabelUrl?: string | null
+  melhorEnvioShipmentId?: string | null
   shippingMethod?: string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -1264,6 +1366,9 @@ export type OrderUncheckedCreateWithoutWebhookLogsInput = {
   paymentMethod?: string | null
   mercadoPagoId?: string | null
   trackingCode?: string | null
+  trackingUrl?: string | null
+  shippingLabelUrl?: string | null
+  melhorEnvioShipmentId?: string | null
   shippingMethod?: string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -1299,6 +1404,9 @@ export type OrderUpdateWithoutWebhookLogsInput = {
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mercadoPagoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shippingLabelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  melhorEnvioShipmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shippingMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1325,6 +1433,9 @@ export type OrderUncheckedUpdateWithoutWebhookLogsInput = {
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mercadoPagoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shippingLabelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  melhorEnvioShipmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shippingMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1347,6 +1458,9 @@ export type OrderCreateManyUserInput = {
   paymentMethod?: string | null
   mercadoPagoId?: string | null
   trackingCode?: string | null
+  trackingUrl?: string | null
+  shippingLabelUrl?: string | null
+  melhorEnvioShipmentId?: string | null
   shippingMethod?: string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -1365,6 +1479,9 @@ export type OrderUpdateWithoutUserInput = {
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mercadoPagoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shippingLabelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  melhorEnvioShipmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shippingMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1390,6 +1507,9 @@ export type OrderUncheckedUpdateWithoutUserInput = {
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mercadoPagoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shippingLabelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  melhorEnvioShipmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shippingMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1413,6 +1533,9 @@ export type OrderUncheckedUpdateManyWithoutUserInput = {
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mercadoPagoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shippingLabelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  melhorEnvioShipmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shippingMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1434,6 +1557,9 @@ export type OrderCreateManyAddressInput = {
   paymentMethod?: string | null
   mercadoPagoId?: string | null
   trackingCode?: string | null
+  trackingUrl?: string | null
+  shippingLabelUrl?: string | null
+  melhorEnvioShipmentId?: string | null
   shippingMethod?: string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -1452,6 +1578,9 @@ export type OrderUpdateWithoutAddressInput = {
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mercadoPagoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shippingLabelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  melhorEnvioShipmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shippingMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1477,6 +1606,9 @@ export type OrderUncheckedUpdateWithoutAddressInput = {
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mercadoPagoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shippingLabelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  melhorEnvioShipmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shippingMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1500,6 +1632,9 @@ export type OrderUncheckedUpdateManyWithoutAddressInput = {
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mercadoPagoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shippingLabelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  melhorEnvioShipmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shippingMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1521,6 +1656,9 @@ export type OrderCreateManyCouponInput = {
   paymentMethod?: string | null
   mercadoPagoId?: string | null
   trackingCode?: string | null
+  trackingUrl?: string | null
+  shippingLabelUrl?: string | null
+  melhorEnvioShipmentId?: string | null
   shippingMethod?: string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
@@ -1539,6 +1677,9 @@ export type OrderUpdateWithoutCouponInput = {
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mercadoPagoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shippingLabelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  melhorEnvioShipmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shippingMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1564,6 +1705,9 @@ export type OrderUncheckedUpdateWithoutCouponInput = {
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mercadoPagoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shippingLabelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  melhorEnvioShipmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shippingMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1587,6 +1731,9 @@ export type OrderUncheckedUpdateManyWithoutCouponInput = {
   paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mercadoPagoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   trackingCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shippingLabelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  melhorEnvioShipmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shippingMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1649,6 +1796,9 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   paymentMethod?: boolean
   mercadoPagoId?: boolean
   trackingCode?: boolean
+  trackingUrl?: boolean
+  shippingLabelUrl?: boolean
+  melhorEnvioShipmentId?: boolean
   shippingMethod?: boolean
   addressSnapshot?: boolean
   createdAt?: boolean
@@ -1677,6 +1827,9 @@ export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   paymentMethod?: boolean
   mercadoPagoId?: boolean
   trackingCode?: boolean
+  trackingUrl?: boolean
+  shippingLabelUrl?: boolean
+  melhorEnvioShipmentId?: boolean
   shippingMethod?: boolean
   addressSnapshot?: boolean
   createdAt?: boolean
@@ -1702,6 +1855,9 @@ export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   paymentMethod?: boolean
   mercadoPagoId?: boolean
   trackingCode?: boolean
+  trackingUrl?: boolean
+  shippingLabelUrl?: boolean
+  melhorEnvioShipmentId?: boolean
   shippingMethod?: boolean
   addressSnapshot?: boolean
   createdAt?: boolean
@@ -1727,13 +1883,16 @@ export type OrderSelectScalar = {
   paymentMethod?: boolean
   mercadoPagoId?: boolean
   trackingCode?: boolean
+  trackingUrl?: boolean
+  shippingLabelUrl?: boolean
+  melhorEnvioShipmentId?: boolean
   shippingMethod?: boolean
   addressSnapshot?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderNumber" | "userId" | "addressId" | "status" | "subtotal" | "shipping" | "discount" | "total" | "couponId" | "paymentId" | "paymentStatus" | "paymentMethod" | "mercadoPagoId" | "trackingCode" | "shippingMethod" | "addressSnapshot" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
+export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderNumber" | "userId" | "addressId" | "status" | "subtotal" | "shipping" | "discount" | "total" | "couponId" | "paymentId" | "paymentStatus" | "paymentMethod" | "mercadoPagoId" | "trackingCode" | "trackingUrl" | "shippingLabelUrl" | "melhorEnvioShipmentId" | "shippingMethod" | "addressSnapshot" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
 export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   address?: boolean | Prisma.Order$addressArgs<ExtArgs>
@@ -1778,6 +1937,9 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     paymentMethod: string | null
     mercadoPagoId: string | null
     trackingCode: string | null
+    trackingUrl: string | null
+    shippingLabelUrl: string | null
+    melhorEnvioShipmentId: string | null
     shippingMethod: string | null
     addressSnapshot: runtime.JsonValue | null
     createdAt: Date
@@ -2225,6 +2387,9 @@ export interface OrderFieldRefs {
   readonly paymentMethod: Prisma.FieldRef<"Order", 'String'>
   readonly mercadoPagoId: Prisma.FieldRef<"Order", 'String'>
   readonly trackingCode: Prisma.FieldRef<"Order", 'String'>
+  readonly trackingUrl: Prisma.FieldRef<"Order", 'String'>
+  readonly shippingLabelUrl: Prisma.FieldRef<"Order", 'String'>
+  readonly melhorEnvioShipmentId: Prisma.FieldRef<"Order", 'String'>
   readonly shippingMethod: Prisma.FieldRef<"Order", 'String'>
   readonly addressSnapshot: Prisma.FieldRef<"Order", 'Json'>
   readonly createdAt: Prisma.FieldRef<"Order", 'DateTime'>

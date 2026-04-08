@@ -13,6 +13,9 @@ interface OrderDetail {
   discount: number;
   total: number;
   trackingCode: string | null;
+  trackingUrl: string | null;
+  shippingLabelUrl: string | null;
+  melhorEnvioShipmentId: string | null;
   shippingMethod: string | null;
   paymentMethod: string | null;
   mercadoPagoId: string | null;
@@ -27,6 +30,13 @@ interface OrderDetail {
   } | null;
   createdAt: string;
   user: { email: string; name: string | null; phone: string | null };
+  webhookLogs?: {
+    id: string;
+    eventType: string;
+    processed: boolean;
+    error: string | null;
+    createdAt: string;
+  }[];
   items: {
     id: string;
     quantity: number;
@@ -54,6 +64,10 @@ export default function AdminOrderDetailPage() {
   const [saving, setSaving] = useState(false);
   const [newStatus, setNewStatus] = useState("");
   const [trackingCode, setTrackingCode] = useState("");
+  const [trackingUrl, setTrackingUrl] = useState("");
+  const [shippingLabelUrl, setShippingLabelUrl] = useState("");
+  const [melhorEnvioShipmentId, setMelhorEnvioShipmentId] = useState("");
+  const [printingLabel, setPrintingLabel] = useState(false);
 
   useEffect(() => {
     async function fetchOrder() {
@@ -64,6 +78,9 @@ export default function AdminOrderDetailPage() {
           setOrder(data.order);
           setNewStatus(data.order.status);
           setTrackingCode(data.order.trackingCode || "");
+          setTrackingUrl(data.order.trackingUrl || "");
+          setShippingLabelUrl(data.order.shippingLabelUrl || "");
+          setMelhorEnvioShipmentId(data.order.melhorEnvioShipmentId || "");
         }
       } catch {
         // ignore
@@ -81,6 +98,14 @@ export default function AdminOrderDetailPage() {
       if (newStatus !== order?.status) body.status = newStatus;
       if (trackingCode !== (order?.trackingCode || ""))
         body.trackingCode = trackingCode;
+      if (trackingUrl !== (order?.trackingUrl || ""))
+        body.trackingUrl = trackingUrl;
+      if (shippingLabelUrl !== (order?.shippingLabelUrl || "")) {
+        body.shippingLabelUrl = shippingLabelUrl;
+      }
+      if (melhorEnvioShipmentId !== (order?.melhorEnvioShipmentId || "")) {
+        body.melhorEnvioShipmentId = melhorEnvioShipmentId;
+      }
 
       const res = await fetch(`/api/admin/orders/${params.id}`, {
         method: "PUT",
@@ -124,6 +149,50 @@ export default function AdminOrderDetailPage() {
       // ignore
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handlePrintLabel = async () => {
+    setPrintingLabel(true);
+    try {
+      const res = await fetch(`/api/admin/orders/${params.id}/shipping-label`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        window.alert(data.error || "Não foi possível gerar a etiqueta.");
+        return;
+      }
+
+      const nextLabelUrl = data.labelUrl || "";
+      const nextTrackingCode = data.trackingCode || "";
+      const nextTrackingUrl = data.trackingUrl || "";
+
+      setShippingLabelUrl(nextLabelUrl);
+      setTrackingCode(nextTrackingCode);
+      setTrackingUrl(nextTrackingUrl);
+
+      setOrder((prev) =>
+        prev
+          ? {
+              ...prev,
+              shippingLabelUrl: nextLabelUrl,
+              trackingCode: nextTrackingCode,
+              trackingUrl: nextTrackingUrl,
+            }
+          : prev,
+      );
+
+      if (nextLabelUrl) {
+        window.open(nextLabelUrl, "_blank", "noopener,noreferrer");
+      }
+    } catch {
+      window.alert("Erro ao gerar etiqueta do Melhor Envio.");
+    } finally {
+      setPrintingLabel(false);
     }
   };
 
@@ -263,6 +332,71 @@ export default function AdminOrderDetailPage() {
                   className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
                 />
               </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">
+                  Link de rastreio
+                </label>
+                <input
+                  type="url"
+                  value={trackingUrl}
+                  onChange={(e) => setTrackingUrl(e.target.value)}
+                  placeholder="https://..."
+                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">
+                  Shipment ID (Melhor Envio)
+                </label>
+                <input
+                  type="text"
+                  value={melhorEnvioShipmentId}
+                  onChange={(e) => setMelhorEnvioShipmentId(e.target.value)}
+                  placeholder="ID do envio no Melhor Envio"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">
+                  Link da etiqueta (manual)
+                </label>
+                <input
+                  type="url"
+                  value={shippingLabelUrl}
+                  onChange={(e) => setShippingLabelUrl(e.target.value)}
+                  placeholder="https://...pdf"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
+                />
+              </div>
+              <button
+                onClick={handlePrintLabel}
+                disabled={printingLabel || saving}
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-xl text-sm transition-colors disabled:opacity-50"
+              >
+                {printingLabel
+                  ? "Gerando etiqueta..."
+                  : "Gerar / Imprimir etiqueta Melhor Envio"}
+              </button>
+              {(shippingLabelUrl || order.shippingLabelUrl) && (
+                <a
+                  href={shippingLabelUrl || order.shippingLabelUrl || "#"}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex text-sm text-indigo-700 hover:text-indigo-800 font-medium"
+                >
+                  Abrir etiqueta para impressão ↗
+                </a>
+              )}
+              {(trackingUrl || order.trackingUrl) && (
+                <a
+                  href={trackingUrl || order.trackingUrl || "#"}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex text-sm text-blue-700 hover:text-blue-800 font-medium"
+                >
+                  Abrir link de rastreio ↗
+                </a>
+              )}
               <button
                 onClick={handleUpdate}
                 disabled={saving}
@@ -296,7 +430,7 @@ export default function AdminOrderDetailPage() {
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">MP ID</span>
-                <span className="text-xs truncate max-w-[120px]">
+                <span className="text-xs truncate max-w-30">
                   {order.mercadoPagoId || "—"}
                 </span>
               </div>
@@ -309,6 +443,34 @@ export default function AdminOrderDetailPage() {
                 </div>
               )}
             </div>
+          </div>
+
+          {/* Webhook diagnostics */}
+          <div className="bg-white rounded-2xl border border-gray-200 p-5">
+            <h2 className="font-semibold text-gray-900 mb-3">Webhook MP</h2>
+            {order.webhookLogs && order.webhookLogs.length > 0 ? (
+              <div className="space-y-2">
+                {order.webhookLogs.slice(0, 5).map((log) => (
+                  <div
+                    key={log.id}
+                    className="rounded-xl border border-gray-100 p-3 text-xs"
+                  >
+                    <p className="font-medium text-gray-800">{log.eventType}</p>
+                    <p className="text-gray-500">
+                      {new Date(log.createdAt).toLocaleString("pt-BR")}
+                    </p>
+                    {!log.processed && (
+                      <p className="text-amber-600">Aguardando processamento</p>
+                    )}
+                    {log.error && <p className="text-red-600">{log.error}</p>}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-gray-500">
+                Nenhuma notificação de webhook registrada para este pedido.
+              </p>
+            )}
           </div>
         </div>
       </div>

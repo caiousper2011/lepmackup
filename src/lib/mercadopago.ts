@@ -1,12 +1,15 @@
 import { MercadoPagoConfig, Payment, Preference } from "mercadopago";
 
-const client = new MercadoPagoConfig({
-  accessToken: process.env.MERCADOPAGO_ACCESS_TOKEN || "",
-});
+type MercadoPagoMode = "test" | "production";
 
-export const payment = new Payment(client);
-export const preference = new Preference(client);
-export { client as mercadoPagoClient };
+export interface MercadoPagoRuntimeConfig {
+  mode: MercadoPagoMode;
+  accessToken: string;
+  publicKey: string;
+  webhookSecret: string;
+  notificationUrl: string;
+  tokenOwnerUserId: string | null;
+}
 
 const TEST_USER_EMAIL_REGEX = /@testuser\.com$/i;
 
@@ -17,24 +20,146 @@ export class MercadoPagoConfigurationError extends Error {
   }
 }
 
+function cleanEnv(value: string | undefined): string {
+  return (value || "").trim();
+}
+
+function resolvePreferredMode(): MercadoPagoMode {
+  const explicitMode = cleanEnv(process.env.MERCADOPAGO_MODE).toLowerCase();
+
+  if (explicitMode === "test") return "test";
+  if (explicitMode === "production" || explicitMode === "prod") {
+    return "production";
+  }
+
+  return process.env.NODE_ENV === "production" ? "production" : "test";
+}
+
+function normalizeNotificationUrl(url: string): string {
+  return url.replace(/\/$/, "");
+}
+
 function getTokenOwnerUserId(accessToken: string): string | null {
   const match = accessToken.trim().match(/-(\d+)$/);
   return match?.[1] || null;
 }
 
+export function getMercadoPagoRuntimeConfig(): MercadoPagoRuntimeConfig {
+  const preferredMode = resolvePreferredMode();
+
+  const legacyAccessToken = cleanEnv(process.env.MERCADOPAGO_ACCESS_TOKEN);
+  const legacyPublicKey = cleanEnv(
+    process.env.MERCADOPAGO_PUBLIC_KEY ||
+      process.env.NEXT_PUBLIC_MERCADOPAGO_PUBLIC_KEY,
+  );
+  const legacyWebhookSecret = cleanEnv(process.env.MERCADOPAGO_WEBHOOK_SECRET);
+  const legacyNotificationUrl = cleanEnv(
+    process.env.MERCADOPAGO_NOTIFICATION_URL,
+  );
+
+  const testAccessToken =
+    cleanEnv(process.env.MERCADOPAGO_TEST_ACCESS_TOKEN) || legacyAccessToken;
+  const prodAccessToken = cleanEnv(process.env.MERCADOPAGO_PROD_ACCESS_TOKEN);
+
+  const testPublicKey = cleanEnv(
+    process.env.MERCADOPAGO_TEST_PUBLIC_KEY ||
+      process.env.NEXT_PUBLIC_MERCADOPAGO_TEST_PUBLIC_KEY,
+  );
+  const prodPublicKey = cleanEnv(
+    process.env.MERCADOPAGO_PROD_PUBLIC_KEY ||
+      process.env.NEXT_PUBLIC_MERCADOPAGO_PROD_PUBLIC_KEY,
+  );
+
+  const testWebhookSecret = cleanEnv(
+    process.env.MERCADOPAGO_TEST_WEBHOOK_SECRET,
+  );
+  const prodWebhookSecret = cleanEnv(
+    process.env.MERCADOPAGO_PROD_WEBHOOK_SECRET,
+  );
+
+  const testNotificationUrl = cleanEnv(
+    process.env.MERCADOPAGO_TEST_NOTIFICATION_URL,
+  );
+  const prodNotificationUrl = cleanEnv(
+    process.env.MERCADOPAGO_PROD_NOTIFICATION_URL,
+  );
+
+  const selectedMode: MercadoPagoMode =
+    preferredMode === "production"
+      ? prodAccessToken
+        ? "production"
+        : "test"
+      : testAccessToken
+        ? "test"
+        : "production";
+
+  const selectedAccessToken =
+    selectedMode === "production" ? prodAccessToken : testAccessToken;
+
+  if (!selectedAccessToken) {
+    throw new MercadoPagoConfigurationError(
+      "Credenciais do Mercado Pago não configuradas. Defina MERCADOPAGO_TEST_ACCESS_TOKEN e/ou MERCADOPAGO_PROD_ACCESS_TOKEN.",
+    );
+  }
+
+  const selectedPublicKey =
+    selectedMode === "production"
+      ? prodPublicKey || legacyPublicKey
+      : testPublicKey || legacyPublicKey;
+
+  const selectedWebhookSecret =
+    selectedMode === "production"
+      ? prodWebhookSecret || legacyWebhookSecret
+      : testWebhookSecret || legacyWebhookSecret;
+
+  const selectedNotificationUrl =
+    selectedMode === "production"
+      ? prodNotificationUrl || legacyNotificationUrl
+      : testNotificationUrl || legacyNotificationUrl;
+
+  return {
+    mode: selectedMode,
+    accessToken: selectedAccessToken,
+    publicKey: selectedPublicKey,
+    webhookSecret: selectedWebhookSecret,
+    notificationUrl: normalizeNotificationUrl(selectedNotificationUrl),
+    tokenOwnerUserId: getTokenOwnerUserId(selectedAccessToken),
+  };
+}
+
+function createMercadoPagoClient(accessToken: string): MercadoPagoConfig {
+  return new MercadoPagoConfig({ accessToken });
+}
+
+function isStrictMercadoPagoTestValidationEnabled(): boolean {
+  const raw = cleanEnv(
+    process.env.MERCADOPAGO_TEST_STRICT_VALIDATION,
+  ).toLowerCase();
+
+  return raw === "1" || raw === "true" || raw === "yes";
+}
+
 function validateMercadoPagoTestMode(payerEmail: string, accessToken: string) {
+  const strictValidation = isStrictMercadoPagoTestValidationEnabled();
   const requiredSellerUserId =
     process.env.MERCADOPAGO_TEST_SELLER_USER_ID?.trim() || "";
-  const forcedTestPayerEmail =
+  const forcedTestPayerEmailRaw =
     process.env.MERCADOPAGO_TEST_PAYER_EMAIL?.trim() || "";
+  const forcedTestPayerEmail =
+    forcedTestPayerEmailRaw &&
+    TEST_USER_EMAIL_REGEX.test(forcedTestPayerEmailRaw)
+      ? forcedTestPayerEmailRaw
+      : "";
 
-  if (
-    forcedTestPayerEmail &&
-    !TEST_USER_EMAIL_REGEX.test(forcedTestPayerEmail)
-  ) {
-    throw new MercadoPagoConfigurationError(
-      "MERCADOPAGO_TEST_PAYER_EMAIL deve terminar com @testuser.com.",
-    );
+  if (forcedTestPayerEmailRaw && !forcedTestPayerEmail) {
+    const message =
+      "MERCADOPAGO_TEST_PAYER_EMAIL deve terminar com @testuser.com.";
+
+    if (strictValidation) {
+      throw new MercadoPagoConfigurationError(message);
+    }
+
+    console.warn(`[mercadopago] ${message} Ignorando valor configurado.`);
   }
 
   const effectivePayerEmail = forcedTestPayerEmail || payerEmail;
@@ -50,14 +175,18 @@ function validateMercadoPagoTestMode(payerEmail: string, accessToken: string) {
   if (requiredSellerUserId) {
     if (!tokenOwnerUserId) {
       throw new MercadoPagoConfigurationError(
-        "Não foi possível identificar o vendedor no MERCADOPAGO_ACCESS_TOKEN. Verifique o token TEST.",
+        "Não foi possível identificar o vendedor no token ativo do Mercado Pago. Verifique MERCADOPAGO_TEST_ACCESS_TOKEN.",
       );
     }
 
     if (tokenOwnerUserId !== requiredSellerUserId) {
-      throw new MercadoPagoConfigurationError(
-        `MERCADOPAGO_ACCESS_TOKEN está vinculado ao vendedor ${tokenOwnerUserId}, mas o esperado é ${requiredSellerUserId}. Gere credenciais TEST do vendedor correto no painel Mercado Pago Developers.`,
-      );
+      const message = `O token ativo está vinculado ao vendedor ${tokenOwnerUserId}, mas o esperado é ${requiredSellerUserId}. Gere credenciais TEST do vendedor correto no painel Mercado Pago Developers.`;
+
+      if (strictValidation) {
+        throw new MercadoPagoConfigurationError(message);
+      }
+
+      console.warn(`[mercadopago] ${message}`);
     }
   }
 
@@ -82,23 +211,22 @@ export async function createPaymentPreference(
   shipping: number = 0,
   discount: number = 0,
 ) {
-  const accessToken = process.env.MERCADOPAGO_ACCESS_TOKEN || "";
-  const isTestMode = accessToken.startsWith("TEST-");
+  const runtimeConfig = getMercadoPagoRuntimeConfig();
+  const isTestMode = runtimeConfig.mode === "test";
+
   const { effectivePayerEmail, tokenOwnerUserId, requiredSellerUserId } =
     isTestMode
-      ? validateMercadoPagoTestMode(payer.email, accessToken)
+      ? validateMercadoPagoTestMode(payer.email, runtimeConfig.accessToken)
       : {
           effectivePayerEmail: payer.email,
-          tokenOwnerUserId: getTokenOwnerUserId(accessToken),
+          tokenOwnerUserId: runtimeConfig.tokenOwnerUserId,
           requiredSellerUserId: "",
         };
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
   const isLocalEnvironmentUrl = /localhost|127\.0\.0\.1|\[::1\]/i.test(appUrl);
-  const notificationUrlFromEnv =
-    process.env.MERCADOPAGO_NOTIFICATION_URL?.trim() || "";
-  const notificationUrl = notificationUrlFromEnv
-    ? notificationUrlFromEnv
+  const notificationUrl = runtimeConfig.notificationUrl
+    ? runtimeConfig.notificationUrl
     : !isLocalEnvironmentUrl
       ? `${appUrl}/api/webhooks/mercadopago`
       : "";
@@ -147,10 +275,18 @@ export async function createPaymentPreference(
     },
     statement_descriptor: "LEPMAKEUP",
     auto_return: "approved" as const,
-    notification_url: notificationUrl,
+    metadata: {
+      order_id: externalReference,
+      mode: runtimeConfig.mode,
+    },
+    ...(notificationUrl ? { notification_url: notificationUrl } : {}),
   };
 
-  const result = await preference.create({
+  const preferenceClient = new Preference(
+    createMercadoPagoClient(runtimeConfig.accessToken),
+  );
+
+  const result = await preferenceClient.create({
     body: preferenceBody,
   });
 
@@ -168,6 +304,8 @@ export async function createPaymentPreference(
   return {
     ...result,
     checkout_url: checkoutUrl,
+    mode: runtimeConfig.mode,
+    notification_url: notificationUrl || null,
     token_owner_user_id: tokenOwnerUserId,
     required_seller_user_id: requiredSellerUserId || null,
     payer_email_used: effectivePayerEmail,
@@ -175,5 +313,10 @@ export async function createPaymentPreference(
 }
 
 export async function getPaymentById(paymentId: string) {
-  return payment.get({ id: paymentId });
+  const runtimeConfig = getMercadoPagoRuntimeConfig();
+  const paymentClient = new Payment(
+    createMercadoPagoClient(runtimeConfig.accessToken),
+  );
+
+  return paymentClient.get({ id: paymentId });
 }

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getWhatsAppHref } from "@/lib/whatsapp-config";
 
 export default function Footer() {
   return (
@@ -59,7 +60,7 @@ export default function Footer() {
               Pedidos e dúvidas via WhatsApp:
             </p>
             <a
-              href="https://wa.me/5511970196558"
+              href={getWhatsAppHref()}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white text-sm font-medium px-4 py-2 rounded-full transition-colors"

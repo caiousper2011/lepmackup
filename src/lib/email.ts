@@ -180,6 +180,7 @@ export async function sendShippingEmail(
   to: string,
   orderNumber: number,
   trackingCode: string,
+  trackingUrl?: string | null,
 ) {
   await sendEmail({
     from: FROM,
@@ -190,6 +191,7 @@ export async function sendShippingEmail(
         <h2 style="text-align: center; color: #1a1a2e;">📦 Pedido Enviado!</h2>
         <p style="text-align: center; color: #666;">Seu pedido <strong>#${orderNumber}</strong> está a caminho!</p>
         ${trackingCode ? `<div style="background: #eff6ff; border: 2px solid #bfdbfe; border-radius: 12px; padding: 16px; text-align: center; margin: 24px 0;"><p style="margin: 0; color: #1e40af; font-size: 13px;">Código de rastreio</p><p style="margin: 4px 0 0; font-size: 20px; font-weight: bold; color: #1e40af;">${trackingCode}</p></div>` : ""}
+        ${trackingUrl ? `<div style="text-align: center; margin-top: 12px;"><a href="${trackingUrl}" style="display: inline-block; background: #2563eb; color: white; padding: 10px 18px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 13px;">Acompanhar entrega</a></div>` : ""}
       </div>
     `,
   });

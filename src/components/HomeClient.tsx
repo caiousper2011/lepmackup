@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import ProductCard from "@/components/ProductCard";
 import { Product } from "@/data/products";
 import { useCart } from "@/context/CartContext";
+import { getWhatsAppHref } from "@/lib/whatsapp-config";
 
 interface HomeClientProps {
   products: Product[];
@@ -125,7 +126,7 @@ export default function HomeClient({ products, categories }: HomeClientProps) {
                 <span className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
               </a>
               <a
-                href="https://wa.me/5511970196558"
+                href={getWhatsAppHref()}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto bg-white hover:bg-green-50 text-green-600 font-bold px-8 py-4 rounded-2xl shadow-md hover:shadow-lg transition-all border-2 border-green-200 flex items-center justify-center gap-2"
