@@ -416,7 +416,7 @@ export default function HomeClient({ products, categories }: HomeClientProps) {
                 step: "3",
                 icon: "📦",
                 title: "Receba na sua casa",
-                desc: "Enviamos em até 24h após pagamento. Perto de SP? Frete grátis até 1km ou a partir de R$12!",
+                desc: "Enviamos em até 24h após pagamento. Perto de SP? Frete grátis até 1km! Para todo o Brasil via transportadoras.",
               },
             ].map((item) => (
               <div
@@ -469,7 +469,7 @@ export default function HomeClient({ products, categories }: HomeClientProps) {
               },
               {
                 q: "Como funciona a entrega?",
-                a: "Entregamos em São Paulo (frete grátis até 1km, a partir de R$12 localmente) e para todo o Brasil via transportadoras. Enviamos em até 24h após confirmação do pagamento!",
+                a: "Frete grátis para endereços até 1km da loja! Para outras regiões, calculamos o frete em tempo real com as melhores transportadoras (Correios, Jadlog e mais). Enviamos em até 24h após confirmação do pagamento!",
               },
               {
                 q: "Como funciona a indicação de amigas?",

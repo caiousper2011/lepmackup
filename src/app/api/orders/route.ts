@@ -7,6 +7,10 @@ import {
   getMercadoPagoRuntimeConfig,
   MercadoPagoConfigurationError,
 } from "@/lib/mercadopago";
+import {
+  extractMelhorEnvioServiceId,
+  validateMelhorEnvioServiceFromQuote,
+} from "@/lib/shipping";
 import { sendOrderConfirmationEmail } from "@/lib/email";
 import { getProductUnitPrice } from "@/data/products";
 import { getOrCreateShippingSettings } from "@/lib/shipping-settings";
@@ -31,8 +35,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { addressId, shippingMethod, shippingPrice, couponCode, items } =
-      parsed.data;
+    const {
+      addressId,
+      shippingMethod,
+      melhorEnvioServiceId,
+      melhorEnvioCompanyId,
+      shippingDescription,
+      shippingPrice,
+      cpfCnpj,
+      couponCode,
+      items,
+    } = parsed.data;
 
     const isPickup = shippingMethod === "PICKUP_STORE";
 
@@ -110,6 +123,11 @@ export async function POST(request: NextRequest) {
         sum + item.quantity * getProductUnitPrice(item.product, totalQuantity),
       0,
     );
+    const totalWeightGrams = validItems.reduce(
+      (sum, item) =>
+        sum + item.quantity * (item.product.shippingWeightGrams || 50),
+      0,
+    );
 
     // Validate coupon
     let discount = 0;
@@ -135,7 +153,51 @@ export async function POST(request: NextRequest) {
     }
 
     discount = Math.round(discount * 100) / 100;
-    const shipping = isPickup ? 0 : Math.round(shippingPrice * 100) / 100;
+    let normalizedShippingMethod = shippingMethod;
+    let validatedShippingPrice = isPickup
+      ? 0
+      : Math.round(shippingPrice * 100) / 100;
+    let validatedMelhorEnvioServiceId: number | null = null;
+
+    const isMelhorEnvioShipping =
+      !isPickup &&
+      (typeof melhorEnvioServiceId === "number" ||
+        /^MELHOR_ENVIO_\d+$/.test(shippingMethod));
+
+    if (isMelhorEnvioShipping) {
+      const selectedServiceId =
+        melhorEnvioServiceId ?? extractMelhorEnvioServiceId(shippingMethod);
+
+      if (!selectedServiceId) {
+        return NextResponse.json(
+          { error: "Service ID da cotação não encontrado." },
+          { status: 400 },
+        );
+      }
+
+      let selectedQuote;
+      try {
+        selectedQuote = await validateMelhorEnvioServiceFromQuote({
+          cepDestino: address!.cep,
+          totalWeightGrams,
+          totalItems: totalQuantity,
+          insuranceValue: subtotal,
+          serviceId: selectedServiceId,
+        });
+      } catch (error) {
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Não foi possível validar o service ID da cotação.";
+        return NextResponse.json({ error: message }, { status: 400 });
+      }
+
+      validatedMelhorEnvioServiceId = selectedServiceId;
+      normalizedShippingMethod = `MELHOR_ENVIO_${selectedServiceId}`;
+      validatedShippingPrice = Math.round(selectedQuote.price * 100) / 100;
+    }
+
+    const shipping = isPickup ? 0 : validatedShippingPrice;
     const total = Math.round((subtotal + shipping - discount) * 100) / 100;
 
     if (total <= 0) {
@@ -176,11 +238,12 @@ export async function POST(request: NextRequest) {
             discount,
             total,
             couponId,
-            shippingMethod,
+            shippingMethod: normalizedShippingMethod,
             addressSnapshot: isPickup
               ? {
                   pickupAddress: shippingSettings?.pickupAddress,
                   pickupInstructions: shippingSettings?.pickupInstructions,
+                  cpfCnpj,
                 }
               : {
                   street: address!.street,
@@ -190,6 +253,12 @@ export async function POST(request: NextRequest) {
                   city: address!.city,
                   state: address!.state,
                   cep: address!.cep,
+                  cpfCnpj,
+                  ...(validatedMelhorEnvioServiceId
+                    ? { melhorEnvioServiceId: validatedMelhorEnvioServiceId }
+                    : {}),
+                  ...(melhorEnvioCompanyId ? { melhorEnvioCompanyId } : {}),
+                  ...(shippingDescription ? { shippingDescription } : {}),
                 },
             items: {
               create: validItems.map((item) => ({

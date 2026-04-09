@@ -196,3 +196,52 @@ export async function sendShippingEmail(
     `,
   });
 }
+
+export async function sendOrderCancellationEmail(
+  to: string,
+  orderNumber: number,
+  total: number,
+  wasRefunded: boolean,
+) {
+  await sendEmail({
+    from: FROM,
+    to,
+    subject: `Pedido #${orderNumber} cancelado — L&PMakeUp`,
+    html: `
+      <div style="font-family: system-ui, sans-serif; max-width: 480px; margin: 0 auto; padding: 32px;">
+        <div style="text-align: center; margin-bottom: 24px;">
+          <div style="display: inline-block; background: linear-gradient(135deg, #f43f5e, #ec4899); border-radius: 50%; width: 56px; height: 56px; line-height: 56px; color: white; font-weight: bold; font-size: 18px;">L&P</div>
+        </div>
+        <h2 style="text-align: center; color: #1a1a2e;">Pedido Cancelado</h2>
+        <p style="text-align: center; color: #666; font-size: 14px; line-height: 1.6;">
+          Pedimos sinceras desculpas, mas infelizmente o pedido <strong>#${orderNumber}</strong> foi cancelado.
+        </p>
+        ${
+          wasRefunded
+            ? `
+        <div style="background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 12px; padding: 20px; text-align: center; margin: 24px 0;">
+          <p style="margin: 0; color: #166534; font-size: 14px;">Reembolso processado</p>
+          <p style="margin: 4px 0 0; font-size: 24px; font-weight: bold; color: #166534;">R$ ${total.toFixed(2)}</p>
+          <p style="margin: 8px 0 0; color: #166534; font-size: 12px;">O valor será devolvido ao seu meio de pagamento original em até 10 dias úteis.</p>
+        </div>
+        `
+            : `
+        <div style="background: #fef3c7; border: 2px solid #fde68a; border-radius: 12px; padding: 16px; text-align: center; margin: 24px 0;">
+          <p style="margin: 0; color: #92400e; font-size: 13px;">O pedido foi cancelado antes do pagamento ser confirmado. Nenhuma cobrança será realizada.</p>
+        </div>
+        `
+        }
+        <p style="text-align: center; color: #666; font-size: 14px; line-height: 1.6;">
+          Lamentamos o transtorno. Se tiver alguma dúvida, entre em contato conosco pelo WhatsApp.
+        </p>
+        <div style="text-align: center; margin-top: 24px;">
+          <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://lpmakeup.com.br"}/" style="display: inline-block; background: linear-gradient(135deg, #f43f5e, #ec4899); color: white; padding: 12px 32px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 14px;">Voltar à Loja</a>
+        </div>
+        <hr style="border: none; border-top: 1px solid #f0f0f0; margin: 24px 0;" />
+        <p style="text-align: center; color: #ccc; font-size: 11px;">
+          L&PMakeUp — Maquiagem Profissional
+        </p>
+      </div>
+    `,
+  });
+}

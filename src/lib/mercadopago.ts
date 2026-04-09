@@ -320,3 +320,29 @@ export async function getPaymentById(paymentId: string) {
 
   return paymentClient.get({ id: paymentId });
 }
+
+export async function refundPayment(paymentId: string) {
+  const runtimeConfig = getMercadoPagoRuntimeConfig();
+  const client = createMercadoPagoClient(runtimeConfig.accessToken);
+
+  const response = await fetch(
+    `https://api.mercadopago.com/v1/payments/${paymentId}/refunds`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${runtimeConfig.accessToken}`,
+      },
+      body: JSON.stringify({}),
+    },
+  );
+
+  if (!response.ok) {
+    const errorBody = await response.text();
+    throw new Error(
+      `Falha ao reembolsar pagamento ${paymentId}: ${response.status} — ${errorBody}`,
+    );
+  }
+
+  return response.json();
+}

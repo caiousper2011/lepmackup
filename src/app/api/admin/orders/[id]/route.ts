@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentAdmin } from "@/lib/auth";
-import { sendShippingEmail } from "@/lib/email";
+import { sendShippingEmail, sendOrderCancellationEmail } from "@/lib/email";
+import { refundPayment } from "@/lib/mercadopago";
 import { z } from "zod";
 
 const updateOrderSchema = z.object({
@@ -143,38 +144,73 @@ export async function PUT(
       updateData.trackingUrl = buildDefaultTrackingUrl(normalizedTrackingCode);
     }
 
-    if (data.status === "CANCELLED" && existing.status !== "PENDING") {
-      return NextResponse.json(
-        { error: "Somente pedidos pendentes podem ser cancelados." },
-        { status: 400 },
-      );
+    if (data.status === "CANCELLED") {
+      const nonCancellable = ["DELIVERED", "SHIPPED", "CANCELLED", "REFUNDED"];
+      if (nonCancellable.includes(existing.status)) {
+        return NextResponse.json(
+          {
+            error:
+              "Pedidos entregues, enviados, já cancelados ou reembolsados não podem ser cancelados.",
+          },
+          { status: 400 },
+        );
+      }
     }
 
-    const order =
-      data.status === "CANCELLED" && existing.status === "PENDING"
-        ? await prisma.$transaction(async (tx) => {
-            const updatedOrder = await tx.order.update({
-              where: { id },
-              data: updateData,
-            });
+    const isCancelling = data.status === "CANCELLED";
+    const wasPaid = ["PAID", "PROCESSING"].includes(existing.status);
 
-            for (const item of existing.items) {
-              await tx.product.update({
-                where: { id: item.productId },
-                data: {
-                  stockQuantity: {
-                    increment: item.quantity,
-                  },
-                },
-              });
-            }
+    if (isCancelling && wasPaid && existing.mercadoPagoId) {
+      try {
+        await refundPayment(existing.mercadoPagoId);
+        updateData.status = "REFUNDED";
+      } catch (refundError) {
+        console.error("Refund failed:", refundError);
+        return NextResponse.json(
+          {
+            error:
+              "Falha ao processar reembolso no MercadoPago. Tente novamente.",
+          },
+          { status: 502 },
+        );
+      }
+    }
 
-            return updatedOrder;
-          })
-        : await prisma.order.update({
+    const order = isCancelling
+      ? await prisma.$transaction(async (tx) => {
+          const updatedOrder = await tx.order.update({
             where: { id },
             data: updateData,
           });
+
+          for (const item of existing.items) {
+            await tx.product.update({
+              where: { id: item.productId },
+              data: {
+                stockQuantity: {
+                  increment: item.quantity,
+                },
+              },
+            });
+          }
+
+          return updatedOrder;
+        })
+      : await prisma.order.update({
+          where: { id },
+          data: updateData,
+        });
+
+    if (isCancelling && existing.user) {
+      sendOrderCancellationEmail(
+        existing.user.email,
+        existing.orderNumber,
+        Number(existing.total),
+        wasPaid && !!existing.mercadoPagoId,
+      ).catch((emailErr) =>
+        console.error("Cancellation email failed:", emailErr),
+      );
+    }
 
     const nextStatus =
       (updateData.status as string | undefined) || existing.status;

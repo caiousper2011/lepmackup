@@ -112,7 +112,18 @@ export const checkoutSchema = z
   .object({
     addressId: z.string().min(1, "Endereço obrigatório").optional(),
     shippingMethod: z.string().min(1),
+    melhorEnvioServiceId: z.number().int().positive().optional(),
+    melhorEnvioCompanyId: z.number().int().positive().optional(),
+    shippingDescription: z.string().max(200).optional(),
     shippingPrice: z.number().min(0),
+    cpfCnpj: z
+      .string()
+      .min(1, "CPF/CNPJ obrigatório")
+      .transform((value) => value.replace(/\D/g, ""))
+      .refine(
+        (value) => value.length === 11 || value.length === 14,
+        "Informe um CPF (11 dígitos) ou CNPJ (14 dígitos) válido",
+      ),
     couponCode: z.string().max(30).optional(),
     items: z
       .array(

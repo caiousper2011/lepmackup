@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 import { formatPrice } from "@/data/products";
 import Image from "next/image";
 import Link from "next/link";
@@ -20,10 +21,13 @@ interface Address {
 }
 
 interface ShippingOption {
+  serviceId: number | null;
   method: string;
   name: string;
   price: number;
   estimatedDays: string;
+  companyId: number | null;
+  companyName: string | null;
 }
 
 interface PickupSettings {
@@ -38,8 +42,35 @@ interface CouponResult {
   message?: string;
 }
 
+function normalizeCpfCnpj(value: string): string {
+  return value.replace(/\D/g, "");
+}
+
+function formatCpfCnpj(value: string): string {
+  const digits = normalizeCpfCnpj(value);
+
+  if (digits.length <= 11) {
+    return digits
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+  }
+
+  return digits
+    .slice(0, 14)
+    .replace(/(\d{2})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d)/, "$1/$2")
+    .replace(/(\d{4})(\d{1,2})$/, "$1-$2");
+}
+
 export default function CheckoutPage() {
   const { items, totalQuantity, totalPrice, getItemUnitPrice } = useCart();
+  const { user, refresh } = useAuth();
+
+  const [guestEmail, setGuestEmail] = useState("");
+  const [cpfCnpj, setCpfCnpj] = useState("");
+  const [authLoading, setAuthLoading] = useState(false);
 
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<string>("");
@@ -57,6 +88,14 @@ export default function CheckoutPage() {
 
   const [shippingOptions, setShippingOptions] = useState<ShippingOption[]>([]);
   const [selectedShipping, setSelectedShipping] = useState<string>("");
+  const [selectedShippingServiceId, setSelectedShippingServiceId] = useState<
+    number | null
+  >(null);
+  const [selectedShippingCompanyId, setSelectedShippingCompanyId] = useState<
+    number | null
+  >(null);
+  const [selectedShippingDescription, setSelectedShippingDescription] =
+    useState<string>("");
   const [shippingPrice, setShippingPrice] = useState(0);
   const [loadingShipping, setLoadingShipping] = useState(false);
   const [pickupSettings, setPickupSettings] = useState<PickupSettings | null>(
@@ -89,44 +128,34 @@ export default function CheckoutPage() {
   }, []);
 
   useEffect(() => {
-    async function fetchPickupSettings() {
+    async function prefillCpfCnpjFromPreviousOrder() {
+      if (!user || normalizeCpfCnpj(cpfCnpj).length > 0) return;
+
       try {
-        const res = await fetch("/api/shipping/settings");
+        const res = await fetch("/api/orders", { cache: "no-store" });
         if (!res.ok) return;
 
         const data = await res.json();
-        const settings: PickupSettings | undefined = data.settings;
-        if (!settings) return;
+        const orders = Array.isArray(data.orders) ? data.orders : [];
 
-        setPickupSettings(settings);
+        const previousWithDocument = orders.find(
+          (order: { addressSnapshot?: { cpfCnpj?: unknown } }) =>
+            typeof order?.addressSnapshot?.cpfCnpj === "string" &&
+            order.addressSnapshot.cpfCnpj.trim().length > 0,
+        );
 
-        if (settings.pickupEnabled) {
-          setShippingOptions((prev) => {
-            const withoutPickup = prev.filter(
-              (option) => option.method !== "PICKUP_STORE",
-            );
-
-            return [
-              {
-                method: "PICKUP_STORE",
-                name: "Retirada no endereço",
-                price: 0,
-                estimatedDays: "Retirada combinada após confirmação",
-              },
-              ...withoutPickup,
-            ];
-          });
-
-          setSelectedShipping((prev) => prev || "PICKUP_STORE");
-          setShippingPrice((prev) => (prev === 0 ? prev : 0));
+        if (previousWithDocument?.addressSnapshot?.cpfCnpj) {
+          setCpfCnpj(
+            formatCpfCnpj(previousWithDocument.addressSnapshot.cpfCnpj),
+          );
         }
       } catch {
-        // ignore
+        // ignore prefill errors
       }
     }
 
-    fetchPickupSettings();
-  }, []);
+    prefillCpfCnpjFromPreviousOrder();
+  }, [user, cpfCnpj]);
 
   // Calculate shipping when address changes
   const calcShipping = useCallback(
@@ -134,6 +163,10 @@ export default function CheckoutPage() {
       if (!cep || cep.replace(/\D/g, "").length < 8) return;
       setLoadingShipping(true);
       setShippingOptions([]);
+      setSelectedShippingServiceId(null);
+      setSelectedShippingCompanyId(null);
+      setSelectedShippingDescription("");
+      setError("");
       try {
         const res = await fetch("/api/shipping/calculate", {
           method: "POST",
@@ -146,95 +179,79 @@ export default function CheckoutPage() {
             })),
           }),
         });
-        if (res.ok) {
-          const data = await res.json();
-          const options: ShippingOption[] = Array.isArray(data.quotes)
-            ? data.quotes.map(
-                (quote: {
-                  method: string;
-                  description: string;
-                  price: number;
-                  estimatedDays: number;
-                }) => ({
-                  method: quote.method,
-                  name: quote.description,
-                  price: quote.price,
-                  estimatedDays:
-                    quote.estimatedDays > 0
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          setError(data.error || "Erro ao calcular frete. Verifique o CEP.");
+          setShippingOptions([]);
+          return;
+        }
+
+        const options: ShippingOption[] = Array.isArray(data.quotes)
+          ? data.quotes.map(
+              (quote: {
+                serviceId: number | null;
+                method: string;
+                description: string;
+                price: number;
+                estimatedDays: number;
+                companyId: number | null;
+                companyName: string | null;
+              }) => ({
+                serviceId: quote.serviceId ?? null,
+                method: quote.method,
+                name: quote.description,
+                price: quote.price,
+                companyId: quote.companyId ?? null,
+                companyName: quote.companyName ?? null,
+                estimatedDays:
+                  quote.method === "LOCAL_FREE"
+                    ? "Entrega em até 1 dia útil"
+                    : quote.estimatedDays > 0
                       ? `${quote.estimatedDays} dias úteis`
                       : "Retirada combinada após confirmação",
-                }),
-              )
-            : [];
+              }),
+            )
+          : [];
 
-          if (options.length === 0) {
-            options.push({
-              method: "standard",
-              name: "Entrega padrão",
-              price: 15,
-              estimatedDays: "5-10 dias úteis",
-            });
-          }
+        if (options.length === 0) {
+          setError("Nenhuma opção de frete disponível para este CEP.");
+          return;
+        }
 
-          const pickupOption =
-            pickupSettings?.pickupEnabled &&
-            !options.some((opt) => opt.method === "PICKUP_STORE")
-              ? [
-                  {
-                    method: "PICKUP_STORE",
-                    name: "Retirada no endereço",
-                    price: 0,
-                    estimatedDays: "Retirada combinada após confirmação",
-                  },
-                ]
-              : [];
+        setShippingOptions(options);
+        if (options.length > 0) {
+          const current = options.find(
+            (option) => option.method === selectedShipping,
+          );
 
-          const mergedOptions = [...pickupOption, ...options];
-
-          setShippingOptions(mergedOptions);
-          if (mergedOptions.length > 0) {
-            const current = mergedOptions.find(
-              (option) => option.method === selectedShipping,
-            );
-
-            if (current) {
-              setShippingPrice(current.price);
-            } else {
-              setSelectedShipping(mergedOptions[0].method);
-              setShippingPrice(mergedOptions[0].price);
-            }
+          if (current) {
+            setSelectedShippingServiceId(current.serviceId);
+            setSelectedShippingCompanyId(current.companyId);
+            setSelectedShippingDescription(current.name);
+            setShippingPrice(current.price);
+          } else {
+            setSelectedShipping(options[0].method);
+            setSelectedShippingServiceId(options[0].serviceId);
+            setSelectedShippingCompanyId(options[0].companyId);
+            setSelectedShippingDescription(options[0].name);
+            setShippingPrice(options[0].price);
           }
         }
+
+        // Save pickup settings from response
+        if (data.settings) {
+          setPickupSettings(data.settings);
+        }
       } catch {
-        const fallbackOptions: ShippingOption[] = [
-          {
-            method: "standard",
-            name: "Entrega padrão",
-            price: 15,
-            estimatedDays: "5-10 dias úteis",
-          },
-        ];
-
-        const mergedFallback = pickupSettings?.pickupEnabled
-          ? [
-              {
-                method: "PICKUP_STORE",
-                name: "Retirada no endereço",
-                price: 0,
-                estimatedDays: "Retirada combinada após confirmação",
-              },
-              ...fallbackOptions,
-            ]
-          : fallbackOptions;
-
-        setShippingOptions(mergedFallback);
-        setSelectedShipping(mergedFallback[0].method);
-        setShippingPrice(mergedFallback[0].price);
+        setError("Erro de conexão ao calcular frete. Tente novamente.");
+        setShippingOptions([]);
       } finally {
         setLoadingShipping(false);
       }
     },
-    [items, pickupSettings, selectedShipping],
+    [items, selectedShipping],
   );
 
   const lookupCepInCheckout = async (cep: string) => {
@@ -337,8 +354,58 @@ export default function CheckoutPage() {
       return;
     }
 
+    if (
+      selectedShipping.startsWith("MELHOR_ENVIO_") &&
+      !selectedShippingServiceId
+    ) {
+      setError(
+        "Service ID do frete inválido. Recalcule e selecione o frete novamente.",
+      );
+      return;
+    }
+
+    const normalizedDocument = normalizeCpfCnpj(cpfCnpj);
+    if (![11, 14].includes(normalizedDocument.length)) {
+      setError("Informe um CPF (11 dígitos) ou CNPJ (14 dígitos) válido.");
+      return;
+    }
+
     setLoading(true);
     setError("");
+
+    // If not logged in, authenticate with email first
+    if (!user) {
+      if (!guestEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestEmail)) {
+        setError("Informe um e-mail válido para continuar.");
+        setLoading(false);
+        return;
+      }
+
+      setAuthLoading(true);
+      try {
+        const authRes = await fetch("/api/auth/checkout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: guestEmail }),
+        });
+
+        if (!authRes.ok) {
+          const authData = await authRes.json();
+          setError(authData.error || "Erro ao processar e-mail.");
+          setLoading(false);
+          setAuthLoading(false);
+          return;
+        }
+
+        await refresh();
+      } catch {
+        setError("Erro de conexão. Tente novamente.");
+        setLoading(false);
+        setAuthLoading(false);
+        return;
+      }
+      setAuthLoading(false);
+    }
 
     try {
       const res = await fetch("/api/orders", {
@@ -347,7 +414,11 @@ export default function CheckoutPage() {
         body: JSON.stringify({
           addressId: isPickup ? undefined : selectedAddress,
           shippingMethod: selectedShipping,
+          melhorEnvioServiceId: selectedShippingServiceId ?? undefined,
+          melhorEnvioCompanyId: selectedShippingCompanyId ?? undefined,
+          shippingDescription: selectedShippingDescription || undefined,
           shippingPrice: isPickup ? 0 : shippingPrice,
+          cpfCnpj: normalizedDocument,
           couponCode: couponResult?.valid ? couponCode : undefined,
           items: items.map((item) => ({
             productId: item.product.id,
@@ -421,6 +492,48 @@ export default function CheckoutPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left column - Forms */}
         <div className="lg:col-span-2 space-y-6">
+          {/* Email section (guest checkout) */}
+          {!user && (
+            <div className="bg-white rounded-2xl border border-gray-200 p-6">
+              <h2 className="text-lg font-semibold text-gray-900 mb-2">
+                Seu E-mail
+              </h2>
+              <p className="text-xs text-gray-500 mb-4">
+                Informe seu e-mail para receber a confirmação do pedido. Não é
+                necessário criar conta.
+              </p>
+              <input
+                type="email"
+                placeholder="seu@email.com"
+                value={guestEmail}
+                onChange={(e) => setGuestEmail(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all"
+                autoComplete="email"
+              />
+            </div>
+          )}
+
+          <div className="bg-white rounded-2xl border border-gray-200 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-2">
+              CPF ou CNPJ do destinatário
+            </h2>
+            <p className="text-xs text-gray-500 mb-4">
+              Obrigatório para cálculo e emissão da etiqueta de frete.
+            </p>
+            <input
+              type="text"
+              placeholder="000.000.000-00 ou 00.000.000/0000-00"
+              value={cpfCnpj}
+              onChange={(e) => {
+                const digits = normalizeCpfCnpj(e.target.value).slice(0, 14);
+                setCpfCnpj(formatCpfCnpj(digits));
+              }}
+              className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all"
+              autoComplete="off"
+              inputMode="numeric"
+            />
+          </div>
+
           {/* Address section */}
           <div className="bg-white rounded-2xl border border-gray-200 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">
@@ -611,6 +724,9 @@ export default function CheckoutPage() {
                         checked={selectedShipping === opt.method}
                         onChange={() => {
                           setSelectedShipping(opt.method);
+                          setSelectedShippingServiceId(opt.serviceId);
+                          setSelectedShippingCompanyId(opt.companyId);
+                          setSelectedShippingDescription(opt.name);
                           setShippingPrice(opt.price);
                         }}
                         className="accent-rose-600"
@@ -776,12 +892,19 @@ export default function CheckoutPage() {
               onClick={handleCheckout}
               disabled={
                 loading ||
+                authLoading ||
                 !selectedShipping ||
-                (selectedShipping !== "PICKUP_STORE" && !selectedAddress)
+                (selectedShipping !== "PICKUP_STORE" && !selectedAddress) ||
+                (!user && !guestEmail) ||
+                ![11, 14].includes(normalizeCpfCnpj(cpfCnpj).length)
               }
               className="w-full mt-4 bg-linear-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold py-4 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg text-base"
             >
-              {loading ? "Processando..." : `Pagar ${formatPrice(finalTotal)}`}
+              {authLoading
+                ? "Verificando e-mail..."
+                : loading
+                  ? "Processando..."
+                  : `Pagar ${formatPrice(finalTotal)}`}
             </button>
 
             <div className="mt-3 flex items-center justify-center gap-2 text-xs text-gray-400">

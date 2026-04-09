@@ -68,6 +68,10 @@ export default function AdminOrderDetailPage() {
   const [shippingLabelUrl, setShippingLabelUrl] = useState("");
   const [melhorEnvioShipmentId, setMelhorEnvioShipmentId] = useState("");
   const [printingLabel, setPrintingLabel] = useState(false);
+  const [cancellingShipping, setCancellingShipping] = useState(false);
+  const [melhorEnvioBalance, setMelhorEnvioBalance] = useState<number | null>(
+    null,
+  );
 
   useEffect(() => {
     async function fetchOrder() {
@@ -90,6 +94,15 @@ export default function AdminOrderDetailPage() {
     }
     fetchOrder();
   }, [params.id]);
+
+  useEffect(() => {
+    fetch("/api/admin/shipping-settings/balance")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.balance != null) setMelhorEnvioBalance(data.balance);
+      })
+      .catch(() => {});
+  }, []);
 
   const handleUpdate = async () => {
     setSaving(true);
@@ -124,12 +137,13 @@ export default function AdminOrderDetailPage() {
     }
   };
 
-  const handleCancelPending = async () => {
-    if (order?.status !== "PENDING") return;
+  const handleCancelOrder = async () => {
+    const isPaid = ["PAID", "PROCESSING"].includes(order?.status || "");
+    const msg = isPaid
+      ? "Deseja cancelar este pedido pago? O valor será reembolsado automaticamente via MercadoPago."
+      : "Deseja cancelar este pedido pendente? O estoque será devolvido automaticamente.";
 
-    const confirmed = window.confirm(
-      "Deseja cancelar este pedido pendente? O estoque será devolvido automaticamente.",
-    );
+    const confirmed = window.confirm(msg);
     if (!confirmed) return;
 
     setSaving(true);
@@ -143,12 +157,54 @@ export default function AdminOrderDetailPage() {
       if (res.ok) {
         const data = await res.json();
         setOrder((prev) => (prev ? { ...prev, ...data.order } : prev));
-        setNewStatus("CANCELLED");
+        setNewStatus(data.order.status);
+      } else {
+        const data = await res.json();
+        window.alert(data.error || "Erro ao cancelar pedido.");
       }
     } catch {
       // ignore
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleCancelShipping = async () => {
+    if (!order?.melhorEnvioShipmentId) return;
+
+    const confirmed = window.confirm(
+      "Deseja cancelar o envio no Melhor Envio? A etiqueta será removida.",
+    );
+    if (!confirmed) return;
+
+    setCancellingShipping(true);
+    try {
+      const res = await fetch(
+        `/api/admin/orders/${params.id}/cancel-shipping`,
+        { method: "POST", headers: { "Content-Type": "application/json" } },
+      );
+
+      if (res.ok) {
+        setMelhorEnvioShipmentId("");
+        setShippingLabelUrl("");
+        setOrder((prev) =>
+          prev
+            ? {
+                ...prev,
+                melhorEnvioShipmentId: null,
+                shippingLabelUrl: null,
+              }
+            : prev,
+        );
+        window.alert("Envio cancelado com sucesso no Melhor Envio.");
+      } else {
+        const data = await res.json();
+        window.alert(data.error || "Erro ao cancelar envio.");
+      }
+    } catch {
+      window.alert("Erro ao cancelar envio no Melhor Envio.");
+    } finally {
+      setCancellingShipping(false);
     }
   };
 
@@ -404,13 +460,28 @@ export default function AdminOrderDetailPage() {
               >
                 {saving ? "Salvando..." : "Salvar Alterações"}
               </button>
-              {order.status === "PENDING" && (
+              {["PENDING", "PAID", "PROCESSING"].includes(order.status) && (
                 <button
-                  onClick={handleCancelPending}
+                  onClick={handleCancelOrder}
                   disabled={saving}
                   className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2.5 rounded-xl text-sm transition-colors disabled:opacity-50"
                 >
-                  {saving ? "Cancelando..." : "Cancelar Pedido Pendente"}
+                  {saving
+                    ? "Cancelando..."
+                    : order.status === "PENDING"
+                      ? "Cancelar Pedido Pendente"
+                      : "Cancelar e Reembolsar Pedido"}
+                </button>
+              )}
+              {order.melhorEnvioShipmentId && (
+                <button
+                  onClick={handleCancelShipping}
+                  disabled={cancellingShipping || saving}
+                  className="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-2.5 rounded-xl text-sm transition-colors disabled:opacity-50"
+                >
+                  {cancellingShipping
+                    ? "Cancelando envio..."
+                    : "Cancelar Envio Melhor Envio"}
                 </button>
               )}
             </div>
@@ -442,6 +513,38 @@ export default function AdminOrderDetailPage() {
                   </span>
                 </div>
               )}
+            </div>
+          </div>
+
+          {/* Webhook diagnostics */}
+          <div className="bg-white rounded-2xl border border-gray-200 p-5">
+            <h2 className="font-semibold text-gray-900 mb-3">Melhor Envio</h2>
+            <div className="space-y-2 text-sm">
+              {melhorEnvioBalance !== null && (
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Saldo carteira</span>
+                  <span className="font-medium text-green-600">
+                    {melhorEnvioBalance.toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                    })}
+                  </span>
+                </div>
+              )}
+              <div className="flex justify-between">
+                <span className="text-gray-500">Shipment ID</span>
+                <span className="text-xs truncate max-w-30">
+                  {order.melhorEnvioShipmentId || "—"}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-500">Ambiente</span>
+                <span className="text-xs">
+                  {process.env.NEXT_PUBLIC_VERCEL_ENV === "production"
+                    ? "PRODUCTION"
+                    : "SANDBOX"}
+                </span>
+              </div>
             </div>
           </div>
 

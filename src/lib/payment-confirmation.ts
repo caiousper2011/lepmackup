@@ -1,6 +1,7 @@
 import { getPaymentById } from "@/lib/mercadopago";
 import { prisma } from "@/lib/prisma";
 import { sendPaidOrderWhatsAppNotification } from "@/lib/whatsapp";
+import { autoGenerateShippingLabel } from "@/lib/shipping";
 
 const PAYMENT_STATUS_MAP = {
   approved: { order: "PAID", payment: "APPROVED" },
@@ -182,6 +183,26 @@ export async function confirmOrderPaymentByPaymentId(
     } catch (error) {
       console.error(
         "[payment-confirmation] WhatsApp notification error:",
+        error,
+      );
+    }
+  }
+
+  // Auto-generate shipping label after payment approval (best-effort)
+  if (
+    isApprovingNow &&
+    persistedOrder.shippingMethod?.startsWith("MELHOR_ENVIO_")
+  ) {
+    try {
+      const labelResult = await autoGenerateShippingLabel(persistedOrder.id);
+      if (labelResult) {
+        console.info(
+          `[payment-confirmation] Auto label generated for order ${persistedOrder.orderNumber}: shipment ${labelResult.shipmentId}`,
+        );
+      }
+    } catch (error) {
+      console.error(
+        "[payment-confirmation] Auto shipping label failed (can be generated manually):",
         error,
       );
     }
