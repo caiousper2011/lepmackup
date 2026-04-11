@@ -12,12 +12,23 @@ interface ProductPageProps {
 }
 
 export async function generateStaticParams() {
-  // Pré-renderiza os produtos ativos no build para acelerar primeiro load
-  const products = await prisma.product.findMany({
-    where: { active: true },
-    select: { slug: true },
-  });
-  return products.map((p) => ({ slug: p.slug }));
+  // Pré-renderiza os produtos ativos no build para acelerar primeiro load.
+  // Se o banco não estiver acessível no ambiente de build (ex.: Vercel sem
+  // DATABASE_URL válida), cai para geração sob demanda via ISR em vez de
+  // derrubar o deploy.
+  try {
+    const products = await prisma.product.findMany({
+      where: { active: true },
+      select: { slug: true },
+    });
+    return products.map((p) => ({ slug: p.slug }));
+  } catch (error) {
+    console.warn(
+      "[produto/[slug]] generateStaticParams: banco indisponível no build, usando ISR on-demand.",
+      error,
+    );
+    return [];
+  }
 }
 
 export async function generateMetadata({
