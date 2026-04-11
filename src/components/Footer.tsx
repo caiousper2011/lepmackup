@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { getWhatsAppHref } from "@/lib/whatsapp-config";
+import { CATEGORIES } from "@/lib/categories";
 
 export default function Footer() {
   return (
     <footer className="bg-gradient-to-b from-rose-50 to-rose-100 border-t border-rose-200 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {/* Brand */}
-          <div>
+          <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-4">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center">
                 <span className="text-white font-bold text-sm">L&P</span>
@@ -17,14 +18,39 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-sm text-gray-600 leading-relaxed">
-              Sua loja online de maquiagem com os melhores preços. Produtos de
-              qualidade profissional por apenas R$ 7,99.
+              Loja online de maquiagem profissional com produtos a partir de R$
+              6,99. Cílios, delineadores, gloss e paletas. Entrega para todo o
+              Brasil.
+            </p>
+            <p className="text-xs text-gray-500 mt-3">
+              Vila Aricanduva, São Paulo — SP
             </p>
           </div>
 
-          {/* Links */}
+          {/* Categorias — links reais para SEO */}
           <div>
-            <h3 className="font-semibold text-gray-900 mb-3">Navegação</h3>
+            <h3 className="font-semibold text-gray-900 mb-3 text-sm">
+              Categorias
+            </h3>
+            <ul className="space-y-2">
+              {CATEGORIES.map((c) => (
+                <li key={c.slug}>
+                  <Link
+                    href={`/categoria/${c.slug}`}
+                    className="text-sm text-gray-600 hover:text-rose-600 transition-colors"
+                  >
+                    {c.dbName}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Navegação */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-3 text-sm">
+              Navegação
+            </h3>
             <ul className="space-y-2">
               <li>
                 <Link
@@ -39,24 +65,34 @@ export default function Footer() {
                   href="/#produtos"
                   className="text-sm text-gray-600 hover:text-rose-600 transition-colors"
                 >
-                  Produtos
+                  Todos os produtos
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/#categorias"
+                  href="/#promo"
                   className="text-sm text-gray-600 hover:text-rose-600 transition-colors"
                 >
-                  Categorias
+                  Promoções
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/minha-conta"
+                  className="text-sm text-gray-600 hover:text-rose-600 transition-colors"
+                >
+                  Minha Conta
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Contato */}
           <div>
-            <h3 className="font-semibold text-gray-900 mb-3">Atendimento</h3>
-            <p className="text-sm text-gray-600 mb-2">
+            <h3 className="font-semibold text-gray-900 mb-3 text-sm">
+              Atendimento
+            </h3>
+            <p className="text-sm text-gray-600 mb-3">
               Pedidos e dúvidas via WhatsApp:
             </p>
             <a
@@ -75,13 +111,16 @@ export default function Footer() {
               </svg>
               WhatsApp
             </a>
+            <p className="text-xs text-gray-500 mt-3">
+              Pagamento seguro via Mercado Pago: PIX, cartão e boleto.
+            </p>
           </div>
         </div>
 
         <div className="border-t border-rose-200 mt-8 pt-6 text-center">
           <p className="text-xs text-gray-500">
-            © {new Date().getFullYear()} L&PMakeUp. Todos os direitos
-            reservados.
+            © {new Date().getFullYear()} L&PMakeUp — Maquiagem profissional a
+            partir de R$ 6,99. Todos os direitos reservados.
           </p>
         </div>
       </div>

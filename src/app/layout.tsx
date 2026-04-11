@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
@@ -6,59 +6,72 @@ import ClientLayout from "@/components/ClientLayout";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
+
+export const viewport: Viewport = {
+  themeColor: "#e11d48",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_APP_URL || "https://lpmakeup.com.br",
   ),
   title: {
-    default: "L&PMakeUp | Maquiagem Profissional a partir de R$ 6,99",
+    // CTR-first: palavra-chave principal antes da marca
+    default: "Maquiagem Profissional Barata a partir de R$ 6,99 | L&PMakeUp",
     template: "%s | L&PMakeUp",
   },
   description:
-    "Loja online de maquiagem com preços imbatíveis. Cílios postiços, delineadores, gloss, paletas e mais — tudo por R$ 7,99. Acima de 4 itens: R$ 6,99 cada. Entrega para todo o Brasil.",
+    "Loja online de maquiagem profissional com preços imbatíveis. Cílios postiços, delineadores, gloss labial, paletas e mais — todos por R$ 7,99. Compre 4+ itens e pague R$ 6,99 cada. Frete para todo o Brasil via Mercado Pago.",
+  applicationName: "L&PMakeUp",
+  category: "shopping",
   keywords: [
     "maquiagem barata",
     "loja maquiagem online",
-    "cílios postiços",
-    "delineador",
+    "cílios postiços baratos",
+    "delineador preto",
     "gloss labial",
     "paleta maquiagem",
     "maquiagem profissional",
-    "makeup",
     "comprar maquiagem",
     "maquiagem atacado",
+    "maquiagem por 6,99",
+    "maquiagem São Paulo",
     "L&PMakeUp",
   ],
+  authors: [{ name: "L&PMakeUp" }],
+  creator: "L&PMakeUp",
+  publisher: "L&PMakeUp",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   openGraph: {
-    title: "L&PMakeUp | Maquiagem Profissional a partir de R$ 6,99",
+    title: "Maquiagem Profissional Barata a partir de R$ 6,99 | L&PMakeUp",
     description:
-      "Os melhores produtos de maquiagem por preços incríveis. Todos os itens por R$ 7,99 — acima de 4 itens, R$ 6,99 cada!",
+      "Cílios, delineadores, gloss e paletas por R$ 7,99. Leve 4+ e pague R$ 6,99 cada! Marcas Vivai, Ruby Rose, Maxlove, Bellafeme, Dapop, Fenzza.",
     type: "website",
     locale: "pt_BR",
     siteName: "L&PMakeUp",
     url: "/",
-    images: [
-      {
-        url: "/og-default.jpg",
-        width: 1200,
-        height: 630,
-        alt: "L&PMakeUp — Maquiagem Profissional a partir de R$ 6,99",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "L&PMakeUp | Maquiagem Profissional a partir de R$ 6,99",
+    title: "Maquiagem Profissional Barata a partir de R$ 6,99 | L&PMakeUp",
     description:
-      "Os melhores produtos de maquiagem por preços incríveis. Todos os itens por R$ 7,99 — acima de 4 itens, R$ 6,99 cada!",
-    images: ["/og-default.jpg"],
+      "Cílios, delineadores, gloss e paletas por R$ 7,99. Leve 4+ e pague R$ 6,99 cada!",
+    creator: "@lpmakeup",
   },
   robots: {
     index: true,
@@ -74,6 +87,10 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
     languages: { "pt-BR": "/" },
+  },
+  verification: {
+    // Preencher quando houver Google Search Console
+    // google: "xxxxxx",
   },
 };
 

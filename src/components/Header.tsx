@@ -5,6 +5,7 @@ import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { useLoginModal } from "@/components/LoginModal";
 import { useState, useRef, useEffect } from "react";
+import { CATEGORIES } from "@/lib/categories";
 
 export default function Header() {
   const { totalQuantity, setIsOpen } = useCart();
@@ -12,9 +13,11 @@ export default function Header() {
   const { open: openLogin } = useLoginModal();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [categoriesOpen, setCategoriesOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
+  const categoriesRef = useRef<HTMLDivElement>(null);
 
-  // Close user menu on outside click
+  // Close menus on outside click
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (
@@ -22,6 +25,12 @@ export default function Header() {
         !userMenuRef.current.contains(e.target as Node)
       ) {
         setUserMenuOpen(false);
+      }
+      if (
+        categoriesRef.current &&
+        !categoriesRef.current.contains(e.target as Node)
+      ) {
+        setCategoriesOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClick);
@@ -54,7 +63,10 @@ export default function Header() {
           </Link>
 
           {/* Nav desktop */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav
+            aria-label="Principal"
+            className="hidden md:flex items-center gap-8"
+          >
             <Link
               href="/"
               className="text-sm font-medium text-gray-700 hover:text-rose-600 transition-colors"
@@ -67,12 +79,49 @@ export default function Header() {
             >
               Produtos
             </Link>
-            <Link
-              href="/#categorias"
-              className="text-sm font-medium text-gray-700 hover:text-rose-600 transition-colors"
-            >
-              Categorias
-            </Link>
+            <div className="relative" ref={categoriesRef}>
+              <button
+                type="button"
+                onClick={() => setCategoriesOpen((v) => !v)}
+                aria-haspopup="menu"
+                aria-expanded={categoriesOpen}
+                className="text-sm font-medium text-gray-700 hover:text-rose-600 transition-colors flex items-center gap-1"
+              >
+                Categorias
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`h-4 w-4 transition-transform ${categoriesOpen ? "rotate-180" : ""}`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+              {categoriesOpen && (
+                <div
+                  role="menu"
+                  className="absolute left-1/2 -translate-x-1/2 mt-3 w-56 bg-white rounded-xl shadow-xl border border-rose-100 py-2 z-50"
+                >
+                  {CATEGORIES.map((c) => (
+                    <Link
+                      key={c.slug}
+                      href={`/categoria/${c.slug}`}
+                      onClick={() => setCategoriesOpen(false)}
+                      role="menuitem"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-rose-50 hover:text-rose-600 transition-colors"
+                    >
+                      <span aria-hidden="true">{c.emoji}</span> {c.dbName}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
             <Link
               href="/#promo"
               className="text-sm font-medium text-rose-600 hover:text-rose-700 transition-colors"
@@ -233,7 +282,10 @@ export default function Header() {
 
         {/* Mobile nav */}
         {mobileOpen && (
-          <nav className="md:hidden pb-4 border-t border-rose-50 pt-3 flex flex-col gap-3">
+          <nav
+            aria-label="Mobile"
+            className="md:hidden pb-4 border-t border-rose-50 pt-3 flex flex-col gap-3"
+          >
             <Link
               href="/"
               onClick={() => setMobileOpen(false)}
@@ -248,13 +300,24 @@ export default function Header() {
             >
               Produtos
             </Link>
-            <Link
-              href="/#categorias"
-              onClick={() => setMobileOpen(false)}
-              className="text-sm font-medium text-gray-700 hover:text-rose-600 px-2 py-1"
-            >
-              Categorias
-            </Link>
+            <div className="px-2 py-1">
+              <p className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold mb-1">
+                Categorias
+              </p>
+              <ul className="flex flex-col gap-1.5 pl-1">
+                {CATEGORIES.map((c) => (
+                  <li key={c.slug}>
+                    <Link
+                      href={`/categoria/${c.slug}`}
+                      onClick={() => setMobileOpen(false)}
+                      className="text-sm font-medium text-gray-700 hover:text-rose-600"
+                    >
+                      <span aria-hidden="true">{c.emoji}</span> {c.dbName}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
             <Link
               href="/#promo"
               onClick={() => setMobileOpen(false)}

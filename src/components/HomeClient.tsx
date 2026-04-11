@@ -1,14 +1,21 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import { Product } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import { getWhatsAppHref } from "@/lib/whatsapp-config";
 
+interface CategoryLink {
+  name: string;
+  href: string;
+}
+
 interface HomeClientProps {
   products: Product[];
   categories: string[];
+  categoryLinks?: CategoryLink[];
 }
 
 function CountdownTimer() {
@@ -50,9 +57,17 @@ function CountdownTimer() {
   );
 }
 
-export default function HomeClient({ products, categories }: HomeClientProps) {
+export default function HomeClient({
+  products,
+  categories,
+  categoryLinks,
+}: HomeClientProps) {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const { setIsOpen, totalQuantity } = useCart();
+
+  const categoryHrefMap = new Map(
+    (categoryLinks ?? []).map((c) => [c.name, c.href]),
+  );
 
   const filtered = activeCategory
     ? products.filter((p) => p.category === activeCategory)
@@ -356,6 +371,29 @@ export default function HomeClient({ products, categories }: HomeClientProps) {
               );
             })}
           </div>
+
+          {/* Links reais para SEO — crawlers seguem âncoras <a>, não botões */}
+          <nav
+            aria-label="Categorias de maquiagem"
+            className="mt-6 flex flex-wrap justify-center gap-2 text-xs text-gray-500"
+          >
+            <span>Explore por categoria:</span>
+            {categories.map((cat, i) => {
+              const href = categoryHrefMap.get(cat);
+              if (!href) return null;
+              return (
+                <span key={cat} className="inline-flex items-center gap-2">
+                  <Link
+                    href={href}
+                    className="text-rose-600 hover:underline font-medium"
+                  >
+                    {cat}
+                  </Link>
+                  {i < categories.length - 1 && <span>·</span>}
+                </span>
+              );
+            })}
+          </nav>
         </div>
       </section>
 
