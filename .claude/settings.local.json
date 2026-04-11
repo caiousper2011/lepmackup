@@ -2,7 +2,13 @@
   "permissions": {
     "allow": [
       "Bash(npx tsc:*)",
-      "Bash(echo \"exit=$?\")"
+      "Bash(echo \"exit=$?\")",
+      "Bash(vercel --version)",
+      "Bash(npx vercel:*)",
+      "Bash(bash .vercel/env-upload.sh)",
+      "Bash(CI=true npx vercel env add DEBUG_TEST_VAR preview --value \"hello\" --force --yes)",
+      "Bash(rm -f .vercel/.env.preview.check)",
+      "Bash(rm -f .vercel/env-upload.sh)"
     ]
   }
 }
