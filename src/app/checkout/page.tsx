@@ -39,6 +39,7 @@ interface PickupSettings {
 interface CouponResult {
   valid: boolean;
   discount: number;
+  appliesTo?: string;
   message?: string;
 }
 
@@ -70,6 +71,7 @@ export default function CheckoutPage() {
 
   const [guestEmail, setGuestEmail] = useState("");
   const [cpfCnpj, setCpfCnpj] = useState("");
+  const [customerName, setCustomerName] = useState("");
   const [authLoading, setAuthLoading] = useState(false);
 
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -128,8 +130,8 @@ export default function CheckoutPage() {
   }, []);
 
   useEffect(() => {
-    async function prefillCpfCnpjFromPreviousOrder() {
-      if (!user || normalizeCpfCnpj(cpfCnpj).length > 0) return;
+    async function prefillFromPreviousOrder() {
+      if (!user) return;
 
       try {
         const res = await fetch("/api/orders", { cache: "no-store" });
@@ -144,18 +146,28 @@ export default function CheckoutPage() {
             order.addressSnapshot.cpfCnpj.trim().length > 0,
         );
 
-        if (previousWithDocument?.addressSnapshot?.cpfCnpj) {
+        if (
+          previousWithDocument?.addressSnapshot?.cpfCnpj &&
+          normalizeCpfCnpj(cpfCnpj).length === 0
+        ) {
           setCpfCnpj(
             formatCpfCnpj(previousWithDocument.addressSnapshot.cpfCnpj),
           );
+        }
+
+        if (
+          previousWithDocument?.addressSnapshot?.customerName &&
+          customerName.trim().length === 0
+        ) {
+          setCustomerName(previousWithDocument.addressSnapshot.customerName);
         }
       } catch {
         // ignore prefill errors
       }
     }
 
-    prefillCpfCnpjFromPreviousOrder();
-  }, [user, cpfCnpj]);
+    prefillFromPreviousOrder();
+  }, [user, cpfCnpj, customerName]);
 
   // Calculate shipping when address changes
   const calcShipping = useCallback(
@@ -295,11 +307,16 @@ export default function CheckoutPage() {
           code: couponCode.trim(),
           itemCount: totalQuantity,
           subtotal: totalPrice,
+          shippingPrice,
         }),
       });
       const data = await res.json();
       if (res.ok) {
-        setCouponResult({ valid: true, discount: data.discount });
+        setCouponResult({
+          valid: true,
+          discount: data.discount,
+          appliesTo: data.coupon?.appliesTo,
+        });
       } else {
         setCouponResult({ valid: false, discount: 0, message: data.error });
       }
@@ -370,6 +387,11 @@ export default function CheckoutPage() {
       return;
     }
 
+    if (!customerName.trim() || customerName.trim().length < 2) {
+      setError("Informe o nome completo do destinatário.");
+      return;
+    }
+
     setLoading(true);
     setError("");
 
@@ -419,6 +441,7 @@ export default function CheckoutPage() {
           shippingDescription: selectedShippingDescription || undefined,
           shippingPrice: isPickup ? 0 : shippingPrice,
           cpfCnpj: normalizedDocument,
+          customerName: customerName.trim(),
           couponCode: couponResult?.valid ? couponCode : undefined,
           items: items.map((item) => ({
             productId: item.product.id,
@@ -515,23 +538,68 @@ export default function CheckoutPage() {
 
           <div className="bg-white rounded-2xl border border-gray-200 p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-2">
-              CPF ou CNPJ do destinatário
+              Dados do Destinatário
             </h2>
             <p className="text-xs text-gray-500 mb-4">
               Obrigatório para cálculo e emissão da etiqueta de frete.
             </p>
-            <input
-              type="text"
-              placeholder="000.000.000-00 ou 00.000.000/0000-00"
-              value={cpfCnpj}
-              onChange={(e) => {
-                const digits = normalizeCpfCnpj(e.target.value).slice(0, 14);
-                setCpfCnpj(formatCpfCnpj(digits));
-              }}
-              className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all"
-              autoComplete="off"
-              inputMode="numeric"
-            />
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  Nome completo <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Nome do destinatário"
+                  value={customerName}
+                  onChange={(e) => setCustomerName(e.target.value)}
+                  className={`w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all ${
+                    customerName.trim().length > 0 &&
+                    customerName.trim().length < 2
+                      ? "border-red-300 bg-red-50"
+                      : "border-gray-200"
+                  }`}
+                  autoComplete="name"
+                />
+                {customerName.trim().length > 0 &&
+                  customerName.trim().length < 2 && (
+                    <p className="text-xs text-red-500 mt-1">
+                      Nome deve ter no mínimo 2 caracteres.
+                    </p>
+                  )}
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  CPF ou CNPJ <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="000.000.000-00 ou 00.000.000/0000-00"
+                  value={cpfCnpj}
+                  onChange={(e) => {
+                    const digits = normalizeCpfCnpj(e.target.value).slice(
+                      0,
+                      14,
+                    );
+                    setCpfCnpj(formatCpfCnpj(digits));
+                  }}
+                  className={`w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all ${
+                    cpfCnpj.length > 0 &&
+                    ![11, 14].includes(normalizeCpfCnpj(cpfCnpj).length)
+                      ? "border-red-300 bg-red-50"
+                      : "border-gray-200"
+                  }`}
+                  autoComplete="off"
+                  inputMode="numeric"
+                />
+                {cpfCnpj.length > 0 &&
+                  ![11, 14].includes(normalizeCpfCnpj(cpfCnpj).length) && (
+                    <p className="text-xs text-red-500 mt-1">
+                      Informe um CPF (11 dígitos) ou CNPJ (14 dígitos) válido.
+                    </p>
+                  )}
+              </div>
+            </div>
           </div>
 
           {/* Address section */}
@@ -896,7 +964,8 @@ export default function CheckoutPage() {
                 !selectedShipping ||
                 (selectedShipping !== "PICKUP_STORE" && !selectedAddress) ||
                 (!user && !guestEmail) ||
-                ![11, 14].includes(normalizeCpfCnpj(cpfCnpj).length)
+                ![11, 14].includes(normalizeCpfCnpj(cpfCnpj).length) ||
+                customerName.trim().length < 2
               }
               className="w-full mt-4 bg-linear-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold py-4 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg text-base"
             >

@@ -244,6 +244,7 @@ model Coupon {
   code      String     @unique
   type      CouponType
   value     Float
+  appliesTo CouponAppliesTo @default(TOTAL)
   minItems  Int        @default(0)
   minValue  Float      @default(0)
   maxUses   Int?
@@ -263,6 +264,12 @@ model Coupon {
 enum CouponType {
   PERCENT
   FIXED
+}
+
+enum CouponAppliesTo {
+  PRODUCT
+  SHIPPING
+  TOTAL
 }
 
 // ============================================

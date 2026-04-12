@@ -9,6 +9,8 @@ export interface MercadoPagoRuntimeConfig {
   webhookSecret: string;
   notificationUrl: string;
   tokenOwnerUserId: string | null;
+  clientId: string;
+  clientSecret: string;
 }
 
 const TEST_USER_EMAIL_REGEX = /@testuser\.com$/i;
@@ -84,6 +86,12 @@ export function getMercadoPagoRuntimeConfig(): MercadoPagoRuntimeConfig {
     process.env.MERCADOPAGO_PROD_NOTIFICATION_URL,
   );
 
+  const testClientId = cleanEnv(process.env.MERCADOPAGO_CLIENT_ID);
+  const prodClientId = cleanEnv(process.env.MERCADOPAGO_PROD_CLIENT_ID);
+
+  const testClientSecret = cleanEnv(process.env.MERCADOPAGO_CLIENT_SECRET);
+  const prodClientSecret = cleanEnv(process.env.MERCADOPAGO_PROD_CLIENT_SECRET);
+
   const selectedMode: MercadoPagoMode =
     preferredMode === "production"
       ? prodAccessToken
@@ -117,6 +125,16 @@ export function getMercadoPagoRuntimeConfig(): MercadoPagoRuntimeConfig {
       ? prodNotificationUrl || legacyNotificationUrl
       : testNotificationUrl || legacyNotificationUrl;
 
+  const selectedClientId =
+    selectedMode === "production"
+      ? prodClientId || testClientId
+      : testClientId || prodClientId;
+
+  const selectedClientSecret =
+    selectedMode === "production"
+      ? prodClientSecret || testClientSecret
+      : testClientSecret || prodClientSecret;
+
   return {
     mode: selectedMode,
     accessToken: selectedAccessToken,
@@ -124,6 +142,8 @@ export function getMercadoPagoRuntimeConfig(): MercadoPagoRuntimeConfig {
     webhookSecret: selectedWebhookSecret,
     notificationUrl: normalizeNotificationUrl(selectedNotificationUrl),
     tokenOwnerUserId: getTokenOwnerUserId(selectedAccessToken),
+    clientId: selectedClientId,
+    clientSecret: selectedClientSecret,
   };
 }
 

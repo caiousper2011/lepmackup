@@ -313,6 +313,13 @@ export type EnumCouponTypeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumCouponTypeFilter<$PrismaModel> | $Enums.CouponType
 }
 
+export type EnumCouponAppliesToFilter<$PrismaModel = never> = {
+  equals?: $Enums.CouponAppliesTo | Prisma.EnumCouponAppliesToFieldRefInput<$PrismaModel>
+  in?: $Enums.CouponAppliesTo[] | Prisma.ListEnumCouponAppliesToFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CouponAppliesTo[] | Prisma.ListEnumCouponAppliesToFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCouponAppliesToFilter<$PrismaModel> | $Enums.CouponAppliesTo
+}
+
 export type IntNullableFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
@@ -343,6 +350,16 @@ export type EnumCouponTypeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumCouponTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumCouponTypeFilter<$PrismaModel>
+}
+
+export type EnumCouponAppliesToWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CouponAppliesTo | Prisma.EnumCouponAppliesToFieldRefInput<$PrismaModel>
+  in?: $Enums.CouponAppliesTo[] | Prisma.ListEnumCouponAppliesToFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CouponAppliesTo[] | Prisma.ListEnumCouponAppliesToFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCouponAppliesToWithAggregatesFilter<$PrismaModel> | $Enums.CouponAppliesTo
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCouponAppliesToFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCouponAppliesToFilter<$PrismaModel>
 }
 
 export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -700,6 +717,13 @@ export type NestedEnumCouponTypeFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumCouponTypeFilter<$PrismaModel> | $Enums.CouponType
 }
 
+export type NestedEnumCouponAppliesToFilter<$PrismaModel = never> = {
+  equals?: $Enums.CouponAppliesTo | Prisma.EnumCouponAppliesToFieldRefInput<$PrismaModel>
+  in?: $Enums.CouponAppliesTo[] | Prisma.ListEnumCouponAppliesToFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CouponAppliesTo[] | Prisma.ListEnumCouponAppliesToFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCouponAppliesToFilter<$PrismaModel> | $Enums.CouponAppliesTo
+}
+
 export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
   equals?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | null
   in?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -719,6 +743,16 @@ export type NestedEnumCouponTypeWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumCouponTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumCouponTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumCouponAppliesToWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.CouponAppliesTo | Prisma.EnumCouponAppliesToFieldRefInput<$PrismaModel>
+  in?: $Enums.CouponAppliesTo[] | Prisma.ListEnumCouponAppliesToFieldRefInput<$PrismaModel>
+  notIn?: $Enums.CouponAppliesTo[] | Prisma.ListEnumCouponAppliesToFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumCouponAppliesToWithAggregatesFilter<$PrismaModel> | $Enums.CouponAppliesTo
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumCouponAppliesToFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumCouponAppliesToFilter<$PrismaModel>
 }
 
 export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {

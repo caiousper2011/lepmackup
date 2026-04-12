@@ -48,3 +48,12 @@ export const CouponType = {
 } as const
 
 export type CouponType = (typeof CouponType)[keyof typeof CouponType]
+
+
+export const CouponAppliesTo = {
+  PRODUCT: 'PRODUCT',
+  SHIPPING: 'SHIPPING',
+  TOTAL: 'TOTAL'
+} as const
+
+export type CouponAppliesTo = (typeof CouponAppliesTo)[keyof typeof CouponAppliesTo]

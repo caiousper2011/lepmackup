@@ -6,6 +6,7 @@ interface Coupon {
   id: string;
   code: string;
   type: string;
+  appliesTo: string;
   value: number;
   minOrder: number | null;
   maxUses: number | null;
@@ -24,6 +25,7 @@ export default function AdminCouponsPage() {
   const emptyForm = {
     code: "",
     type: "PERCENTAGE" as "PERCENTAGE" | "FIXED",
+    appliesTo: "TOTAL" as "PRODUCT" | "SHIPPING" | "TOTAL",
     value: "",
     minOrder: "",
     maxUses: "",
@@ -60,6 +62,7 @@ export default function AdminCouponsPage() {
     setForm({
       code: c.code,
       type: c.type as "PERCENTAGE" | "FIXED",
+      appliesTo: (c.appliesTo || "TOTAL") as "PRODUCT" | "SHIPPING" | "TOTAL",
       value: c.value.toString(),
       minOrder: c.minOrder?.toString() || "",
       maxUses: c.maxUses?.toString() || "",
@@ -76,6 +79,7 @@ export default function AdminCouponsPage() {
       const body: Record<string, unknown> = {
         code: form.code.toUpperCase(),
         type: form.type,
+        appliesTo: form.appliesTo,
         value: parseFloat(form.value),
       };
       if (form.minOrder) body.minOrder = parseFloat(form.minOrder);
@@ -168,6 +172,30 @@ export default function AdminCouponsPage() {
                 </div>
                 <div>
                   <label className="block text-xs text-gray-500 mb-1">
+                    Aplica em
+                  </label>
+                  <select
+                    value={form.appliesTo}
+                    onChange={(e) =>
+                      setForm({
+                        ...form,
+                        appliesTo: e.target.value as
+                          | "PRODUCT"
+                          | "SHIPPING"
+                          | "TOTAL",
+                      })
+                    }
+                    className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
+                  >
+                    <option value="TOTAL">Valor Total</option>
+                    <option value="PRODUCT">Somente Produto</option>
+                    <option value="SHIPPING">Somente Frete</option>
+                  </select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1">
                     Valor
                   </label>
                   <input
@@ -255,6 +283,7 @@ export default function AdminCouponsPage() {
             <tr>
               <th className="px-5 py-3 text-left">Código</th>
               <th className="px-5 py-3 text-left">Tipo</th>
+              <th className="px-5 py-3 text-left">Aplica em</th>
               <th className="px-5 py-3 text-left">Valor</th>
               <th className="px-5 py-3 text-left">Mín.</th>
               <th className="px-5 py-3 text-left">Usos</th>
@@ -267,7 +296,7 @@ export default function AdminCouponsPage() {
             {loading ? (
               <tr>
                 <td
-                  colSpan={8}
+                  colSpan={9}
                   className="px-5 py-8 text-center text-sm text-gray-400"
                 >
                   Carregando...
@@ -276,7 +305,7 @@ export default function AdminCouponsPage() {
             ) : coupons.length === 0 ? (
               <tr>
                 <td
-                  colSpan={8}
+                  colSpan={9}
                   className="px-5 py-8 text-center text-sm text-gray-400"
                 >
                   Nenhum cupom cadastrado.
@@ -290,6 +319,13 @@ export default function AdminCouponsPage() {
                   </td>
                   <td className="px-5 py-3 text-sm text-gray-600">
                     {c.type === "PERCENTAGE" ? "%" : "R$"}
+                  </td>
+                  <td className="px-5 py-3 text-sm text-gray-600">
+                    {c.appliesTo === "PRODUCT"
+                      ? "Produto"
+                      : c.appliesTo === "SHIPPING"
+                        ? "Frete"
+                        : "Total"}
                   </td>
                   <td className="px-5 py-3 text-sm font-medium">
                     {c.type === "PERCENTAGE"

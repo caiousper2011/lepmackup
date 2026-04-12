@@ -1662,6 +1662,7 @@ export const CouponScalarFieldEnum = {
   code: 'code',
   type: 'type',
   value: 'value',
+  appliesTo: 'appliesTo',
   minItems: 'minItems',
   minValue: 'minValue',
   maxUses: 'maxUses',
@@ -1900,6 +1901,20 @@ export type EnumCouponTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prism
  * Reference to a field of type 'CouponType[]'
  */
 export type ListEnumCouponTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CouponType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CouponAppliesTo'
+ */
+export type EnumCouponAppliesToFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CouponAppliesTo'>
+    
+
+
+/**
+ * Reference to a field of type 'CouponAppliesTo[]'
+ */
+export type ListEnumCouponAppliesToFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CouponAppliesTo[]'>
     
 
 /**

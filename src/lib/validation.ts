@@ -97,6 +97,7 @@ export const couponSchema = z.object({
   code: z.string().min(3).max(30).toUpperCase().trim(),
   type: z.enum(["PERCENT", "FIXED"]),
   value: z.number().positive(),
+  appliesTo: z.enum(["PRODUCT", "SHIPPING", "TOTAL"]).default("TOTAL"),
   minItems: z.number().int().min(0).default(0),
   minValue: z.number().min(0).default(0),
   maxUses: z.number().int().positive().nullable().optional(),
@@ -124,6 +125,10 @@ export const checkoutSchema = z
         (value) => value.length === 11 || value.length === 14,
         "Informe um CPF (11 dígitos) ou CNPJ (14 dígitos) válido",
       ),
+    customerName: z
+      .string()
+      .min(2, "Nome do destinatário é obrigatório")
+      .max(120, "Nome muito longo"),
     couponCode: z.string().max(30).optional(),
     items: z
       .array(
@@ -167,4 +172,5 @@ export const couponValidateSchema = z.object({
   code: z.string().min(1).max(30).toUpperCase().trim(),
   itemCount: z.number().int().positive(),
   subtotal: z.number().positive(),
+  shippingPrice: z.number().min(0).default(0),
 });

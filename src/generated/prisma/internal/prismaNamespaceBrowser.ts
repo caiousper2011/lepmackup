@@ -253,6 +253,7 @@ export const CouponScalarFieldEnum = {
   code: 'code',
   type: 'type',
   value: 'value',
+  appliesTo: 'appliesTo',
   minItems: 'minItems',
   minValue: 'minValue',
   maxUses: 'maxUses',

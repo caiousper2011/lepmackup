@@ -199,17 +199,30 @@ export function isWithinFreeDeliveryRadius(
 // ─── Melhor Envio Helpers ───
 
 function getMelhorEnvioToken(): string {
-  const token = (process.env.MELHOR_ENVIO_TOKEN || "").trim();
+  const env = resolveMelhorEnvioMode();
+  const token =
+    env === "production"
+      ? (process.env.MELHOR_ENVIO_PROD_TOKEN || "").trim() ||
+        (process.env.MELHOR_ENVIO_TOKEN || "").trim()
+      : (process.env.MELHOR_ENVIO_TOKEN || "").trim() ||
+        (process.env.MELHOR_ENVIO_PROD_TOKEN || "").trim();
   if (!token) {
     throw new Error("MELHOR_ENVIO_TOKEN não configurado.");
   }
   return token;
 }
 
-function getMelhorEnvioBaseUrl(): string {
+function resolveMelhorEnvioMode(): "sandbox" | "production" {
   const explicit = (process.env.MELHOR_ENVIO_ENV || "").toLowerCase();
-  if (explicit === "sandbox") return "https://sandbox.melhorenvio.com.br";
-  if (explicit === "production") return "https://melhorenvio.com.br";
+  if (explicit === "sandbox") return "sandbox";
+  if (explicit === "production") return "production";
+  // Auto: use production when NODE_ENV=production
+  return process.env.NODE_ENV === "production" ? "production" : "sandbox";
+}
+
+function getMelhorEnvioBaseUrl(): string {
+  const mode = resolveMelhorEnvioMode();
+  if (mode === "sandbox") return "https://sandbox.melhorenvio.com.br";
   return "https://melhorenvio.com.br";
 }
 
@@ -294,28 +307,79 @@ function buildTrackingUrl(
 // ─── Company / Sender Info ───
 
 export function getCompanyShippingInfo(): MelhorEnvioFullAddress {
+  const isProd = resolveMelhorEnvioMode() === "production";
+
+  const envOrFallback = (
+    prodKey: string,
+    testKey: string,
+    fallback: string = "",
+  ) => {
+    if (isProd)
+      return (process.env[prodKey] || process.env[testKey] || fallback).trim();
+    return (process.env[testKey] || process.env[prodKey] || fallback).trim();
+  };
+
   return {
-    name: process.env.MELHOR_ENVIO_FROM_NAME || "L&P MakeUp",
-    phone: (process.env.MELHOR_ENVIO_FROM_PHONE || "11952875150").replace(
-      /\D/g,
-      "",
+    name: envOrFallback(
+      "MELHOR_ENVIO_PROD_FROM_NAME",
+      "MELHOR_ENVIO_FROM_NAME",
+      "L&P MakeUp",
     ),
-    email: process.env.MELHOR_ENVIO_FROM_EMAIL || "contato@lepmakeup.com.br",
-    document: (process.env.MELHOR_ENVIO_FROM_DOCUMENT || "").replace(/\D/g, ""),
-    company_document: (
-      process.env.MELHOR_ENVIO_FROM_COMPANY_DOCUMENT ||
-      process.env.MELHOR_ENVIO_FROM_DOCUMENT ||
-      ""
+    phone: envOrFallback(
+      "MELHOR_ENVIO_PROD_FROM_PHONE",
+      "MELHOR_ENVIO_FROM_PHONE",
+      "11952875150",
     ).replace(/\D/g, ""),
-    address: process.env.MELHOR_ENVIO_FROM_ADDRESS || "",
-    complement: process.env.MELHOR_ENVIO_FROM_COMPLEMENT || "",
-    number: process.env.MELHOR_ENVIO_FROM_NUMBER || "",
-    district: process.env.MELHOR_ENVIO_FROM_DISTRICT || "",
-    city: process.env.MELHOR_ENVIO_FROM_CITY || "São Paulo",
-    state_abbr: process.env.MELHOR_ENVIO_FROM_STATE || "SP",
+    email: envOrFallback(
+      "MELHOR_ENVIO_PROD_FROM_EMAIL",
+      "MELHOR_ENVIO_FROM_EMAIL",
+      "contato@lepmakeup.com.br",
+    ),
+    document: envOrFallback(
+      "MELHOR_ENVIO_PROD_FROM_DOCUMENT",
+      "MELHOR_ENVIO_FROM_DOCUMENT",
+    ).replace(/\D/g, ""),
+    company_document: (
+      envOrFallback(
+        "MELHOR_ENVIO_PROD_FROM_COMPANY_DOCUMENT",
+        "MELHOR_ENVIO_FROM_COMPANY_DOCUMENT",
+      ) ||
+      envOrFallback(
+        "MELHOR_ENVIO_PROD_FROM_DOCUMENT",
+        "MELHOR_ENVIO_FROM_DOCUMENT",
+      )
+    ).replace(/\D/g, ""),
+    address: envOrFallback(
+      "MELHOR_ENVIO_PROD_FROM_ADDRESS",
+      "MELHOR_ENVIO_FROM_ADDRESS",
+    ),
+    complement: envOrFallback(
+      "MELHOR_ENVIO_PROD_FROM_COMPLEMENT",
+      "MELHOR_ENVIO_FROM_COMPLEMENT",
+    ),
+    number: envOrFallback(
+      "MELHOR_ENVIO_PROD_FROM_NUMBER",
+      "MELHOR_ENVIO_FROM_NUMBER",
+    ),
+    district: envOrFallback(
+      "MELHOR_ENVIO_PROD_FROM_DISTRICT",
+      "MELHOR_ENVIO_FROM_DISTRICT",
+    ),
+    city: envOrFallback(
+      "MELHOR_ENVIO_PROD_FROM_CITY",
+      "MELHOR_ENVIO_FROM_CITY",
+      "São Paulo",
+    ),
+    state_abbr: envOrFallback(
+      "MELHOR_ENVIO_PROD_FROM_STATE",
+      "MELHOR_ENVIO_FROM_STATE",
+      "SP",
+    ),
     country_id: "BR",
-    postal_code: (
-      process.env.MELHOR_ENVIO_FROM_POSTAL_CODE || "03504000"
+    postal_code: envOrFallback(
+      "MELHOR_ENVIO_PROD_FROM_POSTAL_CODE",
+      "MELHOR_ENVIO_FROM_POSTAL_CODE",
+      "03504000",
     ).replace(/\D/g, ""),
   };
 }
@@ -396,8 +460,8 @@ export async function calculateNationalShipping(
   },
 ): Promise<ShippingQuote[]> {
   const token = getMelhorEnvioToken();
-  const fromPostalCode =
-    process.env.MELHOR_ENVIO_FROM_POSTAL_CODE || "03504000";
+  const companyInfo = getCompanyShippingInfo();
+  const fromPostalCode = companyInfo.postal_code || "03504000";
 
   const totalItems = Math.max(1, options?.totalItems ?? 1);
   const totalWeightGrams = Math.max(50, options?.totalWeightGrams ?? 500);
@@ -1073,7 +1137,7 @@ export async function autoGenerateShippingLabel(orderId: string): Promise<{
       : { height: 5, width: 20, length: 20 };
 
   const payloadData: OrderShippingData = {
-    customerName: cpfCnpj,
+    customerName: String(snapshot?.customerName || order.user?.name || cpfCnpj),
     customerEmail: order.user?.email || "",
     customerPhone: order.user?.phone || null,
     customerDocument: cpfCnpj,

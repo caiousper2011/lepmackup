@@ -43,6 +43,7 @@ export async function POST(request: NextRequest) {
       shippingDescription,
       shippingPrice,
       cpfCnpj,
+      customerName,
       couponCode,
       items,
     } = parsed.data;
@@ -129,9 +130,10 @@ export async function POST(request: NextRequest) {
       0,
     );
 
-    // Validate coupon
+    // Validate coupon (discount is applied after shipping is validated)
     let discount = 0;
     let couponId: string | null = null;
+    let couponAppliesTo: string | null = null;
 
     if (couponCode) {
       const coupon = await prisma.coupon.findUnique({
@@ -141,12 +143,21 @@ export async function POST(request: NextRequest) {
       if (coupon && (!coupon.expiresAt || coupon.expiresAt > new Date())) {
         if (!coupon.maxUses || coupon.usedCount < coupon.maxUses) {
           if (totalQuantity >= coupon.minItems && subtotal >= coupon.minValue) {
-            if (coupon.type === "PERCENT") {
-              discount = (subtotal * coupon.value) / 100;
-            } else {
-              discount = Math.min(coupon.value, subtotal);
-            }
             couponId = coupon.id;
+            couponAppliesTo = coupon.appliesTo || "TOTAL";
+            // Discount will be recalculated after shipping validation
+            const tempBase =
+              couponAppliesTo === "PRODUCT"
+                ? subtotal
+                : couponAppliesTo === "SHIPPING"
+                  ? shippingPrice
+                  : subtotal + shippingPrice;
+
+            if (coupon.type === "PERCENT") {
+              discount = (tempBase * coupon.value) / 100;
+            } else {
+              discount = Math.min(coupon.value, tempBase);
+            }
           }
         }
       }
@@ -198,6 +209,29 @@ export async function POST(request: NextRequest) {
     }
 
     const shipping = isPickup ? 0 : validatedShippingPrice;
+
+    // Recalculate discount with validated shipping price
+    if (couponId && couponAppliesTo) {
+      const coupon = await prisma.coupon.findUnique({
+        where: { id: couponId },
+      });
+      if (coupon) {
+        const baseAmount =
+          couponAppliesTo === "PRODUCT"
+            ? subtotal
+            : couponAppliesTo === "SHIPPING"
+              ? shipping
+              : subtotal + shipping;
+
+        if (coupon.type === "PERCENT") {
+          discount = (baseAmount * coupon.value) / 100;
+        } else {
+          discount = Math.min(coupon.value, baseAmount);
+        }
+        discount = Math.round(discount * 100) / 100;
+      }
+    }
+
     const total = Math.round((subtotal + shipping - discount) * 100) / 100;
 
     if (total <= 0) {
@@ -244,6 +278,7 @@ export async function POST(request: NextRequest) {
                   pickupAddress: shippingSettings?.pickupAddress,
                   pickupInstructions: shippingSettings?.pickupInstructions,
                   cpfCnpj,
+                  customerName,
                 }
               : {
                   street: address!.street,
@@ -254,6 +289,7 @@ export async function POST(request: NextRequest) {
                   state: address!.state,
                   cep: address!.cep,
                   cpfCnpj,
+                  customerName,
                   ...(validatedMelhorEnvioServiceId
                     ? { melhorEnvioServiceId: validatedMelhorEnvioServiceId }
                     : {}),

@@ -47,6 +47,7 @@ export type CouponMinAggregateOutputType = {
   code: string | null
   type: $Enums.CouponType | null
   value: number | null
+  appliesTo: $Enums.CouponAppliesTo | null
   minItems: number | null
   minValue: number | null
   maxUses: number | null
@@ -63,6 +64,7 @@ export type CouponMaxAggregateOutputType = {
   code: string | null
   type: $Enums.CouponType | null
   value: number | null
+  appliesTo: $Enums.CouponAppliesTo | null
   minItems: number | null
   minValue: number | null
   maxUses: number | null
@@ -79,6 +81,7 @@ export type CouponCountAggregateOutputType = {
   code: number
   type: number
   value: number
+  appliesTo: number
   minItems: number
   minValue: number
   maxUses: number
@@ -113,6 +116,7 @@ export type CouponMinAggregateInputType = {
   code?: true
   type?: true
   value?: true
+  appliesTo?: true
   minItems?: true
   minValue?: true
   maxUses?: true
@@ -129,6 +133,7 @@ export type CouponMaxAggregateInputType = {
   code?: true
   type?: true
   value?: true
+  appliesTo?: true
   minItems?: true
   minValue?: true
   maxUses?: true
@@ -145,6 +150,7 @@ export type CouponCountAggregateInputType = {
   code?: true
   type?: true
   value?: true
+  appliesTo?: true
   minItems?: true
   minValue?: true
   maxUses?: true
@@ -248,6 +254,7 @@ export type CouponGroupByOutputType = {
   code: string
   type: $Enums.CouponType
   value: number
+  appliesTo: $Enums.CouponAppliesTo
   minItems: number
   minValue: number
   maxUses: number | null
@@ -287,6 +294,7 @@ export type CouponWhereInput = {
   code?: Prisma.StringFilter<"Coupon"> | string
   type?: Prisma.EnumCouponTypeFilter<"Coupon"> | $Enums.CouponType
   value?: Prisma.FloatFilter<"Coupon"> | number
+  appliesTo?: Prisma.EnumCouponAppliesToFilter<"Coupon"> | $Enums.CouponAppliesTo
   minItems?: Prisma.IntFilter<"Coupon"> | number
   minValue?: Prisma.FloatFilter<"Coupon"> | number
   maxUses?: Prisma.IntNullableFilter<"Coupon"> | number | null
@@ -304,6 +312,7 @@ export type CouponOrderByWithRelationInput = {
   code?: Prisma.SortOrder
   type?: Prisma.SortOrder
   value?: Prisma.SortOrder
+  appliesTo?: Prisma.SortOrder
   minItems?: Prisma.SortOrder
   minValue?: Prisma.SortOrder
   maxUses?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -324,6 +333,7 @@ export type CouponWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.CouponWhereInput | Prisma.CouponWhereInput[]
   type?: Prisma.EnumCouponTypeFilter<"Coupon"> | $Enums.CouponType
   value?: Prisma.FloatFilter<"Coupon"> | number
+  appliesTo?: Prisma.EnumCouponAppliesToFilter<"Coupon"> | $Enums.CouponAppliesTo
   minItems?: Prisma.IntFilter<"Coupon"> | number
   minValue?: Prisma.FloatFilter<"Coupon"> | number
   maxUses?: Prisma.IntNullableFilter<"Coupon"> | number | null
@@ -341,6 +351,7 @@ export type CouponOrderByWithAggregationInput = {
   code?: Prisma.SortOrder
   type?: Prisma.SortOrder
   value?: Prisma.SortOrder
+  appliesTo?: Prisma.SortOrder
   minItems?: Prisma.SortOrder
   minValue?: Prisma.SortOrder
   maxUses?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -365,6 +376,7 @@ export type CouponScalarWhereWithAggregatesInput = {
   code?: Prisma.StringWithAggregatesFilter<"Coupon"> | string
   type?: Prisma.EnumCouponTypeWithAggregatesFilter<"Coupon"> | $Enums.CouponType
   value?: Prisma.FloatWithAggregatesFilter<"Coupon"> | number
+  appliesTo?: Prisma.EnumCouponAppliesToWithAggregatesFilter<"Coupon"> | $Enums.CouponAppliesTo
   minItems?: Prisma.IntWithAggregatesFilter<"Coupon"> | number
   minValue?: Prisma.FloatWithAggregatesFilter<"Coupon"> | number
   maxUses?: Prisma.IntNullableWithAggregatesFilter<"Coupon"> | number | null
@@ -381,6 +393,7 @@ export type CouponCreateInput = {
   code: string
   type: $Enums.CouponType
   value: number
+  appliesTo?: $Enums.CouponAppliesTo
   minItems?: number
   minValue?: number
   maxUses?: number | null
@@ -398,6 +411,7 @@ export type CouponUncheckedCreateInput = {
   code: string
   type: $Enums.CouponType
   value: number
+  appliesTo?: $Enums.CouponAppliesTo
   minItems?: number
   minValue?: number
   maxUses?: number | null
@@ -415,6 +429,7 @@ export type CouponUpdateInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCouponTypeFieldUpdateOperationsInput | $Enums.CouponType
   value?: Prisma.FloatFieldUpdateOperationsInput | number
+  appliesTo?: Prisma.EnumCouponAppliesToFieldUpdateOperationsInput | $Enums.CouponAppliesTo
   minItems?: Prisma.IntFieldUpdateOperationsInput | number
   minValue?: Prisma.FloatFieldUpdateOperationsInput | number
   maxUses?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -432,6 +447,7 @@ export type CouponUncheckedUpdateInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCouponTypeFieldUpdateOperationsInput | $Enums.CouponType
   value?: Prisma.FloatFieldUpdateOperationsInput | number
+  appliesTo?: Prisma.EnumCouponAppliesToFieldUpdateOperationsInput | $Enums.CouponAppliesTo
   minItems?: Prisma.IntFieldUpdateOperationsInput | number
   minValue?: Prisma.FloatFieldUpdateOperationsInput | number
   maxUses?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -449,6 +465,7 @@ export type CouponCreateManyInput = {
   code: string
   type: $Enums.CouponType
   value: number
+  appliesTo?: $Enums.CouponAppliesTo
   minItems?: number
   minValue?: number
   maxUses?: number | null
@@ -465,6 +482,7 @@ export type CouponUpdateManyMutationInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCouponTypeFieldUpdateOperationsInput | $Enums.CouponType
   value?: Prisma.FloatFieldUpdateOperationsInput | number
+  appliesTo?: Prisma.EnumCouponAppliesToFieldUpdateOperationsInput | $Enums.CouponAppliesTo
   minItems?: Prisma.IntFieldUpdateOperationsInput | number
   minValue?: Prisma.FloatFieldUpdateOperationsInput | number
   maxUses?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -481,6 +499,7 @@ export type CouponUncheckedUpdateManyInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCouponTypeFieldUpdateOperationsInput | $Enums.CouponType
   value?: Prisma.FloatFieldUpdateOperationsInput | number
+  appliesTo?: Prisma.EnumCouponAppliesToFieldUpdateOperationsInput | $Enums.CouponAppliesTo
   minItems?: Prisma.IntFieldUpdateOperationsInput | number
   minValue?: Prisma.FloatFieldUpdateOperationsInput | number
   maxUses?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -502,6 +521,7 @@ export type CouponCountOrderByAggregateInput = {
   code?: Prisma.SortOrder
   type?: Prisma.SortOrder
   value?: Prisma.SortOrder
+  appliesTo?: Prisma.SortOrder
   minItems?: Prisma.SortOrder
   minValue?: Prisma.SortOrder
   maxUses?: Prisma.SortOrder
@@ -526,6 +546,7 @@ export type CouponMaxOrderByAggregateInput = {
   code?: Prisma.SortOrder
   type?: Prisma.SortOrder
   value?: Prisma.SortOrder
+  appliesTo?: Prisma.SortOrder
   minItems?: Prisma.SortOrder
   minValue?: Prisma.SortOrder
   maxUses?: Prisma.SortOrder
@@ -542,6 +563,7 @@ export type CouponMinOrderByAggregateInput = {
   code?: Prisma.SortOrder
   type?: Prisma.SortOrder
   value?: Prisma.SortOrder
+  appliesTo?: Prisma.SortOrder
   minItems?: Prisma.SortOrder
   minValue?: Prisma.SortOrder
   maxUses?: Prisma.SortOrder
@@ -581,6 +603,10 @@ export type EnumCouponTypeFieldUpdateOperationsInput = {
   set?: $Enums.CouponType
 }
 
+export type EnumCouponAppliesToFieldUpdateOperationsInput = {
+  set?: $Enums.CouponAppliesTo
+}
+
 export type NullableIntFieldUpdateOperationsInput = {
   set?: number | null
   increment?: number
@@ -598,6 +624,7 @@ export type CouponCreateWithoutOrdersInput = {
   code: string
   type: $Enums.CouponType
   value: number
+  appliesTo?: $Enums.CouponAppliesTo
   minItems?: number
   minValue?: number
   maxUses?: number | null
@@ -614,6 +641,7 @@ export type CouponUncheckedCreateWithoutOrdersInput = {
   code: string
   type: $Enums.CouponType
   value: number
+  appliesTo?: $Enums.CouponAppliesTo
   minItems?: number
   minValue?: number
   maxUses?: number | null
@@ -646,6 +674,7 @@ export type CouponUpdateWithoutOrdersInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCouponTypeFieldUpdateOperationsInput | $Enums.CouponType
   value?: Prisma.FloatFieldUpdateOperationsInput | number
+  appliesTo?: Prisma.EnumCouponAppliesToFieldUpdateOperationsInput | $Enums.CouponAppliesTo
   minItems?: Prisma.IntFieldUpdateOperationsInput | number
   minValue?: Prisma.FloatFieldUpdateOperationsInput | number
   maxUses?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -662,6 +691,7 @@ export type CouponUncheckedUpdateWithoutOrdersInput = {
   code?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumCouponTypeFieldUpdateOperationsInput | $Enums.CouponType
   value?: Prisma.FloatFieldUpdateOperationsInput | number
+  appliesTo?: Prisma.EnumCouponAppliesToFieldUpdateOperationsInput | $Enums.CouponAppliesTo
   minItems?: Prisma.IntFieldUpdateOperationsInput | number
   minValue?: Prisma.FloatFieldUpdateOperationsInput | number
   maxUses?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -709,6 +739,7 @@ export type CouponSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   code?: boolean
   type?: boolean
   value?: boolean
+  appliesTo?: boolean
   minItems?: boolean
   minValue?: boolean
   maxUses?: boolean
@@ -727,6 +758,7 @@ export type CouponSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   code?: boolean
   type?: boolean
   value?: boolean
+  appliesTo?: boolean
   minItems?: boolean
   minValue?: boolean
   maxUses?: boolean
@@ -743,6 +775,7 @@ export type CouponSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   code?: boolean
   type?: boolean
   value?: boolean
+  appliesTo?: boolean
   minItems?: boolean
   minValue?: boolean
   maxUses?: boolean
@@ -759,6 +792,7 @@ export type CouponSelectScalar = {
   code?: boolean
   type?: boolean
   value?: boolean
+  appliesTo?: boolean
   minItems?: boolean
   minValue?: boolean
   maxUses?: boolean
@@ -770,7 +804,7 @@ export type CouponSelectScalar = {
   updatedAt?: boolean
 }
 
-export type CouponOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "type" | "value" | "minItems" | "minValue" | "maxUses" | "usedCount" | "expiresAt" | "active" | "isReferral" | "createdAt" | "updatedAt", ExtArgs["result"]["coupon"]>
+export type CouponOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "type" | "value" | "appliesTo" | "minItems" | "minValue" | "maxUses" | "usedCount" | "expiresAt" | "active" | "isReferral" | "createdAt" | "updatedAt", ExtArgs["result"]["coupon"]>
 export type CouponInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   orders?: boolean | Prisma.Coupon$ordersArgs<ExtArgs>
   _count?: boolean | Prisma.CouponCountOutputTypeDefaultArgs<ExtArgs>
@@ -788,6 +822,7 @@ export type $CouponPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     code: string
     type: $Enums.CouponType
     value: number
+    appliesTo: $Enums.CouponAppliesTo
     minItems: number
     minValue: number
     maxUses: number | null
@@ -1225,6 +1260,7 @@ export interface CouponFieldRefs {
   readonly code: Prisma.FieldRef<"Coupon", 'String'>
   readonly type: Prisma.FieldRef<"Coupon", 'CouponType'>
   readonly value: Prisma.FieldRef<"Coupon", 'Float'>
+  readonly appliesTo: Prisma.FieldRef<"Coupon", 'CouponAppliesTo'>
   readonly minItems: Prisma.FieldRef<"Coupon", 'Int'>
   readonly minValue: Prisma.FieldRef<"Coupon", 'Float'>
   readonly maxUses: Prisma.FieldRef<"Coupon", 'Int'>
