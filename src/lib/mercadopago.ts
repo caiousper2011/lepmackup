@@ -245,40 +245,83 @@ export async function createPaymentPreference(
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
   const isLocalEnvironmentUrl = /localhost|127\.0\.0\.1|\[::1\]/i.test(appUrl);
+
+  if (!isTestMode && !isLocalEnvironmentUrl && !appUrl.startsWith("https://")) {
+    console.error(
+      "[mercadopago] AVISO: NEXT_PUBLIC_APP_URL não usa HTTPS em modo produção. " +
+      "O Mercado Pago exige back_urls com HTTPS. Valor atual: " + appUrl,
+    );
+  }
   const notificationUrl = runtimeConfig.notificationUrl
     ? runtimeConfig.notificationUrl
     : !isLocalEnvironmentUrl
       ? `${appUrl}/api/webhooks/mercadopago`
       : "";
 
+  // Round all unit prices to 2 decimal places to avoid floating-point issues
+  // with Mercado Pago's API (which requires exact numeric values)
   const preferenceItems = items.map((item, idx) => ({
     id: `item-${idx}`,
     title: item.title,
     quantity: item.quantity,
-    unit_price: item.unit_price,
+    unit_price: Math.round(item.unit_price * 100) / 100,
     currency_id: "BRL" as const,
   }));
 
-  // Add shipping as an item if > 0
+  // Add shipping as a positive item if > 0
   if (shipping > 0) {
     preferenceItems.push({
       id: "shipping",
       title: "Frete",
       quantity: 1,
-      unit_price: shipping,
+      unit_price: Math.round(shipping * 100) / 100,
       currency_id: "BRL" as const,
     });
   }
 
-  // Add discount as negative item if > 0
+  // Apply discount by distributing it proportionally across all items.
+  // Mercado Pago Checkout Pro Brazil requires unit_price > 0 — negative-price
+  // items trigger the CPT01 error in the checkout UI. We reduce each item's
+  // unit_price proportionally so the preference total equals the expected
+  // order total (subtotal + shipping - discount).
   if (discount > 0) {
-    preferenceItems.push({
-      id: "discount",
-      title: "Desconto (cupom)",
-      quantity: 1,
-      unit_price: -discount,
-      currency_id: "BRL" as const,
-    });
+    const totalBeforeDiscount = preferenceItems.reduce(
+      (sum, item) => sum + item.quantity * item.unit_price,
+      0,
+    );
+
+    if (totalBeforeDiscount > 0 && discount < totalBeforeDiscount) {
+      const discountRatio = discount / totalBeforeDiscount;
+
+      // Reduce each item's unit_price proportionally (keep positives only)
+      for (let i = 0; i < preferenceItems.length; i++) {
+        preferenceItems[i] = {
+          ...preferenceItems[i],
+          unit_price: Math.max(
+            0.01,
+            Math.round(preferenceItems[i].unit_price * (1 - discountRatio) * 100) / 100,
+          ),
+        };
+      }
+
+      // Correct for any rounding difference by adjusting the first item
+      const actualTotal = preferenceItems.reduce(
+        (sum, item) => sum + item.quantity * item.unit_price,
+        0,
+      );
+      const expectedTotal = Math.round((totalBeforeDiscount - discount) * 100) / 100;
+      const roundingDiff = Math.round((expectedTotal - actualTotal) * 100) / 100;
+
+      if (Math.abs(roundingDiff) >= 0.01 && preferenceItems.length > 0) {
+        preferenceItems[0] = {
+          ...preferenceItems[0],
+          unit_price: Math.max(
+            0.01,
+            Math.round((preferenceItems[0].unit_price + roundingDiff) * 100) / 100,
+          ),
+        };
+      }
+    }
   }
 
   const preferenceBody = {
@@ -343,7 +386,6 @@ export async function getPaymentById(paymentId: string) {
 
 export async function refundPayment(paymentId: string) {
   const runtimeConfig = getMercadoPagoRuntimeConfig();
-  const client = createMercadoPagoClient(runtimeConfig.accessToken);
 
   const response = await fetch(
     `https://api.mercadopago.com/v1/payments/${paymentId}/refunds`,
