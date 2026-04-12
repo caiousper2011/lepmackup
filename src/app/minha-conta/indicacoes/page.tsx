@@ -147,7 +147,7 @@ export default function IndicacoesPage() {
                 <div>
                   <p className="font-mono font-bold text-rose-600">{c.code}</p>
                   <p className="text-xs text-gray-400 mt-0.5">
-                    {c.type === "PERCENTAGE"
+                    {c.type === "PERCENT"
                       ? `${c.value}% de desconto`
                       : `R$${c.value.toFixed(2)} de desconto`}
                     {c.expiresAt &&
