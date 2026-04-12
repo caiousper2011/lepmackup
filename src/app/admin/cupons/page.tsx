@@ -21,13 +21,14 @@ export default function AdminCouponsPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const emptyForm = {
     code: "",
-    type: "PERCENTAGE" as "PERCENTAGE" | "FIXED",
+    type: "PERCENT" as "PERCENT" | "FIXED",
     appliesTo: "TOTAL" as "PRODUCT" | "SHIPPING" | "TOTAL",
     value: "",
-    minOrder: "",
+    minValue: "",
     maxUses: "",
     expiresAt: "",
   };
@@ -55,26 +56,29 @@ export default function AdminCouponsPage() {
   const openCreate = () => {
     setForm(emptyForm);
     setEditingId(null);
+    setError(null);
     setShowForm(true);
   };
 
   const openEdit = (c: Coupon) => {
     setForm({
       code: c.code,
-      type: c.type as "PERCENTAGE" | "FIXED",
+      type: c.type as "PERCENT" | "FIXED",
       appliesTo: (c.appliesTo || "TOTAL") as "PRODUCT" | "SHIPPING" | "TOTAL",
       value: c.value.toString(),
-      minOrder: c.minOrder?.toString() || "",
+      minValue: c.minOrder?.toString() || "",
       maxUses: c.maxUses?.toString() || "",
       expiresAt: c.expiresAt ? c.expiresAt.split("T")[0] : "",
     });
     setEditingId(c.id);
+    setError(null);
     setShowForm(true);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
+    setError(null);
     try {
       const body: Record<string, unknown> = {
         code: form.code.toUpperCase(),
@@ -82,7 +86,7 @@ export default function AdminCouponsPage() {
         appliesTo: form.appliesTo,
         value: parseFloat(form.value),
       };
-      if (form.minOrder) body.minOrder = parseFloat(form.minOrder);
+      if (form.minValue) body.minValue = parseFloat(form.minValue);
       if (form.maxUses) body.maxUses = parseInt(form.maxUses);
       if (form.expiresAt)
         body.expiresAt = new Date(form.expiresAt).toISOString();
@@ -99,9 +103,12 @@ export default function AdminCouponsPage() {
       if (res.ok) {
         setShowForm(false);
         fetchCoupons();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Erro ao salvar cupom.");
       }
     } catch {
-      // ignore
+      setError("Erro de conexão. Tente novamente.");
     } finally {
       setSaving(false);
     }
@@ -161,12 +168,12 @@ export default function AdminCouponsPage() {
                     onChange={(e) =>
                       setForm({
                         ...form,
-                        type: e.target.value as "PERCENTAGE" | "FIXED",
+                        type: e.target.value as "PERCENT" | "FIXED",
                       })
                     }
                     className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
                   >
-                    <option value="PERCENTAGE">Porcentagem (%)</option>
+                    <option value="PERCENT">Porcentagem (%)</option>
                     <option value="FIXED">Valor Fixo (R$)</option>
                   </select>
                 </div>
@@ -218,9 +225,9 @@ export default function AdminCouponsPage() {
                   <input
                     type="number"
                     step="0.01"
-                    value={form.minOrder}
+                    value={form.minValue}
                     onChange={(e) =>
-                      setForm({ ...form, minOrder: e.target.value })
+                      setForm({ ...form, minValue: e.target.value })
                     }
                     className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
                   />
@@ -252,6 +259,11 @@ export default function AdminCouponsPage() {
                   className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
                 />
               </div>
+              {error && (
+                <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-3 py-2">
+                  {error}
+                </p>
+              )}
               <div className="flex gap-3 pt-2">
                 <button
                   type="button"
@@ -318,7 +330,7 @@ export default function AdminCouponsPage() {
                     {c.code}
                   </td>
                   <td className="px-5 py-3 text-sm text-gray-600">
-                    {c.type === "PERCENTAGE" ? "%" : "R$"}
+                    {c.type === "PERCENT" ? "%" : "R$"}
                   </td>
                   <td className="px-5 py-3 text-sm text-gray-600">
                     {c.appliesTo === "PRODUCT"
@@ -328,7 +340,7 @@ export default function AdminCouponsPage() {
                         : "Total"}
                   </td>
                   <td className="px-5 py-3 text-sm font-medium">
-                    {c.type === "PERCENTAGE"
+                    {c.type === "PERCENT"
                       ? `${c.value}%`
                       : `R$${c.value.toFixed(2)}`}
                   </td>
