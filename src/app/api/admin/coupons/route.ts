@@ -29,7 +29,8 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error("Admin list coupons error:", error);
-    return NextResponse.json({ error: "Erro ao listar cupons." }, { status: 500 });
+    const msg = error instanceof Error ? error.message : String(error);
+    return NextResponse.json({ error: "Erro ao listar cupons.", detail: msg }, { status: 500 });
   }
 }
 
@@ -80,6 +81,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ coupon }, { status: 201 });
   } catch (error) {
     console.error("Admin create coupon error:", error);
-    return NextResponse.json({ error: "Erro ao criar cupom." }, { status: 500 });
+    const msg = error instanceof Error ? error.message : String(error);
+    return NextResponse.json({ error: "Erro ao criar cupom.", detail: msg }, { status: 500 });
   }
 }
