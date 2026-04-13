@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentAdmin } from "@/lib/auth";
 import { sendShippingEmail, sendOrderCancellationEmail } from "@/lib/email";
-import { refundPayment } from "@/lib/mercadopago";
+import {
+  findPaymentIdByExternalReference,
+  refundPayment,
+} from "@/lib/mercadopago";
 import { z } from "zod";
 
 const updateOrderSchema = z.object({
@@ -31,6 +34,17 @@ function emptyToNull(value: string | undefined): string | null {
 
 function buildDefaultTrackingUrl(trackingCode: string): string {
   return `https://rastreamento.correios.com.br/app/index.php?objetos=${encodeURIComponent(trackingCode)}`;
+}
+
+function normalizePaymentId(value: string | null | undefined): string | null {
+  if (!value) return null;
+  const normalized = value.trim();
+  return normalized ? normalized : null;
+}
+
+function isNumericPaymentId(value: string | null | undefined): boolean {
+  if (!value) return false;
+  return /^\d+$/.test(value.trim());
 }
 
 export async function GET(
@@ -159,11 +173,50 @@ export async function PUT(
 
     const isCancelling = data.status === "CANCELLED";
     const wasPaid = ["PAID", "PROCESSING"].includes(existing.status);
+    let refundedPaymentId: string | null = null;
 
-    if (isCancelling && wasPaid && existing.mercadoPagoId) {
+    if (isCancelling && wasPaid) {
+      const currentPaymentId = normalizePaymentId(existing.paymentId);
+      const legacyNumericMercadoPagoId = isNumericPaymentId(
+        existing.mercadoPagoId,
+      )
+        ? normalizePaymentId(existing.mercadoPagoId)
+        : null;
+
+      let paymentIdToRefund = currentPaymentId || legacyNumericMercadoPagoId;
+
+      if (!paymentIdToRefund) {
+        try {
+          paymentIdToRefund = await findPaymentIdByExternalReference(
+            existing.id,
+            ["approved", "authorized"],
+          );
+        } catch (paymentLookupError) {
+          console.error(
+            "Failed to resolve paymentId for refund:",
+            paymentLookupError,
+          );
+        }
+      }
+
+      if (!paymentIdToRefund) {
+        return NextResponse.json(
+          {
+            error:
+              "Pedido pago sem paymentId confirmado no Mercado Pago. Reconcilie o pagamento e tente novamente.",
+          },
+          { status: 409 },
+        );
+      }
+
       try {
-        await refundPayment(existing.mercadoPagoId);
+        await refundPayment(paymentIdToRefund);
         updateData.status = "REFUNDED";
+        updateData.paymentStatus = "REFUNDED";
+        if (!currentPaymentId) {
+          updateData.paymentId = paymentIdToRefund;
+        }
+        refundedPaymentId = paymentIdToRefund;
       } catch (refundError) {
         console.error("Refund failed:", refundError);
         return NextResponse.json(
@@ -206,7 +259,7 @@ export async function PUT(
         existing.user.email,
         existing.orderNumber,
         Number(existing.total),
-        wasPaid && !!existing.mercadoPagoId,
+        Boolean(refundedPaymentId),
       ).catch((emailErr) =>
         console.error("Cancellation email failed:", emailErr),
       );

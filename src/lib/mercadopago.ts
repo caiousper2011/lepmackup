@@ -249,7 +249,8 @@ export async function createPaymentPreference(
   if (!isTestMode && !isLocalEnvironmentUrl && !appUrl.startsWith("https://")) {
     console.error(
       "[mercadopago] AVISO: NEXT_PUBLIC_APP_URL não usa HTTPS em modo produção. " +
-      "O Mercado Pago exige back_urls com HTTPS. Valor atual: " + appUrl,
+        "O Mercado Pago exige back_urls com HTTPS. Valor atual: " +
+        appUrl,
     );
   }
   const notificationUrl = runtimeConfig.notificationUrl
@@ -299,7 +300,9 @@ export async function createPaymentPreference(
           ...preferenceItems[i],
           unit_price: Math.max(
             0.01,
-            Math.round(preferenceItems[i].unit_price * (1 - discountRatio) * 100) / 100,
+            Math.round(
+              preferenceItems[i].unit_price * (1 - discountRatio) * 100,
+            ) / 100,
           ),
         };
       }
@@ -309,15 +312,18 @@ export async function createPaymentPreference(
         (sum, item) => sum + item.quantity * item.unit_price,
         0,
       );
-      const expectedTotal = Math.round((totalBeforeDiscount - discount) * 100) / 100;
-      const roundingDiff = Math.round((expectedTotal - actualTotal) * 100) / 100;
+      const expectedTotal =
+        Math.round((totalBeforeDiscount - discount) * 100) / 100;
+      const roundingDiff =
+        Math.round((expectedTotal - actualTotal) * 100) / 100;
 
       if (Math.abs(roundingDiff) >= 0.01 && preferenceItems.length > 0) {
         preferenceItems[0] = {
           ...preferenceItems[0],
           unit_price: Math.max(
             0.01,
-            Math.round((preferenceItems[0].unit_price + roundingDiff) * 100) / 100,
+            Math.round((preferenceItems[0].unit_price + roundingDiff) * 100) /
+              100,
           ),
         };
       }
@@ -382,6 +388,68 @@ export async function getPaymentById(paymentId: string) {
   );
 
   return paymentClient.get({ id: paymentId });
+}
+
+interface MercadoPagoPaymentSearchResult {
+  id?: string | number;
+  status?: string;
+}
+
+export async function findPaymentIdByExternalReference(
+  externalReference: string,
+  preferredStatuses: string[] = ["approved"],
+) {
+  const runtimeConfig = getMercadoPagoRuntimeConfig();
+
+  const searchUrl = new URL("https://api.mercadopago.com/v1/payments/search");
+  searchUrl.searchParams.set("external_reference", externalReference);
+  searchUrl.searchParams.set("sort", "date_created");
+  searchUrl.searchParams.set("criteria", "desc");
+  searchUrl.searchParams.set("limit", "10");
+
+  const response = await fetch(searchUrl, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${runtimeConfig.accessToken}`,
+    },
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.text();
+    throw new Error(
+      `Falha ao buscar pagamentos da referência ${externalReference}: ${response.status} — ${errorBody}`,
+    );
+  }
+
+  const data = (await response.json()) as {
+    results?: MercadoPagoPaymentSearchResult[];
+  };
+
+  const results = Array.isArray(data.results) ? data.results : [];
+  if (results.length === 0) return null;
+
+  const normalizedPreferredStatuses = preferredStatuses
+    .map((status) => status.trim().toLowerCase())
+    .filter(Boolean);
+
+  if (normalizedPreferredStatuses.length > 0) {
+    const preferredMatch = results.find((item) => {
+      const normalizedStatus = (item.status || "").trim().toLowerCase();
+      return (
+        item.id !== undefined &&
+        item.id !== null &&
+        normalizedPreferredStatuses.includes(normalizedStatus)
+      );
+    });
+
+    return preferredMatch ? String(preferredMatch.id).trim() : null;
+  }
+
+  const fallbackMatch = results.find(
+    (item) => item.id !== undefined && item.id !== null,
+  );
+
+  return fallbackMatch ? String(fallbackMatch.id).trim() : null;
 }
 
 export async function refundPayment(paymentId: string) {
