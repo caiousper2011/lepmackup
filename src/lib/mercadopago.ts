@@ -477,7 +477,12 @@ export async function refundPayment(paymentId: string): Promise<RefundResult> {
 
   if (response.ok) {
     const data = await response.json();
-    return { ok: true, status: response.status, message: "Reembolso criado.", data };
+    return {
+      ok: true,
+      status: response.status,
+      message: "Reembolso criado.",
+      data,
+    };
   }
 
   const errorBody = await response.text();

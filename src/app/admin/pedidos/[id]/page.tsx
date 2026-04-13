@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import { useParams, useRouter } from "next/navigation";
 
 interface OrderDetail {
@@ -137,7 +137,12 @@ export default function AdminOrderDetailPage() {
     }
   };
 
-  const handleCancelOrder = async (forceCancel = false) => {
+  const handleCancelOrder = async (
+    forceCancelOrEvent?: boolean | MouseEvent<HTMLButtonElement>,
+  ) => {
+    const forceCancel =
+      typeof forceCancelOrEvent === "boolean" ? forceCancelOrEvent : false;
+
     const isPaid = ["PAID", "PROCESSING"].includes(order?.status || "");
     const msg = forceCancel
       ? "Deseja cancelar este pedido SEM reembolso automático? O estoque será devolvido, mas o reembolso precisará ser feito manualmente no MercadoPago."
