@@ -6,7 +6,18 @@ import {
 } from "@/lib/shipping";
 
 function getAppSecret(): string {
-  return (process.env.MELHOR_ENVIO_APP_SECRET || "").trim();
+  const isProd =
+    (process.env.MELHOR_ENVIO_ENV || "").toLowerCase() === "production" ||
+    ((process.env.MELHOR_ENVIO_ENV || "").toLowerCase() !== "sandbox" &&
+      process.env.NODE_ENV === "production");
+
+  const secret = isProd
+    ? (process.env.MELHOR_ENVIO_PROD_APP_SECRET || "").trim() ||
+      (process.env.MELHOR_ENVIO_APP_SECRET || "").trim()
+    : (process.env.MELHOR_ENVIO_APP_SECRET || "").trim() ||
+      (process.env.MELHOR_ENVIO_PROD_APP_SECRET || "").trim();
+
+  return secret;
 }
 
 function verifySignature(
@@ -28,19 +39,35 @@ function verifySignature(
     return false;
   }
 
-  const expectedSignature = crypto
+  // Try hex (Melhor Envio default) and base64 as fallback
+  const expectedHex = crypto
+    .createHmac("sha256", secret)
+    .update(body)
+    .digest("hex");
+  const expectedBase64 = crypto
     .createHmac("sha256", secret)
     .update(body)
     .digest("base64");
 
-  try {
-    return crypto.timingSafeEqual(
-      Buffer.from(expectedSignature),
-      Buffer.from(signatureHeader),
-    );
-  } catch {
-    return false;
-  }
+  const headerBuf = Buffer.from(signatureHeader);
+
+  const matchesHex = (() => {
+    try {
+      return crypto.timingSafeEqual(Buffer.from(expectedHex), headerBuf);
+    } catch {
+      return false;
+    }
+  })();
+
+  const matchesBase64 = (() => {
+    try {
+      return crypto.timingSafeEqual(Buffer.from(expectedBase64), headerBuf);
+    } catch {
+      return false;
+    }
+  })();
+
+  return matchesHex || matchesBase64;
 }
 
 export async function POST(request: NextRequest) {
@@ -48,6 +75,16 @@ export async function POST(request: NextRequest) {
 
   // Verify HMAC-SHA256 signature
   const signature = request.headers.get("x-me-signature");
+
+  // Melhor Envio sends an unsigned test request when registering the webhook.
+  // Accept it with 200 but do not process any business logic.
+  if (!signature) {
+    console.info(
+      "[me-webhook] Request sem assinatura — provavelmente ping de registro. Aceitando.",
+    );
+    return NextResponse.json({ ok: true });
+  }
+
   if (!verifySignature(rawBody, signature)) {
     console.error("[me-webhook] Assinatura inválida — rejeitando webhook.");
     return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
