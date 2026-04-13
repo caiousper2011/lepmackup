@@ -137,21 +137,26 @@ export default function AdminOrderDetailPage() {
     }
   };
 
-  const handleCancelOrder = async () => {
+  const handleCancelOrder = async (forceCancel = false) => {
     const isPaid = ["PAID", "PROCESSING"].includes(order?.status || "");
-    const msg = isPaid
-      ? "Deseja cancelar este pedido pago? O valor será reembolsado automaticamente via MercadoPago."
-      : "Deseja cancelar este pedido pendente? O estoque será devolvido automaticamente.";
+    const msg = forceCancel
+      ? "Deseja cancelar este pedido SEM reembolso automático? O estoque será devolvido, mas o reembolso precisará ser feito manualmente no MercadoPago."
+      : isPaid
+        ? "Deseja cancelar este pedido pago? O valor será reembolsado automaticamente via MercadoPago."
+        : "Deseja cancelar este pedido pendente? O estoque será devolvido automaticamente.";
 
     const confirmed = window.confirm(msg);
     if (!confirmed) return;
 
     setSaving(true);
     try {
+      const payload: Record<string, unknown> = { status: "CANCELLED" };
+      if (forceCancel) payload.forceCancel = true;
+
       const res = await fetch(`/api/admin/orders/${params.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: "CANCELLED" }),
+        body: JSON.stringify(payload),
       });
 
       if (res.ok) {
@@ -160,7 +165,20 @@ export default function AdminOrderDetailPage() {
         setNewStatus(data.order.status);
       } else {
         const data = await res.json();
-        window.alert(data.error || "Erro ao cancelar pedido.");
+        const errorMsg = data.error || "Erro ao cancelar pedido.";
+
+        // If refund failed, offer force-cancel option
+        if (res.status === 502 || res.status === 409) {
+          const retry = window.confirm(
+            `${errorMsg}\n\nDeseja cancelar mesmo assim SEM reembolso automático?`,
+          );
+          if (retry) {
+            await handleCancelOrder(true);
+            return;
+          }
+        } else {
+          window.alert(errorMsg);
+        }
       }
     } catch {
       // ignore

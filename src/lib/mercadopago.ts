@@ -452,7 +452,15 @@ export async function findPaymentIdByExternalReference(
   return fallbackMatch ? String(fallbackMatch.id).trim() : null;
 }
 
-export async function refundPayment(paymentId: string) {
+export interface RefundResult {
+  ok: boolean;
+  alreadyRefunded?: boolean;
+  status: number;
+  message: string;
+  data?: unknown;
+}
+
+export async function refundPayment(paymentId: string): Promise<RefundResult> {
   const runtimeConfig = getMercadoPagoRuntimeConfig();
 
   const response = await fetch(
@@ -467,12 +475,34 @@ export async function refundPayment(paymentId: string) {
     },
   );
 
-  if (!response.ok) {
-    const errorBody = await response.text();
-    throw new Error(
-      `Falha ao reembolsar pagamento ${paymentId}: ${response.status} — ${errorBody}`,
-    );
+  if (response.ok) {
+    const data = await response.json();
+    return { ok: true, status: response.status, message: "Reembolso criado.", data };
   }
 
-  return response.json();
+  const errorBody = await response.text();
+
+  // MP returns 400/409 when payment is already refunded or status doesn't allow it
+  const alreadyRefundedPatterns = [
+    "already_refunded",
+    "refunded",
+    "cannot_refund",
+    "status does not allow",
+    "amount_exceeded",
+  ];
+  const lowerError = errorBody.toLowerCase();
+  const alreadyRefunded = alreadyRefundedPatterns.some((p) =>
+    lowerError.includes(p),
+  );
+
+  console.error(
+    `[refundPayment] paymentId=${paymentId} status=${response.status} body=${errorBody}`,
+  );
+
+  return {
+    ok: false,
+    alreadyRefunded,
+    status: response.status,
+    message: `Reembolso falhou (${response.status}): ${errorBody}`,
+  };
 }

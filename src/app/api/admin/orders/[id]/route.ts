@@ -24,6 +24,7 @@ const updateOrderSchema = z.object({
   trackingUrl: z.string().max(500).optional(),
   shippingLabelUrl: z.string().max(1000).optional(),
   melhorEnvioShipmentId: z.string().max(100).optional(),
+  forceCancel: z.boolean().optional(),
 });
 
 function emptyToNull(value: string | undefined): string | null {
@@ -173,9 +174,10 @@ export async function PUT(
 
     const isCancelling = data.status === "CANCELLED";
     const wasPaid = ["PAID", "PROCESSING"].includes(existing.status);
+    const forceCancel = data.forceCancel === true;
     let refundedPaymentId: string | null = null;
 
-    if (isCancelling && wasPaid) {
+    if (isCancelling && wasPaid && !forceCancel) {
       const currentPaymentId = normalizePaymentId(existing.paymentId);
       const legacyNumericMercadoPagoId = isNumericPaymentId(
         existing.mercadoPagoId,
@@ -203,30 +205,48 @@ export async function PUT(
         return NextResponse.json(
           {
             error:
-              "Pedido pago sem paymentId confirmado no Mercado Pago. Reconcilie o pagamento e tente novamente.",
+              "Pedido pago sem paymentId confirmado no Mercado Pago. Envie { forceCancel: true } para cancelar sem reembolso automático.",
           },
           { status: 409 },
         );
       }
 
-      try {
-        await refundPayment(paymentIdToRefund);
+      console.info(
+        `[cancel-order] Attempting refund for order ${existing.id} with paymentId=${paymentIdToRefund} (source: ${currentPaymentId ? "paymentId" : legacyNumericMercadoPagoId ? "mercadoPagoId" : "search"})`,
+      );
+
+      const refundResult = await refundPayment(paymentIdToRefund);
+
+      if (refundResult.ok || refundResult.alreadyRefunded) {
         updateData.status = "REFUNDED";
         updateData.paymentStatus = "REFUNDED";
         if (!currentPaymentId) {
           updateData.paymentId = paymentIdToRefund;
         }
         refundedPaymentId = paymentIdToRefund;
-      } catch (refundError) {
-        console.error("Refund failed:", refundError);
+        if (refundResult.alreadyRefunded) {
+          console.info(
+            `[cancel-order] Payment ${paymentIdToRefund} was already refunded. Proceeding with cancellation.`,
+          );
+        }
+      } else {
+        console.error(
+          `[cancel-order] Refund failed for payment ${paymentIdToRefund}:`,
+          refundResult.message,
+        );
         return NextResponse.json(
           {
-            error:
-              "Falha ao processar reembolso no MercadoPago. Tente novamente.",
+            error: `Falha ao reembolsar (${refundResult.status}): ${refundResult.message}. Para cancelar sem reembolso automático, envie { forceCancel: true }.`,
           },
           { status: 502 },
         );
       }
+    } else if (isCancelling && wasPaid && forceCancel) {
+      // Admin chose to force-cancel without automatic refund
+      updateData.status = "CANCELLED";
+      console.info(
+        `[cancel-order] Force-cancelling paid order ${existing.id} without refund (admin request).`,
+      );
     }
 
     const order = isCancelling
