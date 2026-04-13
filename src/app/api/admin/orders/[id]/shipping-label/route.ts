@@ -227,7 +227,7 @@ export async function POST(
           weight: Number((totalWeightGrams / 1000).toFixed(3)),
         },
       ],
-      insuranceValue: order.total,
+      insuranceValue: Math.max(order.total, 1),
     };
 
     const cartParams = mapOrderToMelhorEnvioPayload(payloadData);
