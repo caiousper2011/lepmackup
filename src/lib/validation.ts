@@ -87,6 +87,7 @@ export const shippingSettingsSchema = z.object({
   pickupEnabled: z.boolean(),
   pickupAddress: z.string().min(5, "Endereço de retirada obrigatório").max(255),
   pickupInstructions: z.string().max(500).optional().nullable(),
+  maxItemsPerOrder: z.number().int().min(1, "Limite mínimo de 1 item").max(999).optional(),
 });
 
 // ============================================

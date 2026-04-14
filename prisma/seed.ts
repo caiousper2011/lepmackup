@@ -342,6 +342,21 @@ async function main() {
     `✅ Admin user: ${admin.email} (must change password: ${admin.mustChangePassword})`,
   );
 
+  // 1b. Create Caio admin
+  const caioAdmin = await prisma.adminUser.upsert({
+    where: { email: "caio2016usper@gmail.com" },
+    update: {},
+    create: {
+      email: "caio2016usper@gmail.com",
+      passwordHash: hashSync("LeP@Admin2024!", 12),
+      mustChangePassword: true,
+      active: true,
+    },
+  });
+  console.log(
+    `✅ Admin user: ${caioAdmin.email} (must change password: ${caioAdmin.mustChangePassword})`,
+  );
+
   // 2. Create products
   for (const product of productsData) {
     const productWithStock = {

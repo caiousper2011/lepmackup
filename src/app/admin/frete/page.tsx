@@ -16,6 +16,7 @@ interface ShippingSettings {
   pickupEnabled: boolean;
   pickupAddress: string;
   pickupInstructions: string;
+  maxItemsPerOrder: number;
 }
 
 export default function AdminFretePage() {
@@ -31,6 +32,7 @@ export default function AdminFretePage() {
     pickupEnabled: false,
     pickupAddress: "Retirada no endereço da loja",
     pickupInstructions: "",
+    maxItemsPerOrder: 6,
   });
 
   const emptyForm = {
@@ -67,6 +69,7 @@ export default function AdminFretePage() {
           pickupEnabled: settingsData.settings.pickupEnabled,
           pickupAddress: settingsData.settings.pickupAddress,
           pickupInstructions: settingsData.settings.pickupInstructions || "",
+          maxItemsPerOrder: settingsData.settings.maxItemsPerOrder ?? 6,
         });
       }
     } catch (err) {
@@ -172,6 +175,7 @@ export default function AdminFretePage() {
           pickupEnabled: settings.pickupEnabled,
           pickupAddress: settings.pickupAddress,
           pickupInstructions: settings.pickupInstructions,
+          maxItemsPerOrder: settings.maxItemsPerOrder,
         }),
       });
 
@@ -184,6 +188,7 @@ export default function AdminFretePage() {
         pickupEnabled: data.settings.pickupEnabled,
         pickupAddress: data.settings.pickupAddress,
         pickupInstructions: data.settings.pickupInstructions || "",
+        maxItemsPerOrder: data.settings.maxItemsPerOrder ?? 6,
       });
     } catch (err) {
       setError(
@@ -259,6 +264,44 @@ export default function AdminFretePage() {
             placeholder="Ex.: Retirada das 09h às 18h, apresentar número do pedido."
           />
         </div>
+
+        <button
+          onClick={handleSaveSettings}
+          disabled={savingSettings}
+          className="bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-colors disabled:opacity-50"
+        >
+          {savingSettings ? "Salvando..." : "Salvar Configuração"}
+        </button>
+      </div>
+
+      <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
+        <div>
+          <h2 className="text-base font-semibold text-gray-900">
+            Limite de Itens por Pedido
+          </h2>
+          <p className="text-sm text-gray-500 mt-1">
+            Número máximo de itens (soma das quantidades) que um cliente pode incluir em um único pedido.
+          </p>
+        </div>
+
+        <div className="max-w-xs">
+          <Input
+            label="Máximo de itens por pedido"
+            type="number"
+            value={String(settings.maxItemsPerOrder)}
+            onChange={(v) =>
+              setSettings({
+                ...settings,
+                maxItemsPerOrder: Math.max(1, parseInt(v || "1", 10)),
+              })
+            }
+            required
+          />
+        </div>
+
+        <p className="text-xs text-gray-400">
+          Ao atingir o limite, o cliente verá uma mensagem informando que não pode adicionar mais itens.
+        </p>
 
         <button
           onClick={handleSaveSettings}

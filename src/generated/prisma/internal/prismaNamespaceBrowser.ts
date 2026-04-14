@@ -201,6 +201,7 @@ export const ShippingSettingsScalarFieldEnum = {
   pickupEnabled: 'pickupEnabled',
   pickupAddress: 'pickupAddress',
   pickupInstructions: 'pickupInstructions',
+  maxItemsPerOrder: 'maxItemsPerOrder',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

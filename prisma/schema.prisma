@@ -156,6 +156,7 @@ model ShippingSettings {
   pickupEnabled      Boolean  @default(false)
   pickupAddress      String   @default("Retirada no endereço da loja")
   pickupInstructions String?
+  maxItemsPerOrder   Int      @default(6)
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 

@@ -50,11 +50,10 @@ export async function POST(request: NextRequest) {
 
     const isPickup = shippingMethod === "PICKUP_STORE";
 
-    const shippingSettings = isPickup
-      ? await getOrCreateShippingSettings()
-      : null;
+    // Busca settings uma vez para validar pickup e limite de itens
+    const shippingSettings = await getOrCreateShippingSettings();
 
-    if (isPickup && !shippingSettings?.pickupEnabled) {
+    if (isPickup && !shippingSettings.pickupEnabled) {
       return NextResponse.json(
         { error: "Retirada no endereço está indisponível no momento." },
         { status: 400 },
@@ -119,6 +118,17 @@ export async function POST(request: NextRequest) {
 
     // Calculate totals server-side (never trust client)
     const totalQuantity = validItems.reduce((sum, i) => sum + i.quantity, 0);
+
+    // Valida limite de itens por pedido (configurado pelo admin)
+    const maxItemsPerOrder = shippingSettings.maxItemsPerOrder ?? 6;
+    if (totalQuantity > maxItemsPerOrder) {
+      return NextResponse.json(
+        {
+          error: `Seu pedido excede o limite de ${maxItemsPerOrder} itens por pedido.`,
+        },
+        { status: 400 },
+      );
+    }
     const subtotal = validItems.reduce(
       (sum, item) =>
         sum + item.quantity * getProductUnitPrice(item.product, totalQuantity),

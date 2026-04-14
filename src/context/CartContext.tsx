@@ -12,6 +12,8 @@ import React, {
 import { Product, BULK_THRESHOLD, getProductUnitPrice } from "@/data/products";
 import { getWhatsAppHref } from "@/lib/whatsapp-config";
 
+const DEFAULT_MAX_ITEMS = 6;
+
 export interface CartItem {
   product: Product;
   quantity: number;
@@ -36,6 +38,7 @@ interface CartContextType {
   totalPrice: number;
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
+  maxItemsPerOrder: number;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -67,6 +70,21 @@ function readCartFromStorage(): CartItem[] {
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>(() => readCartFromStorage());
   const [isOpen, setIsOpen] = useState(false);
+  const [maxItemsPerOrder, setMaxItemsPerOrder] = useState(DEFAULT_MAX_ITEMS);
+
+  // Busca o limite de itens configurado pelo admin
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((data) => {
+        if (typeof data.maxItemsPerOrder === "number" && data.maxItemsPerOrder > 0) {
+          setMaxItemsPerOrder(data.maxItemsPerOrder);
+        }
+      })
+      .catch(() => {
+        // mantém o padrão se a API falhar
+      });
+  }, []);
 
   const hasHydrated = useSyncExternalStore(
     () => () => {},
@@ -121,7 +139,20 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
 
       const existingQty = getProductQuantityInCart(product.id);
-      const nextQty = Math.min(existingQty + quantity, stockLimit);
+
+      // Verifica o limite de itens por pedido
+      const currentTotal = effectiveItems.reduce((sum, item) => sum + item.quantity, 0);
+      const otherItemsTotal = currentTotal - existingQty;
+      const availableSlots = maxItemsPerOrder - otherItemsTotal;
+
+      if (availableSlots <= 0) {
+        return {
+          ok: false,
+          message: `Limite de ${maxItemsPerOrder} itens por pedido atingido.`,
+        };
+      }
+
+      const nextQty = Math.min(existingQty + quantity, stockLimit, existingQty + availableSlots);
 
       if (nextQty <= existingQty) {
         return {
@@ -144,16 +175,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       });
 
       if (nextQty < existingQty + quantity) {
+        const limitedByOrder = nextQty === existingQty + availableSlots && availableSlots < quantity;
         return {
           ok: true,
-          message:
-            "A quantidade adicionada ao carrinho foi ajustada ao limite de estoque disponível.",
+          message: limitedByOrder
+            ? `Quantidade ajustada: limite de ${maxItemsPerOrder} itens por pedido.`
+            : "A quantidade adicionada ao carrinho foi ajustada ao limite de estoque disponível.",
         };
       }
 
       return { ok: true };
     },
-    [getProductQuantityInCart],
+    [getProductQuantityInCart, effectiveItems, maxItemsPerOrder],
   );
 
   const removeFromCart = useCallback((productId: string) => {
@@ -173,7 +206,20 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
 
       const stockLimit = getProductStockQuantity(currentItem.product);
-      const adjustedQuantity = Math.min(quantity, stockLimit);
+
+      // Calcula o total dos outros itens para respeitar o limite por pedido
+      const otherItemsTotal = items
+        .filter((item) => item.product.id !== productId)
+        .reduce((sum, item) => sum + item.quantity, 0);
+      const maxAllowed = Math.min(stockLimit, maxItemsPerOrder - otherItemsTotal);
+      const adjustedQuantity = Math.min(quantity, maxAllowed);
+
+      if (adjustedQuantity <= 0) {
+        return {
+          ok: false,
+          message: `Limite de ${maxItemsPerOrder} itens por pedido atingido.`,
+        };
+      }
 
       setItems((prev) =>
         prev.map((item) =>
@@ -184,16 +230,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       );
 
       if (adjustedQuantity < quantity) {
+        const limitedByOrder = adjustedQuantity === maxItemsPerOrder - otherItemsTotal;
         return {
           ok: true,
-          message:
-            "A quantidade adicionada ao carrinho foi ajustada ao limite de estoque disponível.",
+          message: limitedByOrder
+            ? `Quantidade ajustada: limite de ${maxItemsPerOrder} itens por pedido.`
+            : "A quantidade adicionada ao carrinho foi ajustada ao limite de estoque disponível.",
         };
       }
 
       return { ok: true };
     },
-    [items],
+    [items, maxItemsPerOrder],
   );
 
   const clearCart = useCallback(() => {
@@ -216,6 +264,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         totalPrice,
         isOpen,
         setIsOpen,
+        maxItemsPerOrder,
       }}
     >
       {children}

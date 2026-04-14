@@ -60,6 +60,7 @@ export async function PUT(request: NextRequest) {
         pickupAddress:
           normalizedData.pickupAddress ?? "Retirada no endereço da loja",
         pickupInstructions: normalizedData.pickupInstructions ?? null,
+        maxItemsPerOrder: normalizedData.maxItemsPerOrder ?? 6,
       },
     });
 

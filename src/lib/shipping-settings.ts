@@ -6,6 +6,7 @@ const DEFAULT_SHIPPING_SETTINGS = {
   pickupEnabled: false,
   pickupAddress: "Retirada no endereço da loja",
   pickupInstructions: null as string | null,
+  maxItemsPerOrder: 6,
 };
 
 export async function getOrCreateShippingSettings() {
