@@ -24,12 +24,13 @@ export default function ProductDetail({
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [cartMessage, setCartMessage] = useState("");
-  const { addToCart, totalQuantity, setIsOpen, getProductQuantityInCart } =
+  const { addToCart, totalQuantity, setIsOpen, getProductQuantityInCart, maxItemsPerOrder } =
     useCart();
 
   const quantityInCart = getProductQuantityInCart(product.id);
   const stockLimit = Math.max(0, product.stockQuantity ?? 0);
-  const availableToAdd = Math.max(0, stockLimit - quantityInCart);
+  const remainingSlots = Math.max(0, maxItemsPerOrder - totalQuantity);
+  const availableToAdd = Math.min(Math.max(0, stockLimit - quantityInCart), remainingSlots + quantityInCart);
   const isOutOfStock = stockLimit <= 0;
 
   const willHaveBulk = totalQuantity + quantity >= 4;
@@ -56,6 +57,12 @@ export default function ProductDetail({
   };
 
   const increaseQuantity = () => {
+    if (totalQuantity + quantity >= maxItemsPerOrder) {
+      setCartMessage(
+        `Limite de ${maxItemsPerOrder} itens por pedido. Para comprar mais, faça um novo pedido.`,
+      );
+      return;
+    }
     if (quantity >= availableToAdd) {
       setCartMessage(
         "A quantidade adicionada ao carrinho foi ajustada ao limite de estoque disponível.",

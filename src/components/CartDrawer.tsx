@@ -19,7 +19,10 @@ export default function CartDrawer() {
     isBulkPricing,
     isOpen,
     setIsOpen,
+    maxItemsPerOrder,
   } = useCart();
+
+  const isAtLimit = totalQuantity >= maxItemsPerOrder;
 
   const { user } = useAuth();
   const { open: openLogin } = useLoginModal();
@@ -143,6 +146,14 @@ export default function CartDrawer() {
                 </div>
               )}
 
+              {isAtLimit && (
+                <div className="bg-rose-50 border border-rose-200 rounded-xl p-3 text-center">
+                  <p className="text-xs font-medium text-rose-700">
+                    Limite de {maxItemsPerOrder} itens por pedido atingido. Para comprar mais itens, finalize este pedido e faça um novo.
+                  </p>
+                </div>
+              )}
+
               {items.map((item) => (
                 <div
                   key={item.product.id}
@@ -189,7 +200,12 @@ export default function CartDrawer() {
                             );
                             if (result.message) setCartMessage(result.message);
                           }}
-                          className="w-6 h-6 rounded-full bg-white border border-rose-200 flex items-center justify-center text-rose-600 text-xs hover:bg-rose-50 transition-colors"
+                          disabled={isAtLimit}
+                          className={`w-6 h-6 rounded-full bg-white border flex items-center justify-center text-xs transition-colors ${
+                            isAtLimit
+                              ? "border-gray-200 text-gray-300 cursor-not-allowed"
+                              : "border-rose-200 text-rose-600 hover:bg-rose-50"
+                          }`}
                         >
                           +
                         </button>
