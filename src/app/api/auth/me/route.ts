@@ -4,9 +4,11 @@ import { getCurrentUser } from "@/lib/auth";
 export async function GET() {
   try {
     const user = await getCurrentUser();
-    
+
     if (!user) {
-      return NextResponse.json({ user: null }, { status: 401 });
+      // Retorna 200 com user:null (não 401) para não disparar erros
+      // em páginas que checam auth opcionalmente (ex.: admin).
+      return NextResponse.json({ user: null });
     }
 
     return NextResponse.json({
@@ -20,6 +22,6 @@ export async function GET() {
     });
   } catch (error) {
     console.error("Get me error:", error);
-    return NextResponse.json({ user: null }, { status: 401 });
+    return NextResponse.json({ user: null });
   }
 }

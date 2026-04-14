@@ -132,61 +132,68 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
       const stockLimit = getProductStockQuantity(product);
       if (stockLimit <= 0) {
-        return {
-          ok: false,
-          message: "Produto indisponível no momento.",
-        };
+        return { ok: false, message: "Produto indisponível no momento." };
       }
 
-      const existingQty = getProductQuantityInCart(product.id);
-
-      // Verifica o limite de itens por pedido
-      const currentTotal = effectiveItems.reduce((sum, item) => sum + item.quantity, 0);
-      const otherItemsTotal = currentTotal - existingQty;
-      const availableSlots = maxItemsPerOrder - otherItemsTotal;
-
-      if (availableSlots <= 0) {
-        return {
-          ok: false,
-          message: `Limite de ${maxItemsPerOrder} itens por pedido atingido.`,
-        };
-      }
-
-      const nextQty = Math.min(existingQty + quantity, stockLimit, existingQty + availableSlots);
-
-      if (nextQty <= existingQty) {
-        return {
-          ok: false,
-          message:
-            "Você já adicionou ao carrinho a quantidade máxima disponível deste produto.",
-        };
-      }
+      // Usa updater funcional para SEMPRE ter o estado mais recente
+      // (evita stale closure quando o usuário clica rápido em vários produtos)
+      let result: CartActionResult = { ok: true };
 
       setItems((prev) => {
-        const existing = prev.find((item) => item.product.id === product.id);
+        const currentTotal = prev.reduce((sum, it) => sum + it.quantity, 0);
+        const existing = prev.find((it) => it.product.id === product.id);
+        const existingQty = existing?.quantity ?? 0;
+        const otherItemsTotal = currentTotal - existingQty;
+        const availableSlots = maxItemsPerOrder - otherItemsTotal;
+
+        if (availableSlots <= 0) {
+          result = {
+            ok: false,
+            message: `Limite de ${maxItemsPerOrder} itens por pedido atingido. Para comprar mais, finalize este pedido e faça um novo.`,
+          };
+          return prev; // não modifica o carrinho
+        }
+
+        const nextQty = Math.min(
+          existingQty + quantity,
+          stockLimit,
+          existingQty + availableSlots,
+        );
+
+        if (nextQty <= existingQty) {
+          result = {
+            ok: false,
+            message:
+              "Você já adicionou ao carrinho a quantidade máxima disponível deste produto.",
+          };
+          return prev;
+        }
+
+        if (nextQty < existingQty + quantity) {
+          const limitedByOrder =
+            nextQty === existingQty + availableSlots &&
+            availableSlots < quantity;
+          result = {
+            ok: true,
+            message: limitedByOrder
+              ? `Quantidade ajustada: limite de ${maxItemsPerOrder} itens por pedido. Para comprar mais, faça um novo pedido.`
+              : "A quantidade foi ajustada ao limite de estoque disponível.",
+          };
+        }
+
         if (existing) {
-          return prev.map((item) =>
-            item.product.id === product.id
-              ? { ...item, quantity: nextQty, product }
-              : item,
+          return prev.map((it) =>
+            it.product.id === product.id
+              ? { ...it, quantity: nextQty, product }
+              : it,
           );
         }
         return [...prev, { product, quantity: nextQty }];
       });
 
-      if (nextQty < existingQty + quantity) {
-        const limitedByOrder = nextQty === existingQty + availableSlots && availableSlots < quantity;
-        return {
-          ok: true,
-          message: limitedByOrder
-            ? `Quantidade ajustada: limite de ${maxItemsPerOrder} itens por pedido.`
-            : "A quantidade adicionada ao carrinho foi ajustada ao limite de estoque disponível.",
-        };
-      }
-
-      return { ok: true };
+      return result;
     },
-    [getProductQuantityInCart, effectiveItems, maxItemsPerOrder],
+    [maxItemsPerOrder],
   );
 
   const removeFromCart = useCallback((productId: string) => {
@@ -195,9 +202,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const updateQuantity = useCallback(
     (productId: string, quantity: number): CartActionResult => {
-      const currentItem = items.find((item) => item.product.id === productId);
-      if (!currentItem) return { ok: false, message: "Item não encontrado." };
-
       if (quantity <= 0) {
         setItems((prev) =>
           prev.filter((item) => item.product.id !== productId),
@@ -205,43 +209,54 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         return { ok: true };
       }
 
-      const stockLimit = getProductStockQuantity(currentItem.product);
+      let result: CartActionResult = { ok: true };
 
-      // Calcula o total dos outros itens para respeitar o limite por pedido
-      const otherItemsTotal = items
-        .filter((item) => item.product.id !== productId)
-        .reduce((sum, item) => sum + item.quantity, 0);
-      const maxAllowed = Math.min(stockLimit, maxItemsPerOrder - otherItemsTotal);
-      const adjustedQuantity = Math.min(quantity, maxAllowed);
+      setItems((prev) => {
+        const currentItem = prev.find((it) => it.product.id === productId);
+        if (!currentItem) {
+          result = { ok: false, message: "Item não encontrado." };
+          return prev;
+        }
 
-      if (adjustedQuantity <= 0) {
-        return {
-          ok: false,
-          message: `Limite de ${maxItemsPerOrder} itens por pedido atingido.`,
-        };
-      }
+        const stockLimit = getProductStockQuantity(currentItem.product);
+        const otherItemsTotal = prev
+          .filter((it) => it.product.id !== productId)
+          .reduce((sum, it) => sum + it.quantity, 0);
+        const maxAllowed = Math.min(
+          stockLimit,
+          maxItemsPerOrder - otherItemsTotal,
+        );
+        const adjustedQuantity = Math.min(quantity, maxAllowed);
 
-      setItems((prev) =>
-        prev.map((item) =>
-          item.product.id === productId
-            ? { ...item, quantity: adjustedQuantity }
-            : item,
-        ),
-      );
+        if (adjustedQuantity <= 0) {
+          result = {
+            ok: false,
+            message: `Limite de ${maxItemsPerOrder} itens por pedido atingido.`,
+          };
+          return prev;
+        }
 
-      if (adjustedQuantity < quantity) {
-        const limitedByOrder = adjustedQuantity === maxItemsPerOrder - otherItemsTotal;
-        return {
-          ok: true,
-          message: limitedByOrder
-            ? `Quantidade ajustada: limite de ${maxItemsPerOrder} itens por pedido.`
-            : "A quantidade adicionada ao carrinho foi ajustada ao limite de estoque disponível.",
-        };
-      }
+        if (adjustedQuantity < quantity) {
+          const limitedByOrder =
+            adjustedQuantity === maxItemsPerOrder - otherItemsTotal;
+          result = {
+            ok: true,
+            message: limitedByOrder
+              ? `Limite de ${maxItemsPerOrder} itens por pedido. Para comprar mais, faça um novo pedido.`
+              : "Quantidade ajustada ao limite de estoque disponível.",
+          };
+        }
 
-      return { ok: true };
+        return prev.map((it) =>
+          it.product.id === productId
+            ? { ...it, quantity: adjustedQuantity }
+            : it,
+        );
+      });
+
+      return result;
     },
-    [items, maxItemsPerOrder],
+    [maxItemsPerOrder],
   );
 
   const clearCart = useCallback(() => {

@@ -7,10 +7,11 @@ import { Product, formatPrice } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 
 export default function ProductCard({ product }: { product: Product }) {
-  const { addToCart, getItemUnitPrice } = useCart();
+  const { addToCart, getItemUnitPrice, totalQuantity, maxItemsPerOrder } = useCart();
   const [cartMessage, setCartMessage] = useState("");
   const currentPrice = getItemUnitPrice(product);
   const isOutOfStock = (product.stockQuantity ?? 0) <= 0;
+  const isAtLimit = totalQuantity >= maxItemsPerOrder;
 
   const handleAddToCart = () => {
     const result = addToCart(product);
@@ -71,12 +72,21 @@ export default function ProductCard({ product }: { product: Product }) {
 
           <button
             onClick={handleAddToCart}
-            disabled={isOutOfStock}
+            disabled={isOutOfStock || isAtLimit}
             className="w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white text-sm font-semibold py-2.5 rounded-xl transition-all duration-200 active:scale-95 shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {isOutOfStock ? "Indisponível" : "Adicionar ao Carrinho"}
+            {isOutOfStock
+              ? "Indisponível"
+              : isAtLimit
+                ? `Limite de ${maxItemsPerOrder} itens atingido`
+                : "Adicionar ao Carrinho"}
           </button>
-          {cartMessage && (
+          {isAtLimit && !isOutOfStock && (
+            <p className="text-[11px] text-rose-600 mt-2">
+              Para comprar mais itens, finalize seu pedido atual e faça um novo.
+            </p>
+          )}
+          {cartMessage && !isAtLimit && (
             <p className="text-[11px] text-amber-700 mt-2">{cartMessage}</p>
           )}
         </div>
