@@ -48,15 +48,15 @@ export function rateLimit(
   };
 }
 
-// Presets
+// Presets — todos os limites aumentados 3×
 export function rateLimitOTP(email: string): RateLimitResult {
-  return rateLimit(`otp:${email}`, 5, 60 * 60 * 1000); // 5 per hour
+  return rateLimit(`otp:${email}`, 15, 60 * 60 * 1000); // 15 por hora (era 5)
 }
 
 export function rateLimitAPI(ip: string): RateLimitResult {
-  return rateLimit(`api:${ip}`, 100, 60 * 1000); // 100 per minute
+  return rateLimit(`api:${ip}`, 300, 60 * 1000); // 300 por minuto (era 100)
 }
 
 export function rateLimitLogin(ip: string): RateLimitResult {
-  return rateLimit(`login:${ip}`, 10, 15 * 60 * 1000); // 10 per 15 min
+  return rateLimit(`login:${ip}`, 30, 15 * 60 * 1000); // 30 por 15 min (era 10)
 }

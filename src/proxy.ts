@@ -11,18 +11,18 @@ const PROTECTED_ADMIN_ROUTES = ["/admin"];
 const ADMIN_PUBLIC_ROUTES = ["/admin/login", "/admin/trocar-senha"];
 const PUBLIC_ONLY_ROUTES = ["/login"];
 
-// API route-specific rate limit configs: [maxRequests, windowMs]
+// API route-specific rate limit configs: [maxRequests, windowMs] — aumentados 3×
 const RATE_LIMITS: Record<string, [number, number]> = {
-  "/api/auth/send-code": [5, 60 * 60 * 1000], // 5 per hour
-  "/api/auth/verify-code": [10, 15 * 60 * 1000], // 10 per 15 min
-  "/api/auth/checkout": [10, 60 * 1000], // 10 per minute
-  "/api/orders": [10, 60 * 1000], // 10 per minute
-  "/api/shipping/calculate": [30, 60 * 1000], // 30 per minute
-  "/api/coupons/validate": [20, 60 * 1000], // 20 per minute
-  "/api/addresses": [20, 60 * 1000], // 20 per minute
+  "/api/auth/send-code": [15, 60 * 60 * 1000], // 15 por hora (era 5)
+  "/api/auth/verify-code": [30, 15 * 60 * 1000], // 30 por 15 min (era 10)
+  "/api/auth/checkout": [30, 60 * 1000], // 30 por minuto (era 10)
+  "/api/orders": [30, 60 * 1000], // 30 por minuto (era 10)
+  "/api/shipping/calculate": [90, 60 * 1000], // 90 por minuto (era 30)
+  "/api/coupons/validate": [60, 60 * 1000], // 60 por minuto (era 20)
+  "/api/addresses": [60, 60 * 1000], // 60 por minuto (era 20)
 };
 
-const DEFAULT_LIMIT: [number, number] = [100, 60 * 1000]; // 100 per minute
+const DEFAULT_LIMIT: [number, number] = [300, 60 * 1000]; // 300 por minuto (era 100)
 
 function getClientIp(request: NextRequest): string {
   const forwarded = request.headers.get("x-forwarded-for");
