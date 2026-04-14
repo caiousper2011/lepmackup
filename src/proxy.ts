@@ -8,7 +8,7 @@ const JWT_SECRET = new TextEncoder().encode(
 
 const PROTECTED_USER_ROUTES = ["/minha-conta", "/checkout", "/pedido"];
 const PROTECTED_ADMIN_ROUTES = ["/admin"];
-const ADMIN_PUBLIC_ROUTES = ["/admin/login"];
+const ADMIN_PUBLIC_ROUTES = ["/admin/login", "/admin/trocar-senha"];
 const PUBLIC_ONLY_ROUTES = ["/login"];
 
 // API route-specific rate limit configs: [maxRequests, windowMs]
@@ -131,7 +131,7 @@ export async function proxy(request: NextRequest) {
     }
     try {
       const { payload } = await jwtVerify(adminToken, JWT_SECRET);
-      if (payload.type !== "admin") {
+      if (payload.type !== "admin" || payload.role !== "ADMIN") {
         return NextResponse.redirect(new URL("/admin/login", request.url));
       }
     } catch {
