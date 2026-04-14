@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { adminLoginSchema } from "@/lib/validation";
-import { createAdminSession } from "@/lib/auth";
+import { createAdminSession, deleteSessionCookie } from "@/lib/auth";
 import { rateLimitLogin } from "@/lib/rate-limit";
 import { getClientIp } from "@/lib/utils";
 import { compareSync } from "bcryptjs";
@@ -58,4 +58,9 @@ export async function POST(request: NextRequest) {
       { status: 500 },
     );
   }
+}
+
+export async function DELETE() {
+  await deleteSessionCookie("admin");
+  return NextResponse.json({ message: "Logout realizado." });
 }

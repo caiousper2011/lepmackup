@@ -21,7 +21,6 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
 
   const handleLogout = async () => {
     await fetch("/api/admin/auth/login", { method: "DELETE" }).catch(() => {});
-    document.cookie = "lep-admin-session=; max-age=0; path=/";
     router.push("/admin/login");
   };
 
