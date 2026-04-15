@@ -97,7 +97,7 @@ export default function MeusPedidosPage() {
           </p>
           <Link
             href="/"
-            className="inline-block bg-rose-600 hover:bg-rose-700 text-white font-medium px-6 py-2.5 rounded-xl transition-colors"
+            className="inline-block gradient-berry text-white font-medium px-6 py-2.5 rounded-xl transition-colors"
           >
             Ir às Compras
           </Link>
@@ -128,7 +128,7 @@ export default function MeusPedidosPage() {
                   >
                     {statusLabels[order.status] || order.status}
                   </span>
-                  <p className="text-sm font-bold text-rose-600 mt-1">
+                  <p className="text-sm font-bold text-berry-600 mt-1">
                     {fmt(order.total)}
                   </p>
                 </div>
@@ -142,7 +142,7 @@ export default function MeusPedidosPage() {
                   >
                     <Link
                       href={`/produto/${item.product.slug}`}
-                      className="text-gray-600 hover:text-rose-600 transition-colors"
+                      className="text-gray-600 hover:text-berry-600 transition-colors"
                     >
                       {item.product.shortName}{" "}
                       <span className="text-gray-400">x{item.quantity}</span>
@@ -179,7 +179,7 @@ export default function MeusPedidosPage() {
                 <div className="mt-3 pt-3 border-t border-gray-100 flex justify-end">
                   <Link
                     href={`/minha-conta/pedidos/${order.id}`}
-                    className="text-sm font-medium text-rose-600 hover:text-rose-700"
+                    className="text-sm font-medium text-berry-600 hover:text-berry-700"
                   >
                     Ver detalhes do pedido
                   </Link>

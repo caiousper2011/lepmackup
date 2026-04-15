@@ -477,7 +477,7 @@ export default function CheckoutPage() {
   if (items.length === 0) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-20 text-center">
-        <div className="w-20 h-20 rounded-full bg-rose-50 flex items-center justify-center mx-auto mb-4">
+        <div className="w-20 h-20 rounded-full bg-blush-50 flex items-center justify-center mx-auto mb-4">
           <svg
             className="w-10 h-10 text-rose-300"
             fill="none"
@@ -498,7 +498,7 @@ export default function CheckoutPage() {
         </p>
         <Link
           href="/"
-          className="inline-block bg-rose-600 hover:bg-rose-700 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
+          className="inline-block gradient-berry text-white font-semibold px-6 py-3 rounded-xl transition-colors"
         >
           Ver Produtos
         </Link>
@@ -508,7 +508,7 @@ export default function CheckoutPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-8">
+      <h1 className="text-2xl font-bold text-gray-900 mb-8 font-[family-name:var(--font-heading)]">
         Finalizar Compra
       </h1>
 
@@ -530,7 +530,7 @@ export default function CheckoutPage() {
                 placeholder="seu@email.com"
                 value={guestEmail}
                 onChange={(e) => setGuestEmail(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600 focus:border-transparent transition-all"
                 autoComplete="email"
               />
             </div>
@@ -553,7 +553,7 @@ export default function CheckoutPage() {
                   placeholder="Nome do destinatário"
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
-                  className={`w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all ${
+                  className={`w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600 focus:border-transparent transition-all ${
                     customerName.trim().length > 0 &&
                     customerName.trim().length < 2
                       ? "border-red-300 bg-red-50"
@@ -583,7 +583,7 @@ export default function CheckoutPage() {
                     );
                     setCpfCnpj(formatCpfCnpj(digits));
                   }}
-                  className={`w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all ${
+                  className={`w-full px-4 py-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600 focus:border-transparent transition-all ${
                     cpfCnpj.length > 0 &&
                     ![11, 14].includes(normalizeCpfCnpj(cpfCnpj).length)
                       ? "border-red-300 bg-red-50"
@@ -622,7 +622,7 @@ export default function CheckoutPage() {
                     key={addr.id}
                     className={`flex items-start gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${
                       selectedAddress === addr.id
-                        ? "border-rose-500 bg-rose-50"
+                        ? "border-berry-600 bg-rose-50"
                         : "border-gray-200 hover:border-gray-300"
                     }`}
                   >
@@ -632,13 +632,13 @@ export default function CheckoutPage() {
                       value={addr.id}
                       checked={selectedAddress === addr.id}
                       onChange={() => setSelectedAddress(addr.id)}
-                      className="mt-1 accent-rose-600"
+                      className="mt-1 accent-berry-600"
                     />
                     <div>
                       <p className="text-sm font-medium text-gray-900">
                         {addr.label}{" "}
                         {addr.isDefault && (
-                          <span className="text-xs text-rose-600">
+                          <span className="text-xs text-berry-600">
                             (padrão)
                           </span>
                         )}
@@ -657,7 +657,7 @@ export default function CheckoutPage() {
 
             <button
               onClick={() => setShowNewAddress(!showNewAddress)}
-              className="text-sm font-medium text-rose-600 hover:text-rose-700 transition-colors"
+              className="text-sm font-medium text-berry-600 hover:text-berry-700 transition-colors"
             >
               + Novo endereço
             </button>
@@ -672,7 +672,7 @@ export default function CheckoutPage() {
                     onChange={(e) =>
                       setNewAddress({ ...newAddress, label: e.target.value })
                     }
-                    className="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
+                    className="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
                   />
                   <input
                     type="text"
@@ -685,7 +685,7 @@ export default function CheckoutPage() {
                       })
                     }
                     onBlur={(e) => lookupCepInCheckout(e.target.value)}
-                    className="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
+                    className="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
                   />
                 </div>
                 <div className="grid grid-cols-3 gap-3">
@@ -696,7 +696,7 @@ export default function CheckoutPage() {
                     onChange={(e) =>
                       setNewAddress({ ...newAddress, street: e.target.value })
                     }
-                    className="col-span-2 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
+                    className="col-span-2 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
                   />
                   <input
                     type="text"
@@ -705,7 +705,7 @@ export default function CheckoutPage() {
                     onChange={(e) =>
                       setNewAddress({ ...newAddress, number: e.target.value })
                     }
-                    className="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
+                    className="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
@@ -719,7 +719,7 @@ export default function CheckoutPage() {
                         complement: e.target.value,
                       })
                     }
-                    className="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
+                    className="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
                   />
                   <input
                     type="text"
@@ -731,7 +731,7 @@ export default function CheckoutPage() {
                         neighborhood: e.target.value,
                       })
                     }
-                    className="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
+                    className="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
                   />
                 </div>
                 <div className="grid grid-cols-3 gap-3">
@@ -742,7 +742,7 @@ export default function CheckoutPage() {
                     onChange={(e) =>
                       setNewAddress({ ...newAddress, city: e.target.value })
                     }
-                    className="col-span-2 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
+                    className="col-span-2 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
                   />
                   <input
                     type="text"
@@ -755,12 +755,12 @@ export default function CheckoutPage() {
                         state: e.target.value.toUpperCase(),
                       })
                     }
-                    className="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
+                    className="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
                   />
                 </div>
                 <button
                   onClick={handleSaveAddress}
-                  className="w-full bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
+                  className="w-full gradient-berry text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
                 >
                   Salvar Endereço
                 </button>
@@ -780,7 +780,7 @@ export default function CheckoutPage() {
                     key={opt.method}
                     className={`flex items-center justify-between p-3 rounded-xl border-2 cursor-pointer transition-all ${
                       selectedShipping === opt.method
-                        ? "border-rose-500 bg-rose-50"
+                        ? "border-berry-600 bg-rose-50"
                         : "border-gray-200 hover:border-gray-300"
                     }`}
                   >
@@ -797,7 +797,7 @@ export default function CheckoutPage() {
                           setSelectedShippingDescription(opt.name);
                           setShippingPrice(opt.price);
                         }}
-                        className="accent-rose-600"
+                        className="accent-berry-600"
                       />
                       <div>
                         <p className="text-sm font-medium text-gray-900">
@@ -808,7 +808,7 @@ export default function CheckoutPage() {
                         </p>
                       </div>
                     </div>
-                    <span className="text-sm font-bold text-rose-600">
+                    <span className="text-sm font-bold text-berry-600">
                       {opt.price === 0 ? "Grátis!" : formatPrice(opt.price)}
                     </span>
                   </label>
@@ -849,7 +849,7 @@ export default function CheckoutPage() {
                 placeholder="Código do cupom"
                 value={couponCode}
                 onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
               />
               <button
                 onClick={handleValidateCoupon}
@@ -938,7 +938,7 @@ export default function CheckoutPage() {
               <hr className="border-gray-100" />
               <div className="flex justify-between text-lg font-bold">
                 <span className="text-gray-900">Total</span>
-                <span className="text-rose-600">{formatPrice(finalTotal)}</span>
+                <span className="text-berry-600">{formatPrice(finalTotal)}</span>
               </div>
             </div>
 
@@ -967,7 +967,7 @@ export default function CheckoutPage() {
                 ![11, 14].includes(normalizeCpfCnpj(cpfCnpj).length) ||
                 customerName.trim().length < 2
               }
-              className="w-full mt-4 bg-linear-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold py-4 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg text-base"
+              className="w-full mt-4 bg-linear-to-r from-berry-600 to-rose-500 hover:from-berry-700 hover:to-rose-600 text-white font-bold py-4 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg text-base"
             >
               {authLoading
                 ? "Verificando e-mail..."

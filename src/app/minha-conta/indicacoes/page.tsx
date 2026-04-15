@@ -84,14 +84,14 @@ export default function IndicacoesPage() {
       </div>
 
       {/* Hero referral card */}
-      <div className="bg-gradient-to-br from-rose-500 to-pink-600 rounded-2xl p-6 text-white">
+      <div className="bg-gradient-to-br from-berry-600 to-rose-500 rounded-2xl p-6 text-white">
         <h2 className="text-xl font-bold">Indique e Ganhe! 🎁</h2>
-        <p className="text-rose-100 text-sm mt-2">
+        <p className="text-white/80 text-sm mt-2">
           Compartilhe seu link com suas amigas. Quando elas fizerem a primeira
           compra, vocês duas ganham um cupom de desconto!
         </p>
         <div className="mt-4 bg-white/20 backdrop-blur-sm rounded-xl p-3">
-          <p className="text-xs text-rose-100 mb-1">Seu código de indicação</p>
+          <p className="text-xs text-white/80 mb-1">Seu código de indicação</p>
           <p className="text-2xl font-mono font-bold">
             {stats?.referralCode || user?.referralCode || "—"}
           </p>
@@ -99,7 +99,7 @@ export default function IndicacoesPage() {
         <div className="mt-4 flex gap-3">
           <button
             onClick={copy}
-            className="flex-1 bg-white text-rose-600 font-medium py-2.5 rounded-xl text-sm hover:bg-rose-50 transition-colors"
+            className="flex-1 bg-white text-berry-600 font-medium py-2.5 rounded-xl text-sm hover:bg-blush-50 transition-colors"
           >
             {copied ? "✓ Copiado!" : "Copiar Link"}
           </button>
@@ -126,7 +126,7 @@ export default function IndicacoesPage() {
           <p className="text-xs text-gray-500 uppercase tracking-wide">
             Recompensas Ganhas
           </p>
-          <p className="text-3xl font-bold text-rose-600 mt-1">
+          <p className="text-3xl font-bold text-berry-600 mt-1">
             {stats?.rewards.length ?? 0}
           </p>
         </div>
@@ -145,7 +145,7 @@ export default function IndicacoesPage() {
                 className="bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-between"
               >
                 <div>
-                  <p className="font-mono font-bold text-rose-600">{c.code}</p>
+                  <p className="font-mono font-bold text-berry-600">{c.code}</p>
                   <p className="text-xs text-gray-400 mt-0.5">
                     {c.type === "PERCENTAGE"
                       ? `${c.value}% de desconto`

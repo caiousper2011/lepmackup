@@ -214,10 +214,10 @@ export default function LoginModal() {
 
           {/* Logo */}
           <div className="text-center mb-6">
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center mx-auto mb-3">
+            <div className="w-14 h-14 rounded-full gradient-berry flex items-center justify-center mx-auto mb-3 shadow-lg shadow-berry-600/20">
               <span className="text-white font-bold text-lg">L&P</span>
             </div>
-            <h2 className="text-lg font-bold text-gray-900">
+            <h2 className="text-lg font-bold text-gray-900 font-[family-name:var(--font-heading)]">
               {step === "email" ? "Entrar na sua conta" : "Digite o código"}
             </h2>
             <p className="text-sm text-gray-500 mt-1">
@@ -256,13 +256,13 @@ export default function LoginModal() {
                   placeholder="seu@email.com"
                   required
                   autoFocus
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600 focus:border-transparent transition-all"
                 />
               </div>
               <button
                 type="submit"
                 disabled={loading || !email}
-                className="w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-semibold py-3 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full gradient-cta text-white font-semibold py-3 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-berry-600/20"
               >
                 {loading ? "Enviando..." : "Enviar Código"}
               </button>
@@ -286,7 +286,7 @@ export default function LoginModal() {
                     value={digit}
                     onChange={(e) => handleCodeChange(i, e.target.value)}
                     onKeyDown={(e) => handleCodeKeyDown(i, e)}
-                    className="w-11 h-13 text-center text-xl font-bold border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all"
+                    className="w-11 h-13 text-center text-xl font-bold border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-berry-600 focus:border-transparent transition-all"
                     disabled={loading}
                   />
                 ))}
@@ -302,7 +302,7 @@ export default function LoginModal() {
                   <button
                     onClick={handleResend}
                     disabled={loading}
-                    className="text-sm text-rose-600 hover:text-rose-700 font-medium transition-colors"
+                    className="text-sm text-berry-600 hover:text-berry-700 font-medium transition-colors"
                   >
                     Reenviar código
                   </button>

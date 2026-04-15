@@ -53,13 +53,13 @@ export default function CartDrawer() {
       {/* Drawer */}
       <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white z-50 shadow-2xl flex flex-col animate-slide-in">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-rose-100">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-rose-100/60">
           <div>
-            <h2 className="text-lg font-bold text-gray-900">Seu Carrinho</h2>
+            <h2 className="text-lg font-bold text-gray-900 font-[family-name:var(--font-heading)]">Seu Carrinho</h2>
             <p className="text-xs text-gray-500">
               {totalQuantity} {totalQuantity === 1 ? "item" : "itens"}
               {isBulkPricing && (
-                <span className="text-rose-600 font-semibold ml-1">
+                <span className="text-berry-600 font-semibold ml-1">
                   • Desconto ativado!
                 </span>
               )}
@@ -69,7 +69,7 @@ export default function CartDrawer() {
             onClick={() => {
               setIsOpen(false);
             }}
-            className="p-2 rounded-full hover:bg-rose-50 transition-colors"
+            className="p-2 rounded-full hover:bg-blush-50 transition-colors"
             aria-label="Fechar carrinho"
           >
             <svg
@@ -93,7 +93,7 @@ export default function CartDrawer() {
         <div className="flex-1 overflow-y-auto px-6 py-4">
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center">
-              <div className="w-24 h-24 rounded-full bg-rose-50 flex items-center justify-center mb-4">
+              <div className="w-24 h-24 rounded-full bg-blush-50 flex items-center justify-center mb-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-12 w-12 text-rose-300"
@@ -132,7 +132,7 @@ export default function CartDrawer() {
                   <p className="text-xs font-medium text-amber-800">
                     🔥 Adicione mais {4 - totalQuantity}{" "}
                     {4 - totalQuantity === 1 ? "item" : "itens"} e pague apenas{" "}
-                    <span className="font-bold text-rose-600">R$ 6,99</span>{" "}
+                    <span className="font-bold text-berry-600">R$ 6,99</span>{" "}
                     cada!
                   </p>
                 </div>
@@ -157,7 +157,7 @@ export default function CartDrawer() {
               {items.map((item) => (
                 <div
                   key={item.product.id}
-                  className="flex gap-3 bg-rose-50/50 rounded-xl p-3"
+                  className="flex gap-3 bg-blush-50/50 rounded-xl p-3"
                 >
                   <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 relative">
                     <Image
@@ -185,7 +185,7 @@ export default function CartDrawer() {
                             );
                             if (result.message) setCartMessage(result.message);
                           }}
-                          className="w-6 h-6 rounded-full bg-white border border-rose-200 flex items-center justify-center text-rose-600 text-xs hover:bg-rose-50 transition-colors"
+                          className="w-6 h-6 rounded-full bg-white border border-rose-100/60 flex items-center justify-center text-berry-600 text-xs hover:bg-blush-50 transition-colors"
                         >
                           −
                         </button>
@@ -204,21 +204,21 @@ export default function CartDrawer() {
                           className={`w-6 h-6 rounded-full bg-white border flex items-center justify-center text-xs transition-colors ${
                             isAtLimit
                               ? "border-gray-200 text-gray-300 cursor-not-allowed"
-                              : "border-rose-200 text-rose-600 hover:bg-rose-50"
+                              : "border-rose-100/60 text-berry-600 hover:bg-blush-50"
                           }`}
                         >
                           +
                         </button>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold text-rose-600">
+                        <span className="text-sm font-bold text-berry-600">
                           {formatPrice(
                             item.quantity * getItemUnitPrice(item.product),
                           )}
                         </span>
                         <button
                           onClick={() => removeFromCart(item.product.id)}
-                          className="text-gray-400 hover:text-rose-500 transition-colors"
+                          className="text-gray-400 hover:text-berry-600 transition-colors"
                           aria-label="Remover item"
                         >
                           <svg
@@ -247,16 +247,16 @@ export default function CartDrawer() {
 
         {/* Footer / Checkout */}
         {items.length > 0 && (
-          <div className="border-t border-rose-100 px-6 py-4">
+          <div className="border-t border-rose-100/60 px-6 py-4">
             <div className="flex items-center justify-between mb-4">
               <span className="text-sm text-gray-600">Total</span>
-              <span className="text-xl font-bold text-rose-600">
+              <span className="text-xl font-bold text-berry-600">
                 {formatPrice(totalPrice)}
               </span>
             </div>
             <button
               onClick={handleCheckout}
-              className="w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-semibold py-3 rounded-xl transition-all active:scale-[0.98] shadow-lg"
+              className="w-full gradient-cta text-white font-semibold py-3 rounded-xl transition-all active:scale-[0.97] shadow-lg shadow-berry-600/20 hover:shadow-xl hover:shadow-berry-600/30"
             >
               Finalizar Compra
             </button>

@@ -50,7 +50,7 @@ export async function generateMetadata({
     currency: "BRL",
   });
 
-  const imageUrl = product.images[0] || "/icon.svg";
+  const imageUrl = product.images[0] || "/icon.png";
 
   // Title focado em CTR: nome → preço → marca
   const title = `${product.name} por ${promoPrice} | L&PMakeUp`;

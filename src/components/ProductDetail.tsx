@@ -80,13 +80,13 @@ export default function ProductDetail({
         aria-label="Breadcrumb"
         className="flex items-center gap-2 text-sm text-gray-500 mb-6"
       >
-        <Link href="/" className="hover:text-rose-600 transition-colors">
+        <Link href="/" className="hover:text-berry-600 transition-colors">
           Início
         </Link>
         <span aria-hidden="true">/</span>
         <Link
           href={categoryHref ?? "/#categorias"}
-          className="hover:text-rose-600 transition-colors"
+          className="hover:text-berry-600 transition-colors"
         >
           {product.category}
         </Link>
@@ -100,7 +100,7 @@ export default function ProductDetail({
         {/* Image gallery */}
         <div className="space-y-4">
           {/* Main image */}
-          <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-rose-50 to-pink-50 relative shadow-md">
+          <div className="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-blush-50 to-nude-50 relative shadow-lg shadow-berry-600/5">
             <Image
               src={product.images[selectedImage]}
               alt={`${product.name} - Imagem ${selectedImage + 1}`}
@@ -110,7 +110,7 @@ export default function ProductDetail({
               priority
             />
             {/* Discount badge */}
-            <div className="absolute top-4 left-4 bg-rose-600 text-white text-sm font-bold px-3 py-1.5 rounded-full shadow-lg">
+            <div className="absolute top-4 left-4 bg-gradient-to-r from-berry-600 to-rose-500 text-white text-sm font-bold px-3 py-1.5 rounded-full shadow-lg shadow-berry-600/25">
               {discount}% OFF
             </div>
           </div>
@@ -124,7 +124,7 @@ export default function ProductDetail({
                   onClick={() => setSelectedImage(i)}
                   className={`relative w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all ${
                     selectedImage === i
-                      ? "border-rose-500 shadow-md scale-105"
+                      ? "border-berry-600 shadow-md scale-105"
                       : "border-transparent opacity-70 hover:opacity-100"
                   }`}
                 >
@@ -145,24 +145,24 @@ export default function ProductDetail({
         <div className="flex flex-col">
           {/* Category & Brand */}
           <div className="flex items-center gap-2 mb-3">
-            <span className="bg-rose-50 text-rose-600 text-xs font-medium px-3 py-1 rounded-full">
+            <span className="bg-blush-50 text-berry-600 text-xs font-medium px-3 py-1 rounded-full border border-rose-100/60">
               {product.category}
             </span>
             <span className="text-xs text-gray-400">•</span>
             <span className="text-xs text-gray-500">{product.brand}</span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 leading-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 leading-tight font-[family-name:var(--font-heading)]">
             {product.name}
           </h1>
 
           {/* Price section */}
-          <div className="bg-gradient-to-r from-rose-50 to-pink-50 rounded-2xl p-5 mb-6 border border-rose-100">
+          <div className="bg-gradient-to-r from-blush-50 to-nude-50 rounded-2xl p-5 mb-6 border border-rose-100/60">
             <div className="flex items-end gap-3 mb-2">
               <span className="text-sm text-gray-400 line-through">
                 {formatPrice(product.originalPrice)}
               </span>
-              <span className="text-3xl font-extrabold text-rose-600">
+              <span className="text-3xl font-extrabold text-berry-600">
                 {formatPrice(currentPrice)}
               </span>
             </div>
@@ -199,7 +199,7 @@ export default function ProductDetail({
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 text-rose-500 mt-0.5 flex-shrink-0"
+                    className="h-4 w-4 text-berry-600 mt-0.5 flex-shrink-0"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -219,20 +219,20 @@ export default function ProductDetail({
 
           {/* Quantity & Add to cart */}
           <div className="flex items-center gap-4 mb-4">
-            <div className="flex items-center border border-rose-200 rounded-xl overflow-hidden">
+            <div className="flex items-center border border-rose-100/60 rounded-xl overflow-hidden">
               <button
                 onClick={decreaseQuantity}
-                className="w-10 h-10 flex items-center justify-center text-rose-600 hover:bg-rose-50 transition-colors text-lg"
+                className="w-10 h-10 flex items-center justify-center text-berry-600 hover:bg-blush-50 transition-colors text-lg"
               >
                 −
               </button>
-              <span className="w-12 h-10 flex items-center justify-center font-semibold text-gray-900 border-x border-rose-200">
+              <span className="w-12 h-10 flex items-center justify-center font-semibold text-gray-900 border-x border-rose-100/60">
                 {quantity}
               </span>
               <button
                 onClick={increaseQuantity}
                 disabled={isOutOfStock || quantity >= availableToAdd}
-                className="w-10 h-10 flex items-center justify-center text-rose-600 hover:bg-rose-50 transition-colors text-lg"
+                className="w-10 h-10 flex items-center justify-center text-berry-600 hover:bg-blush-50 transition-colors text-lg"
               >
                 +
               </button>
@@ -240,7 +240,7 @@ export default function ProductDetail({
             <button
               onClick={handleAddToCart}
               disabled={isOutOfStock || availableToAdd <= 0}
-              className="flex-1 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold py-3 rounded-xl transition-all active:scale-[0.98] shadow-lg hover:shadow-xl text-sm disabled:opacity-60 disabled:cursor-not-allowed"
+              className="flex-1 gradient-cta text-white font-bold py-3 rounded-xl transition-all active:scale-[0.97] shadow-lg shadow-berry-600/20 hover:shadow-xl hover:shadow-berry-600/30 text-sm disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {isOutOfStock
                 ? "Produto indisponível"
@@ -265,7 +265,7 @@ export default function ProductDetail({
           </div>
 
           {/* Badges */}
-          <div className="grid grid-cols-2 gap-3 mt-6 pt-6 border-t border-rose-100">
+          <div className="grid grid-cols-2 gap-3 mt-6 pt-6 border-t border-rose-100/60">
             <div className="flex items-center gap-2 text-xs text-gray-500">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -320,7 +320,7 @@ export default function ProductDetail({
             <div className="flex items-center gap-2 text-xs text-gray-500">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4 text-rose-500"
+                className="h-4 w-4 text-berry-600"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -342,11 +342,11 @@ export default function ProductDetail({
       {faqs && faqs.length > 0 && (
         <section
           aria-labelledby="produto-faq-titulo"
-          className="mt-16 pt-12 border-t border-rose-100 max-w-3xl mx-auto"
+          className="mt-16 pt-12 border-t border-rose-100/60 max-w-3xl mx-auto"
         >
           <h2
             id="produto-faq-titulo"
-            className="text-xl sm:text-2xl font-bold text-gray-900 text-center mb-6"
+            className="text-xl sm:text-2xl font-bold text-gray-900 text-center mb-6 font-[family-name:var(--font-heading)]"
           >
             Perguntas frequentes sobre {product.shortName}
           </h2>
@@ -354,15 +354,15 @@ export default function ProductDetail({
             {faqs.map((faq, i) => (
               <details
                 key={i}
-                className="group bg-white rounded-xl border border-rose-100 hover:border-rose-200 transition-colors"
+                className="group bg-white rounded-2xl border border-rose-100/60 hover:border-berry-600/20 hover:shadow-md hover:shadow-berry-600/5 transition-all"
               >
                 <summary className="flex items-center justify-between p-5 cursor-pointer list-none">
-                  <span className="font-medium text-gray-900 text-sm">
+                  <span className="font-medium text-gray-800 text-sm pr-4">
                     {faq.q}
                   </span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-rose-400 group-open:rotate-180 transition-transform"
+                    className="h-5 w-5 text-berry-600/50 group-open:rotate-180 transition-transform flex-shrink-0"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -386,8 +386,8 @@ export default function ProductDetail({
 
       {/* Related Products */}
       {relatedProducts.length > 0 && (
-        <section className="mt-16 pt-12 border-t border-rose-100">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6 text-center">
+        <section className="mt-16 pt-12 border-t border-rose-100/60">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6 text-center font-[family-name:var(--font-heading)]">
             Produtos Relacionados
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
