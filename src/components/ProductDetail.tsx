@@ -24,13 +24,21 @@ export default function ProductDetail({
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [cartMessage, setCartMessage] = useState("");
-  const { addToCart, totalQuantity, setIsOpen, getProductQuantityInCart, maxItemsPerOrder } =
-    useCart();
+  const {
+    addToCart,
+    totalQuantity,
+    setIsOpen,
+    getProductQuantityInCart,
+    maxItemsPerOrder,
+  } = useCart();
 
   const quantityInCart = getProductQuantityInCart(product.id);
   const stockLimit = Math.max(0, product.stockQuantity ?? 0);
   const remainingSlots = Math.max(0, maxItemsPerOrder - totalQuantity);
-  const availableToAdd = Math.min(Math.max(0, stockLimit - quantityInCart), remainingSlots + quantityInCart);
+  const availableToAdd = Math.min(
+    Math.max(0, stockLimit - quantityInCart),
+    remainingSlots + quantityInCart,
+  );
   const isOutOfStock = stockLimit <= 0;
 
   const willHaveBulk = totalQuantity + quantity >= 4;

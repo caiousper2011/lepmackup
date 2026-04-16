@@ -31,19 +31,26 @@ function CountdownTimer() {
     };
   }
 
-  const [timeLeft, setTimeLeft] = useState(getTimeLeft);
+  const [timeLeft, setTimeLeft] = useState<{
+    hours: number;
+    minutes: number;
+    seconds: number;
+  } | null>(null);
 
   useEffect(() => {
+    setTimeLeft(getTimeLeft());
     const interval = setInterval(() => setTimeLeft(getTimeLeft()), 1000);
     return () => clearInterval(interval);
   }, []);
 
+  const display = timeLeft ?? { hours: 0, minutes: 0, seconds: 0 };
+
   return (
     <div className="flex items-center gap-2">
       {[
-        { value: timeLeft.hours, label: "h" },
-        { value: timeLeft.minutes, label: "m" },
-        { value: timeLeft.seconds, label: "s" },
+        { value: display.hours, label: "h" },
+        { value: display.minutes, label: "m" },
+        { value: display.seconds, label: "s" },
       ].map((t, i) => (
         <span
           key={i}
@@ -95,7 +102,7 @@ export default function HomeClient({
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-berry-600 to-rose-500 text-white rounded-full px-5 py-2 mb-6 shadow-lg shadow-berry-600/25">
               <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
               <span className="text-xs font-bold uppercase tracking-wider">
-                Oferta ao vivo — vagas limitadas
+                Oferta ao vivo
               </span>
             </div>
 
@@ -181,15 +188,54 @@ export default function HomeClient({
               </div>
               <div className="flex flex-wrap items-center justify-center gap-6">
                 <div className="flex items-center gap-2 text-xs text-gray-500">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-green-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                    />
+                  </svg>
                   Pagamento Seguro via Mercado Pago
                 </div>
                 <div className="flex items-center gap-2 text-xs text-gray-500">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-berry-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-berry-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                    />
+                  </svg>
                   Entrega pra SP e todo Brasil
                 </div>
                 <div className="flex items-center gap-2 text-xs text-gray-500">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gold-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5 text-gold-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
                   Envio em até 24h após pagamento
                 </div>
               </div>
@@ -199,10 +245,7 @@ export default function HomeClient({
       </section>
 
       {/* Promo Banner */}
-      <section
-        id="promo"
-        className="gradient-berry py-8"
-      >
+      <section id="promo" className="gradient-berry py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-white text-center md:text-left">
@@ -210,17 +253,22 @@ export default function HomeClient({
                 ✨ Quanto mais leva, mais economiza
               </h2>
               <p className="text-rose-100 text-sm mt-1.5">
-                Todos por R$7,99 — Leve 4+ e pague R$6,99 cada! PIX, cartão e boleto.
+                Todos por R$7,99 — Leve 4+ e pague R$6,99 cada! PIX, cartão e
+                boleto.
               </p>
             </div>
             <div className="flex items-center gap-4">
               <div className="bg-white/15 backdrop-blur-sm rounded-2xl px-6 py-3.5 text-center border border-white/20">
-                <div className="text-3xl font-extrabold text-white">R$ 7,99</div>
+                <div className="text-3xl font-extrabold text-white">
+                  R$ 7,99
+                </div>
                 <div className="text-xs text-rose-200">por item</div>
               </div>
               <div className="text-white text-2xl font-bold">→</div>
               <div className="bg-white rounded-2xl px-6 py-3.5 text-center shadow-xl shadow-berry-800/20">
-                <div className="text-3xl font-extrabold text-berry-600">R$ 6,99</div>
+                <div className="text-3xl font-extrabold text-berry-600">
+                  R$ 6,99
+                </div>
                 <div className="text-xs text-gray-500">4+ itens</div>
               </div>
             </div>
@@ -249,10 +297,7 @@ export default function HomeClient({
                 stars: 5,
               },
             ].map((t, i) => (
-              <div
-                key={i}
-                className="glass-card rounded-2xl p-6"
-              >
+              <div key={i} className="glass-card rounded-2xl p-6">
                 <div className="flex gap-0.5 mb-3">
                   {[...Array(t.stars)].map((_, j) => (
                     <svg

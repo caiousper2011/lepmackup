@@ -7,7 +7,8 @@ import { Product, formatPrice } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 
 export default function ProductCard({ product }: { product: Product }) {
-  const { addToCart, getItemUnitPrice, totalQuantity, maxItemsPerOrder } = useCart();
+  const { addToCart, getItemUnitPrice, totalQuantity, maxItemsPerOrder } =
+    useCart();
   const [cartMessage, setCartMessage] = useState("");
   const currentPrice = getItemUnitPrice(product);
   const isOutOfStock = (product.stockQuantity ?? 0) <= 0;
@@ -75,13 +76,13 @@ export default function ProductCard({ product }: { product: Product }) {
           <button
             onClick={handleAddToCart}
             disabled={isOutOfStock || isAtLimit}
-            className="w-full gradient-cta text-white text-sm font-semibold py-2.5 rounded-xl transition-all duration-200 active:scale-[0.97] shadow-md shadow-berry-600/20 hover:shadow-lg hover:shadow-berry-600/30 disabled:opacity-60 disabled:cursor-not-allowed disabled:shadow-none"
+            className="w-full min-h-11 px-2 gradient-cta text-white text-[13px] sm:text-sm font-semibold leading-tight rounded-xl transition-all duration-200 active:scale-[0.97] shadow-md shadow-berry-600/20 hover:shadow-lg hover:shadow-berry-600/30 disabled:opacity-60 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center text-center"
           >
             {isOutOfStock
               ? "Indisponível"
               : isAtLimit
                 ? `Limite de ${maxItemsPerOrder} itens`
-                : "Adicionar ao Carrinho 🛍️"}
+                : "Adicionar ao Carrinho"}
           </button>
           {isAtLimit && !isOutOfStock && (
             <p className="text-[11px] text-berry-600 mt-2">

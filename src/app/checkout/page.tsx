@@ -938,7 +938,9 @@ export default function CheckoutPage() {
               <hr className="border-gray-100" />
               <div className="flex justify-between text-lg font-bold">
                 <span className="text-gray-900">Total</span>
-                <span className="text-berry-600">{formatPrice(finalTotal)}</span>
+                <span className="text-berry-600">
+                  {formatPrice(finalTotal)}
+                </span>
               </div>
             </div>
 

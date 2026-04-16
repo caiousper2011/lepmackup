@@ -55,7 +55,9 @@ export default function CartDrawer() {
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-rose-100/60">
           <div>
-            <h2 className="text-lg font-bold text-gray-900 font-[family-name:var(--font-heading)]">Seu Carrinho</h2>
+            <h2 className="text-lg font-bold text-gray-900 font-[family-name:var(--font-heading)]">
+              Seu Carrinho
+            </h2>
             <p className="text-xs text-gray-500">
               {totalQuantity} {totalQuantity === 1 ? "item" : "itens"}
               {isBulkPricing && (
@@ -149,7 +151,8 @@ export default function CartDrawer() {
               {isAtLimit && (
                 <div className="bg-rose-50 border border-rose-200 rounded-xl p-3 text-center">
                   <p className="text-xs font-medium text-rose-700">
-                    Limite de {maxItemsPerOrder} itens por pedido atingido. Para comprar mais itens, finalize este pedido e faça um novo.
+                    Limite de {maxItemsPerOrder} itens por pedido atingido. Para
+                    comprar mais itens, finalize este pedido e faça um novo.
                   </p>
                 </div>
               )}
