@@ -112,7 +112,7 @@ export default function MeuPedidoDetalhePage() {
         <p className="text-gray-500">Pedido não encontrado.</p>
         <Link
           href="/minha-conta/pedidos"
-          className="mt-4 inline-flex text-sm font-medium text-rose-600 hover:text-rose-700"
+          className="mt-4 inline-flex text-sm font-medium text-berry-600 hover:text-berry-700"
         >
           Voltar para meus pedidos
         </Link>
@@ -229,7 +229,7 @@ export default function MeuPedidoDetalhePage() {
               >
                 <Link
                   href={`/produto/${item.product.slug}`}
-                  className="text-gray-700 hover:text-rose-600"
+                  className="text-gray-700 hover:text-berry-600"
                 >
                   {item.product.shortName}
                   <span className="text-gray-400 ml-2">x{item.quantity}</span>
@@ -261,7 +261,7 @@ export default function MeuPedidoDetalhePage() {
             )}
             <div className="flex justify-between font-semibold pt-1 border-t border-gray-100">
               <span>Total</span>
-              <span className="text-rose-600">{fmt(order.total)}</span>
+              <span className="text-berry-600">{fmt(order.total)}</span>
             </div>
           </div>
 

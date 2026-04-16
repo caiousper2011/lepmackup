@@ -174,7 +174,7 @@ export default function OrderConfirmationPage() {
             </p>
             <p className="text-sm text-gray-500 mt-1">
               Total:{" "}
-              <span className="font-bold text-rose-600">
+              <span className="font-bold text-berry-600">
                 {order.total.toLocaleString("pt-BR", {
                   style: "currency",
                   currency: "BRL",
@@ -191,7 +191,7 @@ export default function OrderConfirmationPage() {
       <div className="flex gap-3 mt-8 justify-center">
         <Link
           href="/minha-conta/pedidos"
-          className="px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white font-semibold rounded-xl transition-colors"
+          className="px-6 py-3 gradient-berry text-white font-semibold rounded-xl transition-colors"
         >
           Ver Meus Pedidos
         </Link>

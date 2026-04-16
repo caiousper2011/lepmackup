@@ -148,13 +148,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           aria-label="Breadcrumb"
           className="flex items-center gap-2 text-sm text-gray-500 mb-6"
         >
-          <Link href="/" className="hover:text-rose-600 transition-colors">
+          <Link href="/" className="hover:text-berry-600 transition-colors">
             Início
           </Link>
           <span aria-hidden="true">/</span>
           <Link
             href="/#categorias"
-            className="hover:text-rose-600 transition-colors"
+            className="hover:text-berry-600 transition-colors"
           >
             Categorias
           </Link>
@@ -183,7 +183,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             <Link
               key={c.slug}
               href={`/categoria/${c.slug}`}
-              className="px-4 py-1.5 rounded-full text-xs font-medium bg-rose-50 text-rose-600 hover:bg-rose-100 transition-colors"
+              className="px-4 py-1.5 rounded-full text-xs font-medium bg-blush-50 text-berry-600 hover:bg-blush-100 transition-colors"
             >
               {c.emoji} {c.dbName}
             </Link>
@@ -208,7 +208,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             Nenhum produto disponível nesta categoria no momento.{" "}
             <Link
               href="/"
-              className="text-rose-600 hover:underline font-medium"
+              className="text-berry-600 hover:underline font-medium"
             >
               Ver todos os produtos
             </Link>
@@ -218,7 +218,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         {/* Conteúdo SEO/GEO — FAQ específica da categoria */}
         <section
           aria-labelledby="faq-titulo"
-          className="mt-16 pt-12 border-t border-rose-100 max-w-3xl mx-auto"
+          className="mt-16 pt-12 border-t border-rose-100/60 max-w-3xl mx-auto"
         >
           <h2
             id="faq-titulo"
@@ -230,7 +230,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             {category.faqs.map((faq, i) => (
               <details
                 key={i}
-                className="group bg-white rounded-xl border border-rose-100 hover:border-rose-200 transition-colors"
+                className="group bg-white rounded-xl border border-rose-100/60 hover:border-berry-600/20 transition-colors"
               >
                 <summary className="flex items-center justify-between p-5 cursor-pointer list-none">
                   <span className="font-medium text-gray-900 text-sm">
@@ -238,7 +238,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                   </span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-rose-400 group-open:rotate-180 transition-transform"
+                    className="h-5 w-5 text-berry-600/50 group-open:rotate-180 transition-transform"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"

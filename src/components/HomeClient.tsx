@@ -31,26 +31,33 @@ function CountdownTimer() {
     };
   }
 
-  const [timeLeft, setTimeLeft] = useState(getTimeLeft);
+  const [timeLeft, setTimeLeft] = useState<{
+    hours: number;
+    minutes: number;
+    seconds: number;
+  } | null>(null);
 
   useEffect(() => {
+    setTimeLeft(getTimeLeft());
     const interval = setInterval(() => setTimeLeft(getTimeLeft()), 1000);
     return () => clearInterval(interval);
   }, []);
 
+  const display = timeLeft ?? { hours: 0, minutes: 0, seconds: 0 };
+
   return (
-    <div className="flex items-center gap-1.5">
+    <div className="flex items-center gap-2">
       {[
-        { value: timeLeft.hours, label: "h" },
-        { value: timeLeft.minutes, label: "m" },
-        { value: timeLeft.seconds, label: "s" },
+        { value: display.hours, label: "h" },
+        { value: display.minutes, label: "m" },
+        { value: display.seconds, label: "s" },
       ].map((t, i) => (
         <span
           key={i}
-          className="bg-gray-900 text-white font-mono font-bold text-lg px-2.5 py-1 rounded-lg min-w-[44px] text-center"
+          className="bg-gray-900/90 backdrop-blur-sm text-white font-mono font-bold text-lg px-3 py-1.5 rounded-xl min-w-[48px] text-center shadow-lg"
         >
           {String(t.value).padStart(2, "0")}
-          <span className="text-xs text-rose-300">{t.label}</span>
+          <span className="text-xs text-gold-400 ml-0.5">{t.label}</span>
         </span>
       ))}
     </div>
@@ -76,35 +83,38 @@ export default function HomeClient({
   return (
     <>
       {/* Urgency top bar */}
-      <div className="bg-gray-900 text-white py-2 px-4 text-center text-xs sm:text-sm font-medium">
-        🔥 <span className="text-rose-400 font-bold">ÚLTIMA CHANCE</span> —
-        Promoção acaba hoje! Frete grátis perto de SP
+      <div className="bg-gray-900 text-white py-2.5 px-4 text-center text-xs sm:text-sm font-medium">
+        <span className="inline-flex items-center gap-2">
+          🔥 <span className="text-gold-400 font-bold">ÚLTIMA CHANCE</span> —
+          Promoção acaba hoje! Frete grátis perto de SP
+        </span>
       </div>
 
-      {/* Hero Section - More aggressive */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-rose-50 via-pink-50 to-fuchsia-50">
-        <div className="absolute top-10 left-10 w-72 h-72 bg-rose-200/30 rounded-full blur-3xl" />
-        <div className="absolute bottom-10 right-10 w-96 h-96 bg-pink-200/20 rounded-full blur-3xl" />
+      {/* Hero Section */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-blush-50 via-rose-50 to-nude-50">
+        <div className="absolute top-10 left-10 w-72 h-72 bg-rose-200/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-10 w-96 h-96 bg-berry-600/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold-100/20 rounded-full blur-3xl" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-28">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 lg:py-28">
           <div className="text-center max-w-3xl mx-auto">
             {/* Live badge */}
-            <div className="inline-flex items-center gap-2 bg-red-600 text-white rounded-full px-4 py-1.5 mb-5 shadow-lg animate-pulse">
-              <span className="w-2 h-2 rounded-full bg-white" />
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-berry-600 to-rose-500 text-white rounded-full px-5 py-2 mb-6 shadow-lg shadow-berry-600/25">
+              <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
               <span className="text-xs font-bold uppercase tracking-wider">
-                Oferta ao vivo — vagas limitadas
+                Oferta ao vivo
               </span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tight mb-3">
-              <span className="bg-gradient-to-r from-rose-600 via-pink-600 to-fuchsia-600 bg-clip-text text-transparent">
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tight mb-4 font-[family-name:var(--font-heading)]">
+              <span className="bg-gradient-to-r from-berry-600 via-rose-500 to-berry-700 bg-clip-text text-transparent">
                 Maquiagem Profissional
               </span>
               <br />
               <span className="text-gray-900">a partir de</span>{" "}
               <span className="relative inline-block">
-                <span className="text-rose-600">R$6,99</span>
-                <span className="absolute -top-3 -right-8 bg-yellow-400 text-gray-900 text-xs font-bold px-2 py-0.5 rounded-full rotate-12 shadow">
+                <span className="text-berry-600">R$6,99</span>
+                <span className="absolute -top-3 -right-8 bg-gold-400 text-gray-900 text-xs font-bold px-2 py-0.5 rounded-full rotate-12 shadow-lg">
                   -63%
                 </span>
               </span>
@@ -113,11 +123,11 @@ export default function HomeClient({
             <p className="text-lg sm:text-xl text-gray-600 mb-6 max-w-xl mx-auto leading-relaxed">
               <span className="line-through text-gray-400">De R$18,99</span> por
               apenas{" "}
-              <span className="font-extrabold text-rose-600 text-2xl">
+              <span className="font-extrabold text-berry-600 text-2xl">
                 R$7,99
               </span>
               . Leve 4+ e pague{" "}
-              <span className="font-extrabold text-rose-600 text-2xl">
+              <span className="font-extrabold text-berry-600 text-2xl">
                 R$6,99
               </span>{" "}
               cada!
@@ -135,9 +145,9 @@ export default function HomeClient({
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
                 href="#produtos"
-                className="w-full sm:w-auto bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold px-10 py-4.5 rounded-2xl shadow-xl hover:shadow-2xl transition-all active:scale-95 text-lg relative overflow-hidden group"
+                className="w-full sm:w-auto gradient-cta text-white font-bold px-10 py-4.5 rounded-2xl shadow-xl shadow-berry-600/25 hover:shadow-2xl hover:shadow-berry-600/30 transition-all active:scale-[0.97] text-lg relative overflow-hidden group"
               >
-                <span className="relative z-10">Comprar Agora</span>
+                <span className="relative z-10">Comprar Agora ✨</span>
                 <span className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
               </a>
               <a
@@ -159,13 +169,13 @@ export default function HomeClient({
             </div>
 
             {/* Social proof + trust */}
-            <div className="mt-8 space-y-4">
+            <div className="mt-10 space-y-4">
               <div className="flex items-center justify-center gap-1">
                 {[1, 2, 3, 4, 5].map((s) => (
                   <svg
                     key={s}
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-yellow-400"
+                    className="h-5 w-5 text-gold-400"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
@@ -197,7 +207,7 @@ export default function HomeClient({
                 <div className="flex items-center gap-2 text-xs text-gray-500">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-blue-500"
+                    className="h-5 w-5 text-berry-600"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -214,7 +224,7 @@ export default function HomeClient({
                 <div className="flex items-center gap-2 text-xs text-gray-500">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-amber-500"
+                    className="h-5 w-5 text-gold-500"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -235,31 +245,28 @@ export default function HomeClient({
       </section>
 
       {/* Promo Banner */}
-      <section
-        id="promo"
-        className="bg-gradient-to-r from-rose-600 via-pink-600 to-fuchsia-600 py-6"
-      >
+      <section id="promo" className="gradient-berry py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-white text-center md:text-left">
-              <h2 className="text-xl sm:text-2xl font-bold">
-                🔥 Quanto mais leva, mais economiza
+              <h2 className="text-xl sm:text-2xl font-bold font-[family-name:var(--font-heading)]">
+                ✨ Quanto mais leva, mais economiza
               </h2>
-              <p className="text-rose-100 text-sm mt-1">
+              <p className="text-rose-100 text-sm mt-1.5">
                 Todos por R$7,99 — Leve 4+ e pague R$6,99 cada! PIX, cartão e
                 boleto.
               </p>
             </div>
             <div className="flex items-center gap-4">
-              <div className="bg-white/20 backdrop-blur-sm rounded-xl px-6 py-3 text-center">
+              <div className="bg-white/15 backdrop-blur-sm rounded-2xl px-6 py-3.5 text-center border border-white/20">
                 <div className="text-3xl font-extrabold text-white">
                   R$ 7,99
                 </div>
-                <div className="text-xs text-rose-100">por item</div>
+                <div className="text-xs text-rose-200">por item</div>
               </div>
               <div className="text-white text-2xl font-bold">→</div>
-              <div className="bg-white rounded-xl px-6 py-3 text-center shadow-lg">
-                <div className="text-3xl font-extrabold text-rose-600">
+              <div className="bg-white rounded-2xl px-6 py-3.5 text-center shadow-xl shadow-berry-800/20">
+                <div className="text-3xl font-extrabold text-berry-600">
                   R$ 6,99
                 </div>
                 <div className="text-xs text-gray-500">4+ itens</div>
@@ -270,7 +277,7 @@ export default function HomeClient({
       </section>
 
       {/* Social proof testimonials */}
-      <section className="py-10 bg-white">
+      <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {[
@@ -290,16 +297,13 @@ export default function HomeClient({
                 stars: 5,
               },
             ].map((t, i) => (
-              <div
-                key={i}
-                className="bg-rose-50/50 rounded-2xl p-5 border border-rose-100"
-              >
-                <div className="flex gap-0.5 mb-2">
+              <div key={i} className="glass-card rounded-2xl p-6">
+                <div className="flex gap-0.5 mb-3">
                   {[...Array(t.stars)].map((_, j) => (
                     <svg
                       key={j}
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 text-yellow-400"
+                      className="h-4 w-4 text-gold-400"
                       fill="currentColor"
                       viewBox="0 0 24 24"
                     >
@@ -307,10 +311,10 @@ export default function HomeClient({
                     </svg>
                   ))}
                 </div>
-                <p className="text-sm text-gray-600 italic">
+                <p className="text-sm text-gray-600 italic leading-relaxed">
                   &quot;{t.text}&quot;
                 </p>
-                <p className="text-xs font-semibold text-gray-900 mt-2">
+                <p className="text-xs font-semibold text-berry-600 mt-3">
                   — {t.name}
                 </p>
               </div>
@@ -320,10 +324,10 @@ export default function HomeClient({
       </section>
 
       {/* Categories */}
-      <section id="categorias" className="py-12 bg-white">
+      <section id="categorias" className="py-14 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 font-[family-name:var(--font-heading)]">
               Categorias
             </h2>
             <p className="text-gray-500 text-sm mt-2">
@@ -333,10 +337,10 @@ export default function HomeClient({
           <div className="flex flex-wrap justify-center gap-3">
             <button
               onClick={() => setActiveCategory(null)}
-              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
+              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
                 !activeCategory
-                  ? "bg-rose-600 text-white shadow-lg"
-                  : "bg-rose-50 text-rose-600 hover:bg-rose-100"
+                  ? "gradient-berry text-white shadow-lg shadow-berry-600/25"
+                  : "bg-blush-50 text-berry-600 hover:bg-rose-100 border border-rose-200/60"
               }`}
             >
               Todos
@@ -360,10 +364,10 @@ export default function HomeClient({
                   onClick={() =>
                     setActiveCategory(cat === activeCategory ? null : cat)
                   }
-                  className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
+                  className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
                     activeCategory === cat
-                      ? "bg-rose-600 text-white shadow-lg"
-                      : "bg-rose-50 text-rose-600 hover:bg-rose-100"
+                      ? "gradient-berry text-white shadow-lg shadow-berry-600/25"
+                      : "bg-blush-50 text-berry-600 hover:bg-rose-100 border border-rose-200/60"
                   }`}
                 >
                   {emoji} {cat}
@@ -375,7 +379,7 @@ export default function HomeClient({
           {/* Links reais para SEO — crawlers seguem âncoras <a>, não botões */}
           <nav
             aria-label="Categorias de maquiagem"
-            className="mt-6 flex flex-wrap justify-center gap-2 text-xs text-gray-500"
+            className="mt-6 flex flex-wrap justify-center gap-2 text-xs text-gray-400"
           >
             <span>Explore por categoria:</span>
             {categories.map((cat, i) => {
@@ -385,7 +389,7 @@ export default function HomeClient({
                 <span key={cat} className="inline-flex items-center gap-2">
                   <Link
                     href={href}
-                    className="text-rose-600 hover:underline font-medium"
+                    className="text-berry-600 hover:underline font-medium"
                   >
                     {cat}
                   </Link>
@@ -400,11 +404,11 @@ export default function HomeClient({
       {/* Products Grid */}
       <section
         id="produtos"
-        className="py-12 lg:py-16 bg-gradient-to-b from-white to-rose-50/30"
+        className="py-14 lg:py-20 bg-gradient-to-b from-white via-blush-50/30 to-white"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 font-[family-name:var(--font-heading)]">
               {activeCategory ? `${activeCategory}` : "Todos os Produtos"}
             </h2>
             <p className="text-gray-500 text-sm mt-2">
@@ -428,7 +432,7 @@ export default function HomeClient({
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 font-[family-name:var(--font-heading)]">
               Compre em 3 Passos Rápidos
             </h2>
             <p className="text-gray-500 text-sm mt-2">
@@ -436,7 +440,7 @@ export default function HomeClient({
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
                 step: "1",
@@ -459,12 +463,12 @@ export default function HomeClient({
             ].map((item) => (
               <div
                 key={item.step}
-                className="text-center p-6 bg-gradient-to-b from-rose-50 to-white rounded-2xl border border-rose-100"
+                className="text-center p-6 bg-gradient-to-b from-blush-50 to-white rounded-2xl border border-rose-100/60 hover:shadow-lg hover:shadow-berry-600/5 transition-all"
               >
-                <div className="w-16 h-16 rounded-2xl bg-rose-100 flex items-center justify-center text-3xl mx-auto mb-4">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-rose-100 to-blush-50 flex items-center justify-center text-3xl mx-auto mb-4 shadow-sm">
                   {item.icon}
                 </div>
-                <div className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-rose-600 text-white text-xs font-bold mb-3">
+                <div className="inline-flex items-center justify-center w-7 h-7 rounded-full gradient-berry text-white text-xs font-bold mb-3">
                   {item.step}
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2">
@@ -480,14 +484,14 @@ export default function HomeClient({
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 bg-gradient-to-b from-rose-50/30 to-white">
+      <section className="py-16 bg-gradient-to-b from-blush-50/30 to-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 font-[family-name:var(--font-heading)]">
               Perguntas Frequentes
             </h2>
           </div>
-          <div className="space-y-4">
+          <div className="space-y-3">
             {[
               {
                 q: "Como faço para comprar?",
@@ -516,15 +520,15 @@ export default function HomeClient({
             ].map((faq, i) => (
               <details
                 key={i}
-                className="group bg-white rounded-xl border border-rose-100 hover:border-rose-200 transition-colors"
+                className="group bg-white rounded-2xl border border-rose-100/60 hover:border-berry-600/20 hover:shadow-md hover:shadow-berry-600/5 transition-all"
               >
                 <summary className="flex items-center justify-between p-5 cursor-pointer list-none">
-                  <span className="font-medium text-gray-900 text-sm">
+                  <span className="font-medium text-gray-800 text-sm pr-4">
                     {faq.q}
                   </span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-rose-400 group-open:rotate-180 transition-transform"
+                    className="h-5 w-5 text-berry-600/50 group-open:rotate-180 transition-transform flex-shrink-0"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -550,7 +554,7 @@ export default function HomeClient({
       {totalQuantity > 0 && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-40 md:hidden bg-gradient-to-r from-rose-500 to-pink-600 text-white p-4 rounded-full shadow-2xl pulse-glow flex items-center gap-2"
+          className="fixed bottom-6 right-6 z-40 md:hidden gradient-cta text-white p-4 rounded-full shadow-2xl shadow-berry-600/30 flex items-center gap-2 active:scale-95 transition-transform"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

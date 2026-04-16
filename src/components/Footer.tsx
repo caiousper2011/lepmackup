@@ -4,16 +4,16 @@ import { CATEGORIES } from "@/lib/categories";
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-b from-rose-50 to-rose-100 border-t border-rose-200 mt-auto">
+    <footer className="bg-gradient-to-b from-blush-50 to-blush-100 border-t border-rose-100/60 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full gradient-berry flex items-center justify-center shadow-md shadow-berry-600/20">
                 <span className="text-white font-bold text-sm">L&P</span>
               </div>
-              <span className="text-lg font-bold bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">
+              <span className="text-lg font-bold bg-gradient-to-r from-berry-600 to-rose-500 bg-clip-text text-transparent font-[family-name:var(--font-heading)]">
                 L&PMakeUp
               </span>
             </div>
@@ -37,7 +37,7 @@ export default function Footer() {
                 <li key={c.slug}>
                   <Link
                     href={`/categoria/${c.slug}`}
-                    className="text-sm text-gray-600 hover:text-rose-600 transition-colors"
+                    className="text-sm text-gray-600 hover:text-berry-600 transition-colors"
                   >
                     {c.dbName}
                   </Link>
@@ -55,7 +55,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/"
-                  className="text-sm text-gray-600 hover:text-rose-600 transition-colors"
+                  className="text-sm text-gray-600 hover:text-berry-600 transition-colors"
                 >
                   Início
                 </Link>
@@ -63,7 +63,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/#produtos"
-                  className="text-sm text-gray-600 hover:text-rose-600 transition-colors"
+                  className="text-sm text-gray-600 hover:text-berry-600 transition-colors"
                 >
                   Todos os produtos
                 </Link>
@@ -71,7 +71,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/#promo"
-                  className="text-sm text-gray-600 hover:text-rose-600 transition-colors"
+                  className="text-sm text-gray-600 hover:text-berry-600 transition-colors"
                 >
                   Promoções
                 </Link>
@@ -79,7 +79,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/minha-conta"
-                  className="text-sm text-gray-600 hover:text-rose-600 transition-colors"
+                  className="text-sm text-gray-600 hover:text-berry-600 transition-colors"
                 >
                   Minha Conta
                 </Link>
@@ -117,7 +117,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-rose-200 mt-8 pt-6 text-center">
+        <div className="border-t border-rose-100/60 mt-8 pt-6 text-center">
           <p className="text-xs text-gray-500">
             © {new Date().getFullYear()} L&PMakeUp — Maquiagem profissional a
             partir de R$ 6,99. Todos os direitos reservados.
