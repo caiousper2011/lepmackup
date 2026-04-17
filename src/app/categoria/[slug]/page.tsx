@@ -59,10 +59,20 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const category = getCategoryBySlug(slug);
   if (!category) notFound();
 
-  const products = await prisma.product.findMany({
-    where: { active: true, category: category.dbName },
-    orderBy: { createdAt: "desc" },
-  });
+  let products: Awaited<ReturnType<typeof prisma.product.findMany>> = [];
+  try {
+    products = await prisma.product.findMany({
+      where: { active: true, category: category.dbName },
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (error) {
+    // Banco indisponível no build (ex.: Vercel prerender sem DATABASE_URL
+    // válida). Renderiza vazio e deixa o ISR repopular on-demand.
+    console.warn(
+      "[categoria/[slug]] findMany: banco indisponível, usando ISR on-demand.",
+      error,
+    );
+  }
 
   const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://lpmakeup.com.br";
   const canonical = `${siteUrl}/categoria/${category.slug}`;
