@@ -146,7 +146,7 @@ export default function HomeClient({
                 href="#produtos"
                 className="w-full sm:w-auto gradient-cta text-white font-bold px-10 py-4.5 rounded-2xl shadow-xl shadow-berry-600/25 hover:shadow-2xl hover:shadow-berry-600/30 transition-all active:scale-[0.97] text-lg relative overflow-hidden group"
               >
-                <span className="relative z-10">Comprar Agora ✨</span>
+                <span className="relative z-10">Ver Produtos ✨</span>
                 <span className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
               </a>
             </div>
