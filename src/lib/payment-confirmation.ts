@@ -2,6 +2,7 @@ import { getPaymentById } from "@/lib/mercadopago";
 import { prisma } from "@/lib/prisma";
 import { sendPaidOrderWhatsAppNotification } from "@/lib/whatsapp";
 import { autoGenerateShippingLabel } from "@/lib/shipping";
+import { sendPaidOrderAdminNotificationEmail } from "@/lib/email";
 
 const PAYMENT_STATUS_MAP = {
   approved: { order: "PAID", payment: "APPROVED" },
@@ -183,6 +184,39 @@ export async function confirmOrderPaymentByPaymentId(
     } catch (error) {
       console.error(
         "[payment-confirmation] WhatsApp notification error:",
+        error,
+      );
+    }
+
+    try {
+      await sendPaidOrderAdminNotificationEmail({
+        id: persistedOrder.id,
+        orderNumber: persistedOrder.orderNumber,
+        status: persistedOrder.status,
+        paymentStatus: persistedOrder.paymentStatus,
+        paymentId: persistedOrder.paymentId,
+        paymentMethod: persistedOrder.paymentMethod,
+        subtotal: persistedOrder.subtotal,
+        shipping: persistedOrder.shipping,
+        discount: persistedOrder.discount,
+        total: persistedOrder.total,
+        shippingMethod: persistedOrder.shippingMethod,
+        addressSnapshot: persistedOrder.addressSnapshot,
+        createdAt: persistedOrder.createdAt,
+        user: {
+          name: persistedOrder.user?.name || null,
+          email: persistedOrder.user?.email || "",
+          phone: persistedOrder.user?.phone || null,
+        },
+        items: persistedOrder.items.map((item) => ({
+          quantity: item.quantity,
+          unitPrice: item.unitPrice,
+          productSnapshot: item.productSnapshot,
+        })),
+      });
+    } catch (error) {
+      console.error(
+        "[payment-confirmation] Admin e-mail notification error:",
         error,
       );
     }
