@@ -22,11 +22,19 @@ function urlNode(entry: UrlEntry): string {
 }
 
 export async function GET() {
-  const products = await prisma.product.findMany({
-    where: { active: true },
-    select: { slug: true, updatedAt: true },
-    orderBy: { updatedAt: "desc" },
-  });
+  let products: Array<{ slug: string; updatedAt: Date }> = [];
+  try {
+    products = await prisma.product.findMany({
+      where: { active: true },
+      select: { slug: true, updatedAt: true },
+      orderBy: { updatedAt: "desc" },
+    });
+  } catch (error) {
+    console.warn(
+      "[sitemap.xml] findMany: banco indisponível no build, usando ISR on-demand.",
+      error,
+    );
+  }
 
   const today = new Date().toISOString().split("T")[0];
 

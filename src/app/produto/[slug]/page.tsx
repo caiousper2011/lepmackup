@@ -35,9 +35,21 @@ export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = await prisma.product.findUnique({
-    where: { slug, active: true },
-  });
+  let product;
+  try {
+    product = await prisma.product.findUnique({
+      where: { slug, active: true },
+    });
+  } catch (error) {
+    console.warn(
+      "[produto/[slug]] generateMetadata: banco indisponível no build, usando ISR on-demand.",
+      error,
+    );
+    return {
+      title: "Maquiagem profissional barata",
+      robots: { index: true, follow: true },
+    };
+  }
   if (!product) {
     return {
       title: "Produto não encontrado",
