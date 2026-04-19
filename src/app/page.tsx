@@ -23,10 +23,18 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const products = await prisma.product.findMany({
-    where: { active: true },
-    orderBy: { createdAt: "desc" },
-  });
+  let products: Awaited<ReturnType<typeof prisma.product.findMany>> = [];
+  try {
+    products = await prisma.product.findMany({
+      where: { active: true },
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (error) {
+    console.warn(
+      "[home/page] findMany: banco indisponível no build, usando ISR on-demand.",
+      error,
+    );
+  }
 
   const categories = [...new Set(products.map((p) => p.category))];
 
