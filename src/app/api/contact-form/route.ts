@@ -1,14 +1,26 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import nodemailer from "nodemailer";
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASSWORD,
-  },
-});
+const ADMIN_EMAIL = "lepmakeup3@gmail.com";
+const FROM = process.env.EMAIL_FROM || "L&PMakeUp <noreply@lepmakeup.com.br>";
+
+async function sendEmail(to: string, subject: string, html: string) {
+  const sgMail = await import("@sendgrid/mail").then((m) => m.default);
+  const sendGridApiKey = process.env.SENDGRID_API_KEY?.trim();
+
+  if (!sendGridApiKey) {
+    throw new Error("SENDGRID_API_KEY não configurada");
+  }
+
+  sgMail.setApiKey(sendGridApiKey);
+
+  return sgMail.send({
+    from: FROM,
+    to,
+    subject,
+    html,
+  });
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,6 +34,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Salvar no banco de dados
     const contactForm = await prisma.contactForm.create({
       data: {
         email,
@@ -29,18 +42,17 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    await transporter.sendMail({
-      from: process.env.GMAIL_USER,
-      to: "lepmakeup3@gmail.com",
-      subject: `Nova dúvida do cliente - ${email}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #ec4899;">Nova Dúvida Recebida</h2>
-
-          <p><strong>Email do cliente:</strong> ${email}</p>
+    // Enviar email para o admin
+    await sendEmail(
+      ADMIN_EMAIL,
+      `Nova dúvida do cliente - ${email}`,
+      `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <h2 style="color: #ec4899;">📬 Nova Dúvida Recebida</h2>
 
           <div style="background-color: #f5f5f5; padding: 15px; border-left: 4px solid #ec4899; margin: 20px 0;">
-            <p><strong>Dúvida:</strong></p>
+            <p><strong>Email do cliente:</strong> ${email}</p>
+            <p style="margin-top: 10px;"><strong>Dúvida:</strong></p>
             <p>${question.replace(/\n/g, "<br>")}</p>
           </div>
 
@@ -48,8 +60,8 @@ export async function POST(request: NextRequest) {
             Enviado em: ${new Date().toLocaleString("pt-BR")}
           </p>
         </div>
-      `,
-    });
+      `
+    );
 
     return NextResponse.json(
       { message: "Dúvida enviada com sucesso!" },
@@ -63,3 +75,4 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
