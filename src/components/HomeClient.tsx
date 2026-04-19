@@ -89,23 +89,23 @@ export default function HomeClient({
         </span>
       </div>
 
-      {/* Hero Section */}
+      {/* Hero Section - Compact */}
       <section className="relative overflow-hidden bg-gradient-to-br from-blush-50 via-rose-50 to-nude-50">
         <div className="absolute top-10 left-10 w-72 h-72 bg-rose-200/20 rounded-full blur-3xl" />
         <div className="absolute bottom-10 right-10 w-96 h-96 bg-berry-600/5 rounded-full blur-3xl" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold-100/20 rounded-full blur-3xl" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 lg:py-28">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-16">
           <div className="text-center max-w-3xl mx-auto">
             {/* Live badge */}
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-berry-600 to-rose-500 text-white rounded-full px-5 py-2 mb-6 shadow-lg shadow-berry-600/25">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-berry-600 to-rose-500 text-white rounded-full px-5 py-2 mb-4 shadow-lg shadow-berry-600/25">
               <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
               <span className="text-xs font-bold uppercase tracking-wider">
                 Oferta ao vivo
               </span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tight mb-4 font-[family-name:var(--font-heading)]">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight mb-3 font-[family-name:var(--font-heading)]">
               <span className="bg-gradient-to-r from-berry-600 via-rose-500 to-berry-700 bg-clip-text text-transparent">
                 Maquiagem Profissional
               </span>
@@ -119,21 +119,21 @@ export default function HomeClient({
               </span>
             </h1>
 
-            <p className="text-lg sm:text-xl text-gray-600 mb-6 max-w-xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-lg text-gray-600 mb-4 max-w-xl mx-auto leading-relaxed">
               <span className="line-through text-gray-400">De R$18,99</span> por
               apenas{" "}
-              <span className="font-extrabold text-berry-600 text-2xl">
+              <span className="font-extrabold text-berry-600 text-xl">
                 R$7,99
               </span>
               . Leve 4+ e pague{" "}
-              <span className="font-extrabold text-berry-600 text-2xl">
+              <span className="font-extrabold text-berry-600 text-xl">
                 R$6,99
               </span>{" "}
               cada!
             </p>
 
             {/* Countdown */}
-            <div className="flex items-center justify-center gap-3 mb-8">
+            <div className="flex items-center justify-center gap-3 mb-6">
               <span className="text-sm font-medium text-gray-500">
                 Acaba em:
               </span>
@@ -152,28 +152,28 @@ export default function HomeClient({
             </div>
 
             {/* Social proof + trust */}
-            <div className="mt-10 space-y-4">
+            <div className="mt-8 space-y-3">
               <div className="flex items-center justify-center gap-1">
                 {[1, 2, 3, 4, 5].map((s) => (
                   <svg
                     key={s}
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-gold-400"
+                    className="h-4 w-4 text-gold-400"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
                     <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z" />
                   </svg>
                 ))}
-                <span className="text-sm text-gray-600 ml-2">
+                <span className="text-xs text-gray-600 ml-2">
                   4.9/5 — mais de 500 clientes satisfeitas
                 </span>
               </div>
-              <div className="flex flex-wrap items-center justify-center gap-6">
-                <div className="flex items-center gap-2 text-xs text-gray-500">
+              <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-500">
+                <div className="flex items-center gap-1.5">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-green-500"
+                    className="h-4 w-4 text-green-500"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -185,12 +185,12 @@ export default function HomeClient({
                       d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
                     />
                   </svg>
-                  Pagamento Seguro via Mercado Pago
+                  Pagamento Seguro
                 </div>
-                <div className="flex items-center gap-2 text-xs text-gray-500">
+                <div className="flex items-center gap-1.5">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-berry-600"
+                    className="h-4 w-4 text-berry-600"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -202,12 +202,12 @@ export default function HomeClient({
                       d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
                     />
                   </svg>
-                  Entrega pra SP e todo Brasil
+                  Entrega Brasil Inteiro
                 </div>
-                <div className="flex items-center gap-2 text-xs text-gray-500">
+                <div className="flex items-center gap-1.5">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-gold-500"
+                    className="h-4 w-4 text-gold-500"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -219,10 +219,117 @@ export default function HomeClient({
                       d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                     />
                   </svg>
-                  Envio em até 24h após pagamento
+                  Envio em 24h
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Categories - Early positioning for retention */}
+      <section id="categorias" className="py-10 bg-white border-b border-rose-100/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 font-[family-name:var(--font-heading)]">
+              Categorias
+            </h2>
+          </div>
+          <div className="flex flex-wrap justify-center gap-2">
+            <button
+              onClick={() => setActiveCategory(null)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                !activeCategory
+                  ? "gradient-berry text-white shadow-lg shadow-berry-600/25"
+                  : "bg-blush-50 text-berry-600 hover:bg-rose-100 border border-rose-200/60"
+              }`}
+            >
+              Todos
+            </button>
+            {categories.map((cat) => {
+              const emoji =
+                cat === "Olhos"
+                  ? "👁️"
+                  : cat === "Lábios"
+                    ? "💋"
+                    : cat === "Rosto"
+                      ? "✨"
+                      : cat === "Sobrancelhas"
+                        ? "✏️"
+                        : cat === "Acessórios"
+                          ? "🧽"
+                          : "💄";
+              return (
+                <button
+                  key={cat}
+                  onClick={() =>
+                    setActiveCategory(cat === activeCategory ? null : cat)
+                  }
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                    activeCategory === cat
+                      ? "gradient-berry text-white shadow-lg shadow-berry-600/25"
+                      : "bg-blush-50 text-berry-600 hover:bg-rose-100 border border-rose-200/60"
+                  }`}
+                >
+                  {emoji} {cat}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Links reais para SEO — crawlers seguem âncoras <a>, não botões */}
+          <nav
+            aria-label="Categorias de maquiagem"
+            className="mt-5 flex flex-wrap justify-center gap-2 text-xs text-gray-400"
+          >
+            <span>Explore:</span>
+            {categories.map((cat, i) => {
+              const href = categoryHrefMap.get(cat);
+              if (!href) return null;
+              return (
+                <span key={cat} className="inline-flex items-center gap-2">
+                  <Link
+                    href={href}
+                    className="text-berry-600 hover:underline font-medium"
+                  >
+                    {cat}
+                  </Link>
+                  {i < categories.length - 1 && <span>·</span>}
+                </span>
+              );
+            })}
+          </nav>
+        </div>
+      </section>
+
+      {/* Products Grid - FEATURED */}
+      <section
+        id="produtos"
+        className="py-16 lg:py-24 bg-gradient-to-b from-white via-blush-50/50 to-white"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <span className="inline-flex items-center gap-2 bg-gradient-to-r from-berry-600 to-rose-500 text-white rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wider mb-4">
+              ⭐ Em Destaque
+            </span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 font-[family-name:var(--font-heading)] mb-3">
+              {activeCategory ? `${activeCategory}` : "Todos os Produtos"}
+            </h2>
+            <p className="text-gray-500 text-base max-w-2xl mx-auto">
+              {filtered.length}{" "}
+              {filtered.length === 1
+                ? "produto disponível"
+                : "produtos disponíveis"}{" "}
+              — Por apenas <span className="font-bold text-berry-600">R$ 7,99</span>
+              <br />
+              <span className="text-sm text-gold-600 font-semibold">Leve 4+ e pague R$ 6,99 cada!</span>
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+            {filtered.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
           </div>
         </div>
       </section>
@@ -255,158 +362,6 @@ export default function HomeClient({
                 <div className="text-xs text-gray-500">4+ itens</div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Social proof testimonials */}
-      <section className="py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {[
-              {
-                name: "Ana P.",
-                text: "Melhor custo-benefício! Comprei 6 produtos e paguei menos de R$42. Qualidade incrível!",
-                stars: 5,
-              },
-              {
-                name: "Camila S.",
-                text: "Entrega super rápida aqui em SP. Maquiagem linda e pagamento pelo Mercado Pago muito prático.",
-                stars: 5,
-              },
-              {
-                name: "Juliana R.",
-                text: "Indiquei pra 3 amigas e já ganhei 3 cupons de desconto! Amando essa loja 💕",
-                stars: 5,
-              },
-            ].map((t, i) => (
-              <div key={i} className="glass-card rounded-2xl p-6">
-                <div className="flex gap-0.5 mb-3">
-                  {[...Array(t.stars)].map((_, j) => (
-                    <svg
-                      key={j}
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 text-gold-400"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z" />
-                    </svg>
-                  ))}
-                </div>
-                <p className="text-sm text-gray-600 italic leading-relaxed">
-                  &quot;{t.text}&quot;
-                </p>
-                <p className="text-xs font-semibold text-berry-600 mt-3">
-                  — {t.name}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Categories */}
-      <section id="categorias" className="py-14 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 font-[family-name:var(--font-heading)]">
-              Categorias
-            </h2>
-            <p className="text-gray-500 text-sm mt-2">
-              Encontre exatamente o que você procura
-            </p>
-          </div>
-          <div className="flex flex-wrap justify-center gap-3">
-            <button
-              onClick={() => setActiveCategory(null)}
-              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
-                !activeCategory
-                  ? "gradient-berry text-white shadow-lg shadow-berry-600/25"
-                  : "bg-blush-50 text-berry-600 hover:bg-rose-100 border border-rose-200/60"
-              }`}
-            >
-              Todos
-            </button>
-            {categories.map((cat) => {
-              const emoji =
-                cat === "Olhos"
-                  ? "👁️"
-                  : cat === "Lábios"
-                    ? "💋"
-                    : cat === "Rosto"
-                      ? "✨"
-                      : cat === "Sobrancelhas"
-                        ? "✏️"
-                        : cat === "Acessórios"
-                          ? "🧽"
-                          : "💄";
-              return (
-                <button
-                  key={cat}
-                  onClick={() =>
-                    setActiveCategory(cat === activeCategory ? null : cat)
-                  }
-                  className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
-                    activeCategory === cat
-                      ? "gradient-berry text-white shadow-lg shadow-berry-600/25"
-                      : "bg-blush-50 text-berry-600 hover:bg-rose-100 border border-rose-200/60"
-                  }`}
-                >
-                  {emoji} {cat}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Links reais para SEO — crawlers seguem âncoras <a>, não botões */}
-          <nav
-            aria-label="Categorias de maquiagem"
-            className="mt-6 flex flex-wrap justify-center gap-2 text-xs text-gray-400"
-          >
-            <span>Explore por categoria:</span>
-            {categories.map((cat, i) => {
-              const href = categoryHrefMap.get(cat);
-              if (!href) return null;
-              return (
-                <span key={cat} className="inline-flex items-center gap-2">
-                  <Link
-                    href={href}
-                    className="text-berry-600 hover:underline font-medium"
-                  >
-                    {cat}
-                  </Link>
-                  {i < categories.length - 1 && <span>·</span>}
-                </span>
-              );
-            })}
-          </nav>
-        </div>
-      </section>
-
-      {/* Products Grid */}
-      <section
-        id="produtos"
-        className="py-14 lg:py-20 bg-gradient-to-b from-white via-blush-50/30 to-white"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 font-[family-name:var(--font-heading)]">
-              {activeCategory ? `${activeCategory}` : "Todos os Produtos"}
-            </h2>
-            <p className="text-gray-500 text-sm mt-2">
-              {filtered.length}{" "}
-              {filtered.length === 1
-                ? "produto disponível"
-                : "produtos disponíveis"}{" "}
-              — por apenas R$ 7,99
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-            {filtered.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
           </div>
         </div>
       </section>
@@ -528,6 +483,61 @@ export default function HomeClient({
                   {faq.a}
                 </div>
               </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Social proof testimonials - Near footer */}
+      <section className="py-16 bg-white border-t border-rose-100/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 font-[family-name:var(--font-heading)]">
+              O que nossas clientes dizem 💕
+            </h2>
+            <p className="text-gray-500 text-sm mt-2">
+              Mais de 500 clientes satisfeitas compartilhando sua experiência
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {[
+              {
+                name: "Ana P.",
+                text: "Melhor custo-benefício! Comprei 6 produtos e paguei menos de R$42. Qualidade incrível!",
+                stars: 5,
+              },
+              {
+                name: "Camila S.",
+                text: "Entrega super rápida aqui em SP. Maquiagem linda e pagamento pelo Mercado Pago muito prático.",
+                stars: 5,
+              },
+              {
+                name: "Juliana R.",
+                text: "Indiquei pra 3 amigas e já ganhei 3 cupons de desconto! Amando essa loja 💕",
+                stars: 5,
+              },
+            ].map((t, i) => (
+              <div key={i} className="glass-card rounded-2xl p-6 border border-rose-100/60 hover:shadow-lg hover:shadow-berry-600/10 transition-all">
+                <div className="flex gap-0.5 mb-3">
+                  {[...Array(t.stars)].map((_, j) => (
+                    <svg
+                      key={j}
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 text-gold-400"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z" />
+                    </svg>
+                  ))}
+                </div>
+                <p className="text-sm text-gray-600 italic leading-relaxed">
+                  &quot;{t.text}&quot;
+                </p>
+                <p className="text-xs font-semibold text-berry-600 mt-4">
+                  — {t.name}
+                </p>
+              </div>
             ))}
           </div>
         </div>
