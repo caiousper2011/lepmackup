@@ -252,19 +252,7 @@ export default function HomeClient({
 
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
             {filtered.map((product) => (
-              <div key={product.id} className="group">
-                <div className="relative">
-                  <ProductCard product={product} />
-                  {/* OFERTA BADGE */}
-                  <div className="absolute top-3 right-3 bg-gradient-to-r from-rose-600 to-pink-600 text-white px-2 py-1 rounded-lg text-xs font-black flex items-center gap-1">
-                    ⚡ OFERTA
-                  </div>
-                  {/* ESTOQUE ACABANDO */}
-                  <div className="absolute bottom-3 left-3 bg-gradient-to-r from-orange-500 to-red-600 text-white px-2 py-1 rounded-lg text-xs font-bold flex items-center gap-1">
-                    📦 Estoque limitado
-                  </div>
-                </div>
-              </div>
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
 

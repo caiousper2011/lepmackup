@@ -55,6 +55,16 @@ export default function ProductCard({ product }: { product: Product }) {
 
       {/* Content */}
       <div className="p-4 flex flex-col flex-1">
+        {/* BADGES DE OFERTA E ESTOQUE */}
+        <div className="flex gap-2 mb-2 flex-wrap">
+          <div className="bg-gradient-to-r from-rose-600 to-pink-600 text-white px-2 py-0.5 rounded-lg text-xs font-black flex items-center gap-1">
+            ⚡ OFERTA
+          </div>
+          <div className="bg-gradient-to-r from-orange-500 to-red-600 text-white px-2 py-0.5 rounded-lg text-xs font-bold flex items-center gap-1">
+            📦 Estoque limitado
+          </div>
+        </div>
+
         <Link href={`/produto/${product.slug}`}>
           <h3 className="font-semibold text-sm text-gray-800 line-clamp-2 group-hover:text-berry-600 transition-colors mb-1">
             {product.name}
