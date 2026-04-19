@@ -29,6 +29,7 @@ model User {
   sessions  Session[]
   referralRewards ReferralReward[] @relation("ReferrerRewards")
   referredRewards ReferralReward[] @relation("ReferredRewards")
+  supportMessages SupportMessage[]
 
   @@map("users")
 }
@@ -196,6 +197,7 @@ model Order {
 
   items OrderItem[]
   webhookLogs WebhookLog[]
+  supportMessages SupportMessage[]
 
   @@index([userId])
   @@index([status])
@@ -322,3 +324,42 @@ model AuditLog {
   @@index([adminId])
   @@map("audit_logs")
 }
+
+// ============================================
+// SUPPORT & CONTACT
+// ============================================
+
+model SupportMessage {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  message   String
+  senderType SenderType @default(USER)
+  attachmentUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([orderId])
+  @@index([userId])
+  @@map("support_messages")
+}
+
+enum SenderType {
+  USER
+  ADMIN
+}
+
+model ContactForm {
+  id        String   @id @default(cuid())
+  email     String
+  question  String
+  read      Boolean  @default(false)
+  respondedAt DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@map("contact_forms")
+}
+

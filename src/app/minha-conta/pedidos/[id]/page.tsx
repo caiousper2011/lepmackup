@@ -3,9 +3,11 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import SupportChat from "@/components/SupportChat";
 
 interface OrderDetail {
   id: string;
+  userId: string;
   orderNumber: number;
   status: string;
   paymentStatus: string;
@@ -297,6 +299,9 @@ export default function MeuPedidoDetalhePage() {
           </div>
         </div>
       </div>
+
+      {/* Support Chat */}
+      <SupportChat orderId={orderId} userId={order.userId || ""} />
     </div>
   );
 }

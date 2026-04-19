@@ -5,6 +5,7 @@ import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import { Product } from "@/data/products";
 import { useCart } from "@/context/CartContext";
+import ContactFormSection from "@/components/ContactFormSection";
 
 interface CategoryLink {
   name: string;
@@ -509,6 +510,9 @@ export default function HomeClient({
           </a>
         </div>
       </section>
+
+      {/* Contact Form Section */}
+      <ContactFormSection />
 
       {/* Floating cart button (mobile) */}
       {totalQuantity > 0 && (
