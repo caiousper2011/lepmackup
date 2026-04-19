@@ -15,13 +15,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Salvar no banco de dados
-    const contactForm = await prisma.contactForm.create({
-      data: {
-        email,
-        question,
-      },
-    });
+    // Tentar salvar no banco de dados (não-crítico)
+    try {
+      await prisma.contactForm.create({
+        data: {
+          email,
+          question,
+        },
+      });
+      console.log("✓ Dúvida salva no banco de dados:", email);
+    } catch (dbError) {
+      console.warn("⚠ Aviso: Erro ao salvar no banco de dados:", dbError);
+      // Continua mesmo se o banco falhar
+    }
 
     // Tentar enviar email para o admin (não-crítico)
     try {
@@ -52,26 +58,31 @@ export async function POST(request: NextRequest) {
             </div>
           `,
         });
+        console.log("✓ Email enviado para admin:", ADMIN_EMAIL);
       }
     } catch (emailError) {
-      console.warn("Aviso: Erro ao enviar email de notificação:", emailError);
+      console.warn("⚠ Aviso: Erro ao enviar email de notificação:", emailError);
       // Não falha a requisição se o email não for enviado
     }
 
     return NextResponse.json(
       {
-        message: "Dúvida enviada com sucesso! Responderemos no seu email em breve.",
-        success: true
+        success: true,
+        message: "✓ Dúvida enviada com sucesso! Responderemos no seu email em breve.",
       },
       { status: 201 }
     );
   } catch (error) {
-    console.error("Erro ao processar formulário de contato:", error);
+    console.error("❌ Erro geral ao processar formulário:", error);
     return NextResponse.json(
-      { error: "Erro ao enviar a dúvida. Tente novamente." },
+      {
+        success: false,
+        error: "Erro ao enviar a dúvida. Tente novamente."
+      },
       { status: 500 }
     );
   }
 }
+
 
 
