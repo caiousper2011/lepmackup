@@ -1,14 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import sgMail from "@sendgrid/mail";
 
 const ADMIN_EMAIL = "lepmakeup3@gmail.com";
-const FROM = process.env.EMAIL_FROM || "L&PMakeUp <noreply@lepmakeup.com.br>";
-
-const sendGridApiKey = process.env.SENDGRID_API_KEY?.trim() ?? "";
-if (sendGridApiKey) {
-  sgMail.setApiKey(sendGridApiKey);
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,16 +16,22 @@ export async function POST(request: NextRequest) {
     }
 
     // Salvar no banco de dados
-    await prisma.contactForm.create({
+    const contactForm = await prisma.contactForm.create({
       data: {
         email,
         question,
       },
     });
 
-    // Enviar email para o admin
-    if (sendGridApiKey) {
-      try {
+    // Tentar enviar email para o admin (não-crítico)
+    try {
+      const sgMail = require("@sendgrid/mail");
+      const apiKey = process.env.SENDGRID_API_KEY;
+
+      if (apiKey) {
+        sgMail.setApiKey(apiKey);
+        const FROM = process.env.EMAIL_FROM || "L&PMakeUp <noreply@lepmakeup.com.br>";
+
         await sgMail.send({
           from: FROM,
           to: ADMIN_EMAIL,
@@ -53,21 +52,26 @@ export async function POST(request: NextRequest) {
             </div>
           `,
         });
-      } catch (emailError) {
-        console.error("Erro ao enviar email:", emailError);
       }
+    } catch (emailError) {
+      console.warn("Aviso: Erro ao enviar email de notificação:", emailError);
+      // Não falha a requisição se o email não for enviado
     }
 
     return NextResponse.json(
-      { message: "Dúvida enviada com sucesso!" },
+      {
+        message: "Dúvida enviada com sucesso! Responderemos no seu email em breve.",
+        success: true
+      },
       { status: 201 }
     );
   } catch (error) {
-    console.error("Error submitting contact form:", error);
+    console.error("Erro ao processar formulário de contato:", error);
     return NextResponse.json(
-      { error: "Failed to submit form" },
+      { error: "Erro ao enviar a dúvida. Tente novamente." },
       { status: 500 }
     );
   }
 }
+
 

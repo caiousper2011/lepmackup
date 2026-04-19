@@ -27,16 +27,19 @@ export default function ContactFormSection() {
         body: JSON.stringify({ email, question }),
       });
 
+      const data = await res.json();
+
       if (res.ok) {
         setSuccess(true);
         setEmail("");
         setQuestion("");
         setTimeout(() => setSuccess(false), 5000);
       } else {
-        setError("Erro ao enviar. Tente novamente.");
+        setError(data.error || "Erro ao enviar. Tente novamente.");
       }
-    } catch {
-      setError("Erro ao enviar. Tente novamente.");
+    } catch (error) {
+      console.error("Erro:", error);
+      setError("Erro ao enviar. Verifique sua conexão e tente novamente.");
     } finally {
       setLoading(false);
     }
