@@ -161,9 +161,11 @@ export default function Header() {
               href="https://shopee.com.br/leticia.guardian?entryPoint=ShopByPDP&tab=product"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:text-berry-600 hover:bg-rose-50/60 transition-all flex items-center gap-1"
+              className="px-4 py-2 rounded-lg text-sm font-bold text-white bg-orange-500 hover:bg-orange-600 transition-all flex items-center gap-1.5 shadow-md shadow-orange-500/30"
             >
-              <span className="text-xs">📱</span>
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
               Shopee
             </a>
           </nav>
@@ -424,9 +426,12 @@ export default function Header() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setMobileOpen(false)}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-gray-600 hover:text-berry-600 hover:bg-rose-50/60 transition-all"
+              className="flex items-center gap-3 mx-1 px-4 py-2.5 rounded-xl text-sm font-bold text-white bg-orange-500 hover:bg-orange-600 transition-all shadow-md shadow-orange-500/30"
             >
-              📱 Shopee
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+              Shopee
             </a>
             {!user && (
               <button

@@ -159,14 +159,20 @@ export default function HomeClient({
               <span className="text-2xl animate-pulse">→</span>
             </a>
 
-            {/* SHOPEE LINK */}
+            {/* SHOPEE BUTTON */}
             <a
               href="https://shopee.com.br/leticia.guardian?entryPoint=ShopByPDP&tab=product"
               target="_blank"
               rel="noopener noreferrer"
-              className="block mt-4 text-gray-600 hover:text-rose-600 font-medium transition-colors"
+              className="inline-flex items-center gap-2 mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold px-6 sm:px-8 py-3 rounded-xl shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 transition-all transform hover:scale-105 active:scale-95"
             >
-              📱 Ou compra na nossa loja da Shopee
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+              <span>Comprar na Shopee</span>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
             </a>
 
             {/* SOCIAL PROOF - Stars & Testimonial Count */}
