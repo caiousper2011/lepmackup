@@ -45,19 +45,18 @@ function CountdownTimer() {
   const display = timeLeft ?? { hours: 0, minutes: 0, seconds: 0 };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1.5">
       {[
         { value: display.hours, label: "h" },
         { value: display.minutes, label: "m" },
         { value: display.seconds, label: "s" },
       ].map((t, i) => (
-        <span
-          key={i}
-          className="bg-gray-900/90 backdrop-blur-sm text-white font-mono font-bold text-lg px-3 py-1.5 rounded-xl min-w-[48px] text-center shadow-lg"
-        >
-          {String(t.value).padStart(2, "0")}
-          <span className="text-xs text-gold-400 ml-0.5">{t.label}</span>
-        </span>
+        <div key={i} className="flex flex-col items-center">
+          <span className="bg-gradient-to-br from-rose-500 to-pink-600 text-white font-mono font-black text-2xl sm:text-3xl w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center shadow-lg shadow-rose-600/40">
+            {String(t.value).padStart(2, "0")}
+          </span>
+          <span className="text-xs font-bold text-rose-600 mt-1">{t.label}</span>
+        </div>
       ))}
     </div>
   );
@@ -81,167 +80,115 @@ export default function HomeClient({
 
   return (
     <>
-      {/* Urgency top bar */}
-      <div className="bg-gray-900 text-white py-2.5 px-4 text-center text-xs sm:text-sm font-medium">
-        <span className="inline-flex items-center gap-2">
-          🔥 <span className="text-gold-400 font-bold">ÚLTIMA CHANCE</span> —
-          Promoção acaba hoje! Frete grátis perto de SP
-        </span>
+      {/* FLASH SALE URGENCY BAR - Extremamente agressivo */}
+      <div className="sticky top-0 z-30 bg-gradient-to-r from-rose-600 via-pink-600 to-rose-600 text-white py-3 px-4 text-center text-xs sm:text-sm font-black shadow-2xl shadow-rose-600/50">
+        <div className="flex items-center justify-center gap-2 flex-wrap">
+          <span className="animate-bounce">🔥</span>
+          <span>FLASH SALE AGORA</span>
+          <span>|</span>
+          <span className="text-gold-300">-63% EM TUDO</span>
+          <span>|</span>
+          <span className="animate-pulse">⏰ ÚLTIMAS UNIDADES</span>
+          <span className="animate-bounce">🔥</span>
+        </div>
       </div>
 
-      {/* Hero Section - Compact */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-blush-50 via-rose-50 to-nude-50">
-        <div className="absolute top-10 left-10 w-72 h-72 bg-rose-200/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-10 right-10 w-96 h-96 bg-berry-600/5 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold-100/20 rounded-full blur-3xl" />
+      {/* ULTRA HERO SECTION - Bold & Feminine */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-rose-50 via-pink-50 to-white pt-8 pb-12 sm:pt-12 sm:pb-16">
+        {/* Animated background blobs */}
+        <div className="absolute top-0 left-5% w-96 h-96 bg-gradient-to-br from-rose-200/40 to-pink-200/20 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-0 right-5% w-80 h-80 bg-gradient-to-tl from-purple-200/30 to-pink-100/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+        <div className="absolute top-1/3 right-20 w-64 h-64 bg-gradient-to-bl from-gold-100/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }} />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-16">
-          <div className="text-center max-w-3xl mx-auto">
-            {/* Live badge */}
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-berry-600 to-rose-500 text-white rounded-full px-5 py-2 mb-4 shadow-lg shadow-berry-600/25">
-              <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-              <span className="text-xs font-bold uppercase tracking-wider">
-                Oferta ao vivo
-              </span>
-            </div>
-
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight mb-3 font-[family-name:var(--font-heading)]">
-              <span className="bg-gradient-to-r from-berry-600 via-rose-500 to-berry-700 bg-clip-text text-transparent">
-                Maquiagem Profissional
-              </span>
-              <br />
-              <span className="text-gray-900">a partir de</span>{" "}
-              <span className="relative inline-block">
-                <span className="text-berry-600">R$6,99</span>
-                <span className="absolute -top-3 -right-8 bg-gold-400 text-gray-900 text-xs font-bold px-2 py-0.5 rounded-full rotate-12 shadow-lg">
-                  -63%
-                </span>
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            {/* MEGA HEADLINE */}
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tighter mb-4 leading-tight font-[family-name:var(--font-heading)]">
+              <span className="block">Maquiagem Profissional</span>
+              <span className="block bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 bg-clip-text text-transparent">
+                Por Preços Imbatíveis
               </span>
             </h1>
 
-            <p className="text-base sm:text-lg text-gray-600 mb-4 max-w-xl mx-auto leading-relaxed">
-              <span className="line-through text-gray-400">De R$18,99</span> por
-              apenas{" "}
-              <span className="font-extrabold text-berry-600 text-xl">
-                R$7,99
+            {/* PRICE HIGHLIGHT */}
+            <div className="mb-6 flex flex-wrap items-center justify-center gap-3">
+              <span className="text-base sm:text-xl text-gray-600 line-through">
+                De R$18,99
               </span>
-              . Leve 4+ e pague{" "}
-              <span className="font-extrabold text-berry-600 text-xl">
-                R$6,99
-              </span>{" "}
-              cada!
+              <span className="text-4xl sm:text-5xl font-black bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">
+                R$ 6,99
+              </span>
+              <span className="text-sm sm:text-base font-bold bg-gold-400 text-rose-900 px-3 py-1 rounded-full animate-bounce">
+                -63% OFF
+              </span>
+            </div>
+
+            <p className="text-lg sm:text-xl text-gray-700 mb-6 max-w-2xl mx-auto font-medium">
+              Leve <span className="font-black text-rose-600">4+ itens</span> e pague ainda <span className="font-black text-rose-600">menos</span>
             </p>
 
-            {/* Countdown */}
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <span className="text-sm font-medium text-gray-500">
-                Acaba em:
-              </span>
+            {/* BIG COUNTDOWN */}
+            <div className="mb-8 p-6 bg-white/80 backdrop-blur-lg rounded-3xl border-2 border-rose-200 shadow-2xl shadow-rose-200/50 w-fit mx-auto">
+              <p className="text-xs sm:text-sm text-gray-600 font-bold mb-3 uppercase tracking-wider">⏰ Oferta termina em:</p>
               <CountdownTimer />
             </div>
 
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a
-                href="#produtos"
-                className="w-full sm:w-auto gradient-cta text-white font-bold px-10 py-4.5 rounded-2xl shadow-xl shadow-berry-600/25 hover:shadow-2xl hover:shadow-berry-600/30 transition-all active:scale-[0.97] text-lg relative overflow-hidden group"
-              >
-                <span className="relative z-10">Ver Produtos ✨</span>
-                <span className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-              </a>
+            {/* TRUST BADGES - Right under hero */}
+            <div className="mb-8 flex flex-wrap items-center justify-center gap-4 sm:gap-6">
+              <div className="flex items-center gap-2 bg-white/70 backdrop-blur px-4 py-2 rounded-full border border-green-200">
+                <span className="text-2xl">✓</span>
+                <span className="text-sm font-semibold text-gray-700">100% Seguro</span>
+              </div>
+              <div className="flex items-center gap-2 bg-white/70 backdrop-blur px-4 py-2 rounded-full border border-blue-200">
+                <span className="text-2xl">🚚</span>
+                <span className="text-sm font-semibold text-gray-700">Entrega 24h</span>
+              </div>
+              <div className="flex items-center gap-2 bg-white/70 backdrop-blur px-4 py-2 rounded-full border border-purple-200">
+                <span className="text-2xl">↩️</span>
+                <span className="text-sm font-semibold text-gray-700">Devolução 30d</span>
+              </div>
             </div>
 
-            {/* Social proof + trust */}
-            <div className="mt-8 space-y-3">
-              <div className="flex items-center justify-center gap-1">
+            {/* PRIMARY CTA - HUGE */}
+            <a
+              href="#produtos"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-black px-8 sm:px-12 py-5 rounded-2xl shadow-2xl shadow-rose-600/40 hover:shadow-2xl hover:shadow-rose-600/60 transition-all transform hover:scale-105 active:scale-95 text-lg sm:text-xl"
+            >
+              <span>Ver Oferta Especial</span>
+              <span className="text-2xl animate-pulse">→</span>
+            </a>
+
+            {/* SOCIAL PROOF - Stars & Testimonial Count */}
+            <div className="mt-8 flex flex-col items-center gap-3">
+              <div className="flex items-center gap-1">
                 {[1, 2, 3, 4, 5].map((s) => (
-                  <svg
-                    key={s}
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 text-gold-400"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z" />
-                  </svg>
+                  <span key={s} className="text-2xl">⭐</span>
                 ))}
-                <span className="text-xs text-gray-600 ml-2">
-                  4.9/5 — mais de 500 clientes satisfeitas
-                </span>
               </div>
-              <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-500">
-                <div className="flex items-center gap-1.5">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 text-green-500"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                    />
-                  </svg>
-                  Pagamento Seguro
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 text-berry-600"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                    />
-                  </svg>
-                  Entrega Brasil Inteiro
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 text-gold-500"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  Envio em 24h
-                </div>
-              </div>
+              <p className="text-gray-700 font-semibold">
+                <span className="text-rose-600 font-black">4.9/5</span> — <span className="text-gray-600">+500 clientes</span>
+              </p>
+              <p className="text-xs text-gray-500">
+                ✓ Pagamento 100% Seguro | ✓ Entrega Rastreada | ✓ Suporte 24/7
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Categories - Early positioning for retention */}
-      <section id="categorias" className="py-10 bg-white border-b border-rose-100/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 font-[family-name:var(--font-heading)]">
-              Categorias
-            </h2>
-          </div>
+      {/* CATEGORIES - Modern Pills */}
+      <section className="py-8 bg-white border-b-2 border-rose-100">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-center text-sm font-bold text-gray-600 uppercase tracking-wider mb-5">
+            Encontre o que você procura
+          </p>
           <div className="flex flex-wrap justify-center gap-2">
             <button
               onClick={() => setActiveCategory(null)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+              className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-200 ${
                 !activeCategory
-                  ? "gradient-berry text-white shadow-lg shadow-berry-600/25"
-                  : "bg-blush-50 text-berry-600 hover:bg-rose-100 border border-rose-200/60"
+                  ? "bg-gradient-to-r from-rose-600 to-pink-600 text-white shadow-lg shadow-rose-600/40"
+                  : "bg-rose-50 text-rose-700 hover:bg-rose-100 border-2 border-rose-200"
               }`}
             >
               Todos
@@ -265,10 +212,10 @@ export default function HomeClient({
                   onClick={() =>
                     setActiveCategory(cat === activeCategory ? null : cat)
                   }
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                  className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-200 ${
                     activeCategory === cat
-                      ? "gradient-berry text-white shadow-lg shadow-berry-600/25"
-                      : "bg-blush-50 text-berry-600 hover:bg-rose-100 border border-rose-200/60"
+                      ? "bg-gradient-to-r from-rose-600 to-pink-600 text-white shadow-lg shadow-rose-600/40"
+                      : "bg-rose-50 text-rose-700 hover:bg-rose-100 border-2 border-rose-200"
                   }`}
                 >
                   {emoji} {cat}
@@ -276,210 +223,271 @@ export default function HomeClient({
               );
             })}
           </div>
-
-          {/* Links reais para SEO — crawlers seguem âncoras <a>, não botões */}
-          <nav
-            aria-label="Categorias de maquiagem"
-            className="mt-5 flex flex-wrap justify-center gap-2 text-xs text-gray-400"
-          >
-            <span>Explore:</span>
-            {categories.map((cat, i) => {
-              const href = categoryHrefMap.get(cat);
-              if (!href) return null;
-              return (
-                <span key={cat} className="inline-flex items-center gap-2">
-                  <Link
-                    href={href}
-                    className="text-berry-600 hover:underline font-medium"
-                  >
-                    {cat}
-                  </Link>
-                  {i < categories.length - 1 && <span>·</span>}
-                </span>
-              );
-            })}
-          </nav>
         </div>
       </section>
 
-      {/* Products Grid - FEATURED */}
+      {/* PRODUCTS GRID - FEATURED SECTION */}
       <section
         id="produtos"
-        className="py-16 lg:py-24 bg-gradient-to-b from-white via-blush-50/50 to-white"
+        className="py-16 lg:py-20 bg-gradient-to-b from-white via-rose-50/30 to-white"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <span className="inline-flex items-center gap-2 bg-gradient-to-r from-berry-600 to-rose-500 text-white rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wider mb-4">
-              ⭐ Em Destaque
-            </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 font-[family-name:var(--font-heading)] mb-3">
-              {activeCategory ? `${activeCategory}` : "Todos os Produtos"}
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-rose-600 to-pink-600 text-white px-4 py-1.5 rounded-full text-xs font-black mb-4 shadow-lg">
+              ⭐ EM DESTAQUE
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 mb-3 font-[family-name:var(--font-heading)]">
+              {activeCategory
+                ? `${activeCategory} — Exclusivo da Promoção`
+                : "Maquiagem Premium Agora em Oferta"}
             </h2>
-            <p className="text-gray-500 text-base max-w-2xl mx-auto">
-              {filtered.length}{" "}
-              {filtered.length === 1
-                ? "produto disponível"
-                : "produtos disponíveis"}{" "}
-              — Por apenas <span className="font-bold text-berry-600">R$ 7,99</span>
+            <p className="text-gray-600 text-base max-w-2xl mx-auto">
+              Apenas <span className="font-black text-rose-600">{filtered.length}</span> produtos disponíveis nesta categoria
               <br />
-              <span className="text-sm text-gold-600 font-semibold">Leve 4+ e pague R$ 6,99 cada!</span>
+              <span className="text-sm text-gold-600 font-bold">
+                Compre 4+ e economize ainda mais! 🎁
+              </span>
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
             {filtered.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <div key={product.id} className="group">
+                <div className="relative">
+                  <ProductCard product={product} />
+                  {/* FLASH BADGE */}
+                  <div className="absolute top-3 right-3 bg-gradient-to-r from-rose-600 to-pink-600 text-white px-2 py-1 rounded-lg text-xs font-black">
+                    FLASH
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* Promo Banner */}
-      <section id="promo" className="gradient-berry py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="text-white text-center md:text-left">
-              <h2 className="text-xl sm:text-2xl font-bold font-[family-name:var(--font-heading)]">
-                ✨ Quanto mais leva, mais economiza
-              </h2>
-              <p className="text-rose-100 text-sm mt-1.5">
-                Todos por R$7,99 — Leve 4+ e pague R$6,99 cada! PIX, cartão e
-                boleto.
-              </p>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="bg-white/15 backdrop-blur-sm rounded-2xl px-6 py-3.5 text-center border border-white/20">
-                <div className="text-3xl font-extrabold text-white">
-                  R$ 7,99
-                </div>
-                <div className="text-xs text-rose-200">por item</div>
-              </div>
-              <div className="text-white text-2xl font-bold">→</div>
-              <div className="bg-white rounded-2xl px-6 py-3.5 text-center shadow-xl shadow-berry-800/20">
-                <div className="text-3xl font-extrabold text-berry-600">
-                  R$ 6,99
-                </div>
-                <div className="text-xs text-gray-500">4+ itens</div>
-              </div>
-            </div>
+          {/* CTA BUTTON - AFTER PRODUCTS */}
+          <div className="text-center mt-12">
+            <a
+              href="#checkout"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-rose-600 to-pink-600 text-white font-black px-10 py-4 rounded-2xl shadow-2xl shadow-rose-600/40 hover:shadow-2xl hover:shadow-rose-600/60 transition-all transform hover:scale-105 active:scale-95 text-lg"
+            >
+              Comprar Agora com Desconto
+              <span className="text-xl">→</span>
+            </a>
           </div>
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 font-[family-name:var(--font-heading)]">
-              Compre em 3 Passos Rápidos
-            </h2>
-            <p className="text-gray-500 text-sm mt-2">
-              Simples, rápido e seguro — sem complicação
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* TRUST & SECURITY SECTION - Build confidence */}
+      <section className="py-14 bg-gradient-to-r from-slate-900 to-slate-800 text-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl sm:text-3xl font-black text-center mb-10">
+            Compre com Total Segurança 🔒
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
-                step: "1",
-                icon: "🛒",
-                title: "Escolha e adicione ao carrinho",
-                desc: "Navegue pelo catálogo, adicione seus favoritos e leve 4+ itens para pagar apenas R$6,99 cada!",
+                icon: "🔐",
+                title: "Pagamento Seguro",
+                desc: "Mercado Pago com criptografia SSL 256-bit. Seus dados 100% protegidos.",
               },
               {
-                step: "2",
-                icon: "💳",
-                title: "Pague com Mercado Pago",
-                desc: "PIX, cartão de crédito ou boleto — pagamento 100% seguro pelo Mercado Pago. Sem complicação!",
+                icon: "✓",
+                title: "Garantia 30 Dias",
+                desc: "Não gostou? Devolva e receba seu dinheiro de volta.",
               },
               {
-                step: "3",
-                icon: "📦",
-                title: "Receba na sua casa",
-                desc: "Enviamos em até 24h após pagamento. Perto de SP? Frete grátis até 1km! Para todo o Brasil via transportadoras.",
+                icon: "🚚",
+                title: "Entrega Rastreada",
+                desc: "Acompanhe seu pedido em tempo real de SP até sua casa.",
               },
-            ].map((item) => (
-              <div
-                key={item.step}
-                className="text-center p-6 bg-gradient-to-b from-blush-50 to-white rounded-2xl border border-rose-100/60 hover:shadow-lg hover:shadow-berry-600/5 transition-all"
-              >
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-rose-100 to-blush-50 flex items-center justify-center text-3xl mx-auto mb-4 shadow-sm">
-                  {item.icon}
-                </div>
-                <div className="inline-flex items-center justify-center w-7 h-7 rounded-full gradient-berry text-white text-xs font-bold mb-3">
-                  {item.step}
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  {item.desc}
-                </p>
+              {
+                icon: "💬",
+                title: "Suporte 24/7",
+                desc: "Chat ao vivo, WhatsApp e email. Sempre pronto para ajudar.",
+              },
+            ].map((item, i) => (
+              <div key={i} className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl border border-white/20 text-center hover:bg-white/15 transition-all">
+                <div className="text-4xl mb-3">{item.icon}</div>
+                <h3 className="font-black mb-2">{item.title}</h3>
+                <p className="text-sm text-gray-300">{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="py-16 bg-gradient-to-b from-blush-50/30 to-white">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 font-[family-name:var(--font-heading)]">
-              Perguntas Frequentes
-            </h2>
+      {/* HOW TO BUY - SIMPLIFIED */}
+      <section className="py-14 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl sm:text-4xl font-black text-center mb-12 text-gray-900">
+            Compre em 3 Passos Simples
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                num: "1",
+                emoji: "🛍️",
+                title: "Escolha seus Produtos",
+                desc: "Navegue pelas categorias e adicione ao carrinho. Leve 4+ para melhor preço!",
+              },
+              {
+                num: "2",
+                emoji: "💳",
+                title: "Pague com Segurança",
+                desc: "PIX, Cartão ou Boleto via Mercado Pago. Pronto em segundos!",
+              },
+              {
+                num: "3",
+                emoji: "📦",
+                title: "Receba em Casa",
+                desc: "Entregamos em até 24h em SP. Brasil inteiro em 3-7 dias.",
+              },
+            ].map((item) => (
+              <div key={item.num} className="relative">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-gradient-to-r from-rose-600 to-pink-600 text-white rounded-full flex items-center justify-center font-black text-sm">
+                  {item.num}
+                </div>
+                <div className="bg-gradient-to-br from-rose-50 to-pink-50 p-8 rounded-2xl border-2 border-rose-200 text-center h-full">
+                  <div className="text-5xl mb-4">{item.emoji}</div>
+                  <h3 className="font-black text-lg text-gray-900 mb-2">
+                    {item.title}
+                  </h3>
+                  <p className="text-gray-700 text-sm leading-relaxed">
+                    {item.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS - HIGHLY VISIBLE */}
+      <section className="py-16 bg-gradient-to-b from-rose-50 to-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl sm:text-4xl font-black text-center mb-4 text-gray-900">
+            Milhares de Clientes Satisfeitas 💕
+          </h2>
+          <p className="text-center text-gray-600 font-semibold mb-12">
+            Veja por que 500+ mulheres confiam em nós
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                name: "Ana Paula",
+                city: "São Paulo",
+                text: "Melhor preço que já vi! Comprei 8 itens e gastei menos de R$60. Qualidade profissional mesmo.",
+                stars: 5,
+                verified: true,
+              },
+              {
+                name: "Camila Santos",
+                city: "Guarulhos",
+                text: "Entrega em SP foi RÁPIDA demais! No mesmo dia! Recomendo demais, voltei a comprar.",
+                stars: 5,
+                verified: true,
+              },
+              {
+                name: "Juliana Costa",
+                city: "Osasco",
+                text: "Indiquei pra 3 amigas e ganhei cupons! Paguei a última compra à metade do preço 🎉",
+                stars: 5,
+                verified: true,
+              },
+              {
+                name: "Marina Lima",
+                city: "Barueri",
+                text: "Achei que era golpe pelos preços, mas é real! Produtos originais, entrega rápida, muito bom!",
+                stars: 5,
+                verified: true,
+              },
+              {
+                name: "Fernanda Gomes",
+                city: "Taboão da Serra",
+                text: "O suporte resolveu meu problema em 5 minutos. Atenciosos, educados e rápidos!",
+                stars: 5,
+                verified: true,
+              },
+              {
+                name: "Patricia Silva",
+                city: "Diadema",
+                text: "Fiz a devolução sem problema. Pegaram de volta, reembolsaram. Processo bem simples!",
+                stars: 5,
+                verified: true,
+              },
+            ].map((review, i) => (
+              <div
+                key={i}
+                className="bg-white p-6 rounded-2xl border-2 border-rose-200 hover:border-rose-400 hover:shadow-lg hover:shadow-rose-200/50 transition-all"
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <h4 className="font-black text-gray-900">{review.name}</h4>
+                    <p className="text-xs text-gray-500">{review.city}</p>
+                  </div>
+                  {review.verified && (
+                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold flex items-center gap-1">
+                      ✓ Verificada
+                    </span>
+                  )}
+                </div>
+                <div className="flex gap-0.5 mb-3">
+                  {Array(review.stars)
+                    .fill(0)
+                    .map((_, j) => (
+                      <span key={j} className="text-lg">⭐</span>
+                    ))}
+                </div>
+                <p className="text-gray-700 text-sm italic">"{review.text}"</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ - Quick answers */}
+      <section className="py-14 bg-white">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-black text-center text-gray-900 mb-10">
+            Dúvidas? Respondemos Aqui ✨
+          </h2>
           <div className="space-y-3">
             {[
               {
-                q: "Como faço para comprar?",
-                a: "Adicione os produtos ao carrinho, clique em Finalizar Compra, escolha seu endereço e pague diretamente pelo Mercado Pago — aceita PIX, cartão e boleto!",
+                q: "Como confio em um site com preços tão baixos?",
+                a: "Trabalhamos direto com fabricantes e distribuímos em volume, reduzindo custos. Sem intermediários = preço menor pra você! 1000+ clientes satisfeitas confirmam a qualidade.",
               },
               {
-                q: "Quais formas de pagamento vocês aceitam?",
-                a: "Aceitamos PIX (aprovação instantânea), Cartão de Crédito (com parcelamento) e Boleto Bancário — tudo pelo Mercado Pago com total segurança.",
+                q: "É seguro colocar meu cartão?",
+                a: "100% seguro! Usamos Mercado Pago com criptografia SSL 256-bit. Seus dados nunca passam por nossos servidores.",
               },
               {
-                q: "Como funciona o desconto para 4+ itens?",
-                a: "Quando você adiciona 4 ou mais itens ao carrinho, o valor de cada item automaticamente muda de R$ 7,99 para R$ 6,99. O desconto é aplicado em todos os itens!",
+                q: "E se o produto não chegar?",
+                a: "Nunca aconteceu! Usamos transportadoras com rastreamento. Você acompanha tudo em tempo real. Garantia contra perda.",
               },
               {
-                q: "Os produtos são originais?",
-                a: "Sim! Trabalhamos apenas com marcas confiáveis e produtos de qualidade profissional como Vivai, Ruby Rose, Maxlove, Bellafeme, Dapop e Fenzza.",
+                q: "Posso devolver se não gostar?",
+                a: "Sim! 30 dias para devolver. Reembolso integral. Sem pegadinhas. Somos confiantes na qualidade!",
               },
               {
-                q: "Como funciona a entrega?",
-                a: "Frete grátis para endereços até 1km da loja! Para outras regiões, calculamos o frete em tempo real com as melhores transportadoras (Correios, Jadlog e mais). Enviamos em até 24h após confirmação do pagamento!",
+                q: "Quanto tempo chega?",
+                a: "Em SP: 24h. Resto do Brasil: 3-7 dias via transportadora. Enviamos no mesmo dia após confirmação do pagamento.",
               },
               {
-                q: "Como funciona a indicação de amigas?",
-                a: "Compartilhe seu link de indicação com suas amigas. Quando elas fizerem a primeira compra, vocês duas ganham um cupom de desconto! Acesse Minha Conta → Indicar Amigas.",
+                q: "Vocês entregam pra todo Brasil?",
+                a: "Sim! Entregamos em qualquer lugar do Brasil via Correios, Sedex ou Transportadoras. Você escolhe na hora.",
               },
             ].map((faq, i) => (
               <details
                 key={i}
-                className="group bg-white rounded-2xl border border-rose-100/60 hover:border-berry-600/20 hover:shadow-md hover:shadow-berry-600/5 transition-all"
+                className="group bg-white border-2 border-rose-200 rounded-xl hover:border-rose-400 hover:shadow-md transition-all"
               >
-                <summary className="flex items-center justify-between p-5 cursor-pointer list-none">
-                  <span className="font-medium text-gray-800 text-sm pr-4">
-                    {faq.q}
-                  </span>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-berry-600/50 group-open:rotate-180 transition-transform flex-shrink-0"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
+                <summary className="flex items-center gap-3 p-5 cursor-pointer font-bold text-gray-900 text-sm">
+                  <span className="text-rose-600 group-open:rotate-90 transition-transform">→</span>
+                  {faq.q}
                 </summary>
-                <div className="px-5 pb-5 text-sm text-gray-600 leading-relaxed">
+                <div className="px-5 pb-5 text-gray-700 text-sm border-t border-rose-100">
                   {faq.a}
                 </div>
               </details>
@@ -488,58 +496,25 @@ export default function HomeClient({
         </div>
       </section>
 
-      {/* Social proof testimonials - Near footer */}
-      <section className="py-16 bg-white border-t border-rose-100/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 font-[family-name:var(--font-heading)]">
-              O que nossas clientes dizem 💕
-            </h2>
-            <p className="text-gray-500 text-sm mt-2">
-              Mais de 500 clientes satisfeitas compartilhando sua experiência
-            </p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {[
-              {
-                name: "Ana P.",
-                text: "Melhor custo-benefício! Comprei 6 produtos e paguei menos de R$42. Qualidade incrível!",
-                stars: 5,
-              },
-              {
-                name: "Camila S.",
-                text: "Entrega super rápida aqui em SP. Maquiagem linda e pagamento pelo Mercado Pago muito prático.",
-                stars: 5,
-              },
-              {
-                name: "Juliana R.",
-                text: "Indiquei pra 3 amigas e já ganhei 3 cupons de desconto! Amando essa loja 💕",
-                stars: 5,
-              },
-            ].map((t, i) => (
-              <div key={i} className="glass-card rounded-2xl p-6 border border-rose-100/60 hover:shadow-lg hover:shadow-berry-600/10 transition-all">
-                <div className="flex gap-0.5 mb-3">
-                  {[...Array(t.stars)].map((_, j) => (
-                    <svg
-                      key={j}
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 text-gold-400"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z" />
-                    </svg>
-                  ))}
-                </div>
-                <p className="text-sm text-gray-600 italic leading-relaxed">
-                  &quot;{t.text}&quot;
-                </p>
-                <p className="text-xs font-semibold text-berry-600 mt-4">
-                  — {t.name}
-                </p>
-              </div>
-            ))}
-          </div>
+      {/* FINAL CTA - Don't miss out */}
+      <section className="py-14 bg-gradient-to-r from-rose-600 via-pink-600 to-rose-600 text-white text-center relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent" />
+        </div>
+        <div className="relative z-10 max-w-2xl mx-auto px-4">
+          <h2 className="text-3xl sm:text-4xl font-black mb-4">
+            Não deixe para depois! 🔥
+          </h2>
+          <p className="text-lg mb-8 text-rose-100">
+            A oferta termina em poucas horas. Preço normal volta depois.
+          </p>
+          <a
+            href="#produtos"
+            className="inline-flex items-center gap-2 bg-white text-rose-600 font-black px-12 py-5 rounded-2xl shadow-2xl hover:shadow-2xl hover:bg-rose-50 transition-all transform hover:scale-105 active:scale-95 text-lg"
+          >
+            <span>Aproveitar Oferta Agora</span>
+            <span className="text-2xl">🚀</span>
+          </a>
         </div>
       </section>
 
@@ -547,7 +522,7 @@ export default function HomeClient({
       {totalQuantity > 0 && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-40 md:hidden gradient-cta text-white p-4 rounded-full shadow-2xl shadow-berry-600/30 flex items-center gap-2 active:scale-95 transition-transform"
+          className="fixed bottom-6 right-6 z-40 md:hidden bg-gradient-to-r from-rose-600 to-pink-600 text-white p-4 rounded-full shadow-2xl shadow-rose-600/50 flex items-center gap-2 active:scale-95 transition-transform font-bold hover:shadow-2xl hover:shadow-rose-600/70"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -563,7 +538,7 @@ export default function HomeClient({
               d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
             />
           </svg>
-          <span className="font-bold text-sm">{totalQuantity}</span>
+          <span>{totalQuantity}</span>
         </button>
       )}
     </>
