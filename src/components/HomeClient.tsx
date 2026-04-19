@@ -80,16 +80,16 @@ export default function HomeClient({
 
   return (
     <>
-      {/* FLASH SALE URGENCY BAR - Extremamente agressivo */}
+      {/* OFERTA RELÂMPAGO URGENCY BAR - Extremamente agressivo */}
       <div className="sticky top-0 z-30 bg-gradient-to-r from-rose-600 via-pink-600 to-rose-600 text-white py-3 px-4 text-center text-xs sm:text-sm font-black shadow-2xl shadow-rose-600/50">
         <div className="flex items-center justify-center gap-2 flex-wrap">
-          <span className="animate-bounce">🔥</span>
-          <span>FLASH SALE AGORA</span>
+          <span className="animate-bounce">⚡</span>
+          <span>OFERTA RELÂMPAGO AGORA</span>
           <span>|</span>
           <span className="text-gold-300">-63% EM TUDO</span>
           <span>|</span>
-          <span className="animate-pulse">⏰ ÚLTIMAS UNIDADES</span>
-          <span className="animate-bounce">🔥</span>
+          <span className="animate-pulse">📦 ESTOQUES ACABANDO</span>
+          <span className="animate-bounce">⚡</span>
         </div>
       </div>
 
@@ -234,7 +234,7 @@ export default function HomeClient({
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-rose-600 to-pink-600 text-white px-4 py-1.5 rounded-full text-xs font-black mb-4 shadow-lg">
-              ⭐ EM DESTAQUE
+              ⚡ OFERTA RELÂMPAGO
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 mb-3 font-[family-name:var(--font-heading)]">
               {activeCategory
@@ -255,9 +255,13 @@ export default function HomeClient({
               <div key={product.id} className="group">
                 <div className="relative">
                   <ProductCard product={product} />
-                  {/* FLASH BADGE */}
-                  <div className="absolute top-3 right-3 bg-gradient-to-r from-rose-600 to-pink-600 text-white px-2 py-1 rounded-lg text-xs font-black">
-                    FLASH
+                  {/* OFERTA BADGE */}
+                  <div className="absolute top-3 right-3 bg-gradient-to-r from-rose-600 to-pink-600 text-white px-2 py-1 rounded-lg text-xs font-black flex items-center gap-1">
+                    ⚡ OFERTA
+                  </div>
+                  {/* ESTOQUE ACABANDO */}
+                  <div className="absolute bottom-3 left-3 bg-gradient-to-r from-orange-500 to-red-600 text-white px-2 py-1 rounded-lg text-xs font-bold flex items-center gap-1">
+                    📦 Estoque limitado
                   </div>
                 </div>
               </div>
