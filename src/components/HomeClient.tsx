@@ -164,15 +164,15 @@ export default function HomeClient({
               href="https://shopee.com.br/leticia.guardian?entryPoint=ShopByPDP&tab=product"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 mt-4 bg-orange-500 hover:bg-orange-600 text-white font-bold px-6 sm:px-8 py-3 rounded-xl shadow-lg shadow-orange-500/30 hover:shadow-orange-500/50 transition-all transform hover:scale-105 active:scale-95"
+              className="inline-flex items-center gap-2.5 mt-4 text-white font-bold px-7 sm:px-9 py-3 rounded-xl shadow-lg transition-all transform hover:scale-105 active:scale-95"
+              style={{ backgroundColor: "#EE4D2D" }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#D63D1A"}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "#EE4D2D"}
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m3.22 6.03L11 7.75 8.78 8.03c-.29.04-.54.23-.63.51-.1.29 0 .61.22.82l2.26 2.2-.53 3.1c-.05.29.07.58.31.74.24.17.56.2.83.08l2.83-1.49 2.83 1.49c.27.12.59.09.83-.08.24-.16.36-.45.31-.74l-.53-3.1 2.26-2.2c.22-.21.32-.53.22-.82-.09-.28-.34-.47-.63-.51z"/>
               </svg>
-              <span>Comprar na Shopee</span>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
+              <span>Nossa loja Shopee</span>
             </a>
 
             {/* SOCIAL PROOF - Stars & Testimonial Count */}

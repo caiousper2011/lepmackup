@@ -161,10 +161,13 @@ export default function Header() {
               href="https://shopee.com.br/leticia.guardian?entryPoint=ShopByPDP&tab=product"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-4 py-2 rounded-lg text-sm font-bold text-white bg-orange-500 hover:bg-orange-600 transition-all flex items-center gap-1.5 shadow-md shadow-orange-500/30"
+              className="px-4 py-2 rounded-lg text-sm font-bold text-white transition-all flex items-center gap-1.5 shadow-md"
+              style={{ backgroundColor: "#EE4D2D" }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#D63D1A"}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "#EE4D2D"}
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m3.22 6.03L11 7.75 8.78 8.03c-.29.04-.54.23-.63.51-.1.29 0 .61.22.82l2.26 2.2-.53 3.1c-.05.29.07.58.31.74.24.17.56.2.83.08l2.83-1.49 2.83 1.49c.27.12.59.09.83-.08.24-.16.36-.45.31-.74l-.53-3.1 2.26-2.2c.22-.21.32-.53.22-.82-.09-.28-.34-.47-.63-.51z"/>
               </svg>
               Shopee
             </a>
@@ -426,10 +429,13 @@ export default function Header() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setMobileOpen(false)}
-              className="flex items-center gap-3 mx-1 px-4 py-2.5 rounded-xl text-sm font-bold text-white bg-orange-500 hover:bg-orange-600 transition-all shadow-md shadow-orange-500/30"
+              className="flex items-center gap-3 mx-1 px-4 py-2.5 rounded-xl text-sm font-bold text-white transition-all shadow-md"
+              style={{ backgroundColor: "#EE4D2D" }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#D63D1A"}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "#EE4D2D"}
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m3.22 6.03L11 7.75 8.78 8.03c-.29.04-.54.23-.63.51-.1.29 0 .61.22.82l2.26 2.2-.53 3.1c-.05.29.07.58.31.74.24.17.56.2.83.08l2.83-1.49 2.83 1.49c.27.12.59.09.83-.08.24-.16.36-.45.31-.74l-.53-3.1 2.26-2.2c.22-.21.32-.53.22-.82-.09-.28-.34-.47-.63-.51z"/>
               </svg>
               Shopee
             </a>
