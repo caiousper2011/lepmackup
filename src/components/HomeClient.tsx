@@ -159,6 +159,16 @@ export default function HomeClient({
               <span className="text-2xl animate-pulse">→</span>
             </a>
 
+            {/* SHOPEE LINK */}
+            <a
+              href="https://shopee.com.br/leticia.guardian?entryPoint=ShopByPDP&tab=product"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block mt-4 text-gray-600 hover:text-rose-600 font-medium transition-colors"
+            >
+              📱 Ou compra na nossa loja da Shopee
+            </a>
+
             {/* SOCIAL PROOF - Stars & Testimonial Count */}
             <div className="mt-8 flex flex-col items-center gap-3">
               <div className="flex items-center gap-1">

@@ -157,6 +157,15 @@ export default function Header() {
               <span className="text-xs">🔥</span>
               Promoção
             </Link>
+            <a
+              href="https://shopee.com.br/leticia.guardian?entryPoint=ShopByPDP&tab=product"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-2 rounded-lg text-sm font-semibold text-gray-600 hover:text-berry-600 hover:bg-rose-50/60 transition-all flex items-center gap-1"
+            >
+              <span className="text-xs">📱</span>
+              Shopee
+            </a>
           </nav>
 
           {/* User & Cart buttons */}
@@ -410,6 +419,15 @@ export default function Header() {
             >
               🔥 Promoção
             </Link>
+            <a
+              href="https://shopee.com.br/leticia.guardian?entryPoint=ShopByPDP&tab=product"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMobileOpen(false)}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-gray-600 hover:text-berry-600 hover:bg-rose-50/60 transition-all"
+            >
+              📱 Shopee
+            </a>
             {!user && (
               <button
                 onClick={() => {
