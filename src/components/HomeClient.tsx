@@ -171,7 +171,7 @@ export default function HomeClient({
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#D63D1A"}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "#EE4D2D"}
               >
-                <img src="/shopee-logo.svg" alt="Shopee" className="w-6 h-6" style={{ filter: "brightness(0) invert(1)" }} />
+                <img src="/shopee-logo.svg" alt="Shopee" className="w-6 h-6" />
                 <span>Veja também nossa loja na Shopee</span>
               </a>
             </div>
