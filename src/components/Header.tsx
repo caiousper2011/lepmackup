@@ -166,8 +166,13 @@ export default function Header() {
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#D63D1A"}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "#EE4D2D"}
             >
-              <svg className="w-4 h-4" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M70 25C75 30 80 40 75 50M75 50C70 60 55 60 45 60M45 60C30 60 20 50 25 40M25 40C30 30 40 25 55 25"/>
+              <svg className="w-4 h-4" viewBox="0 0 100 120" fill="currentColor">
+                <path d="M25 18 Q25 8 35 8 Q45 8 45 18" fill="none" stroke="currentColor" strokeWidth="7" strokeLinecap="round"/>
+                <path d="M75 18 Q75 8 65 8 Q55 8 55 18" fill="none" stroke="currentColor" strokeWidth="7" strokeLinecap="round"/>
+                <path d="M18 20 L22 35 L78 35 L82 20 Q82 15 77 15 L23 15 Q18 15 18 20 Z" fill="currentColor"/>
+                <rect x="22" y="35" width="56" height="70" rx="4" fill="currentColor"/>
+                <path d="M50 50 C55 50 58 47 58 42 C58 38 55 35 50 35 C45 35 42 38 42 42 M42 58 C42 62 45 65 50 65 C58 65 62 68 62 75 C62 82 58 85 50 85 C45 85 42 82 42 78"
+                  fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
               Shopee
             </a>
@@ -434,8 +439,13 @@ export default function Header() {
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#D63D1A"}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "#EE4D2D"}
             >
-              <svg className="w-4 h-4" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M70 25C75 30 80 40 75 50M75 50C70 60 55 60 45 60M45 60C30 60 20 50 25 40M25 40C30 30 40 25 55 25"/>
+              <svg className="w-4 h-4" viewBox="0 0 100 120" fill="currentColor">
+                <path d="M25 18 Q25 8 35 8 Q45 8 45 18" fill="none" stroke="currentColor" strokeWidth="7" strokeLinecap="round"/>
+                <path d="M75 18 Q75 8 65 8 Q55 8 55 18" fill="none" stroke="currentColor" strokeWidth="7" strokeLinecap="round"/>
+                <path d="M18 20 L22 35 L78 35 L82 20 Q82 15 77 15 L23 15 Q18 15 18 20 Z" fill="currentColor"/>
+                <rect x="22" y="35" width="56" height="70" rx="4" fill="currentColor"/>
+                <path d="M50 50 C55 50 58 47 58 42 C58 38 55 35 50 35 C45 35 42 38 42 42 M42 58 C42 62 45 65 50 65 C58 65 62 68 62 75 C62 82 58 85 50 85 C45 85 42 82 42 78"
+                  fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
               Shopee
             </a>

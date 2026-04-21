@@ -171,8 +171,18 @@ export default function HomeClient({
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#D63D1A"}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "#EE4D2D"}
               >
-                <svg className="w-6 h-6" viewBox="0 0 100 100" fill="currentColor">
-                  <path d="M50 10C27.91 10 10 27.91 10 50s17.91 40 40 40 40-17.91 40-40S72.09 10 50 10zm15 35c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-30 0c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm15 20c-8 0-14.4-2.5-14.4-6h28.8c0 3.5-6.4 6-14.4 6z"/>
+                <svg className="w-6 h-6" viewBox="0 0 100 120" fill="white">
+                  {/* Sacola com S branco - Shopee logo */}
+                  {/* Alça esquerda */}
+                  <path d="M25 18 Q25 8 35 8 Q45 8 45 18" fill="none" stroke="white" strokeWidth="7" strokeLinecap="round"/>
+                  {/* Alça direita */}
+                  <path d="M75 18 Q75 8 65 8 Q55 8 55 18" fill="none" stroke="white" strokeWidth="7" strokeLinecap="round"/>
+                  {/* Corpo da sacola */}
+                  <path d="M18 20 L22 35 L78 35 L82 20 Q82 15 77 15 L23 15 Q18 15 18 20 Z" fill="white"/>
+                  <rect x="22" y="35" width="56" height="70" rx="4" fill="white"/>
+                  {/* Letra S grande */}
+                  <path d="M50 50 C55 50 58 47 58 42 C58 38 55 35 50 35 C45 35 42 38 42 42 M42 58 C42 62 45 65 50 65 C58 65 62 68 62 75 C62 82 58 85 50 85 C45 85 42 82 42 78"
+                    fill="none" stroke="#EE4D2D" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
                 <span>Nossa loja Shopee</span>
               </a>
