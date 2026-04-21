@@ -150,30 +150,33 @@ export default function HomeClient({
               </div>
             </div>
 
-            {/* PRIMARY CTA - HUGE */}
-            <a
-              href="#produtos"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-black px-8 sm:px-12 py-5 rounded-2xl shadow-2xl shadow-rose-600/40 hover:shadow-2xl hover:shadow-rose-600/60 transition-all transform hover:scale-105 active:scale-95 text-lg sm:text-xl"
-            >
-              <span>Ver Oferta Especial</span>
-              <span className="text-2xl animate-pulse">→</span>
-            </a>
+            {/* BUTTONS CONTAINER */}
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-3 items-center justify-center mt-8">
+              {/* PRIMARY CTA - HUGE */}
+              <a
+                href="#produtos"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-black px-8 sm:px-12 py-5 rounded-2xl shadow-2xl shadow-rose-600/40 hover:shadow-2xl hover:shadow-rose-600/60 transition-all transform hover:scale-105 active:scale-95 text-lg sm:text-xl w-full sm:w-auto justify-center"
+              >
+                <span>Ver Oferta Especial</span>
+                <span className="text-2xl animate-pulse">→</span>
+              </a>
 
-            {/* SHOPEE BUTTON */}
-            <a
-              href="https://shopee.com.br/leticia.guardian?entryPoint=ShopByPDP&tab=product"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2.5 mt-4 text-white font-bold px-7 sm:px-9 py-3 rounded-xl shadow-lg transition-all transform hover:scale-105 active:scale-95"
-              style={{ backgroundColor: "#EE4D2D" }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#D63D1A"}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "#EE4D2D"}
-            >
-              <svg className="w-5 h-5" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M70 25C75 30 80 40 75 50M75 50C70 60 55 60 45 60M45 60C30 60 20 50 25 40M25 40C30 30 40 25 55 25"/>
-              </svg>
-              <span>Nossa loja Shopee</span>
-            </a>
+              {/* SHOPEE BUTTON */}
+              <a
+                href="https://shopee.com.br/leticia.guardian?entryPoint=ShopByPDP&tab=product"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2.5 text-white font-bold px-7 sm:px-8 py-5 rounded-2xl shadow-lg transition-all transform hover:scale-105 active:scale-95 w-full sm:w-auto justify-center"
+                style={{ backgroundColor: "#EE4D2D" }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#D63D1A"}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "#EE4D2D"}
+              >
+                <svg className="w-6 h-6" viewBox="0 0 100 100" fill="currentColor">
+                  <path d="M50 10C27.91 10 10 27.91 10 50s17.91 40 40 40 40-17.91 40-40S72.09 10 50 10zm15 35c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm-30 0c0 1.66-1.34 3-3 3s-3-1.34-3-3 1.34-3 3-3 3 1.34 3 3zm15 20c-8 0-14.4-2.5-14.4-6h28.8c0 3.5-6.4 6-14.4 6z"/>
+                </svg>
+                <span>Nossa loja Shopee</span>
+              </a>
+            </div>
 
             {/* SOCIAL PROOF - Stars & Testimonial Count */}
             <div className="mt-8 flex flex-col items-center gap-3">
