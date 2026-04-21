@@ -151,7 +151,7 @@ export default function HomeClient({
             </div>
 
             {/* BUTTONS CONTAINER */}
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-3 items-center justify-center mt-8">
+            <div className="flex flex-col gap-4 items-center justify-center mt-8">
               {/* PRIMARY CTA - HUGE */}
               <a
                 href="#produtos"
@@ -161,30 +161,18 @@ export default function HomeClient({
                 <span className="text-2xl animate-pulse">→</span>
               </a>
 
-              {/* SHOPEE BUTTON */}
+              {/* SHOPEE BUTTON - ABAIXO do botão principal */}
               <a
                 href="https://shopee.com.br/leticia.guardian?entryPoint=ShopByPDP&tab=product"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2.5 text-white font-bold px-7 sm:px-8 py-5 rounded-2xl shadow-lg transition-all transform hover:scale-105 active:scale-95 w-full sm:w-auto justify-center"
+                className="inline-flex items-center gap-2.5 text-white font-bold px-7 sm:px-8 py-4 rounded-2xl shadow-lg transition-all transform hover:scale-105 active:scale-95 w-full sm:w-auto justify-center text-sm sm:text-base"
                 style={{ backgroundColor: "#EE4D2D" }}
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#D63D1A"}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "#EE4D2D"}
               >
-                <svg className="w-6 h-6" viewBox="0 0 100 120" fill="white">
-                  {/* Sacola com S branco - Shopee logo */}
-                  {/* Alça esquerda */}
-                  <path d="M25 18 Q25 8 35 8 Q45 8 45 18" fill="none" stroke="white" strokeWidth="7" strokeLinecap="round"/>
-                  {/* Alça direita */}
-                  <path d="M75 18 Q75 8 65 8 Q55 8 55 18" fill="none" stroke="white" strokeWidth="7" strokeLinecap="round"/>
-                  {/* Corpo da sacola */}
-                  <path d="M18 20 L22 35 L78 35 L82 20 Q82 15 77 15 L23 15 Q18 15 18 20 Z" fill="white"/>
-                  <rect x="22" y="35" width="56" height="70" rx="4" fill="white"/>
-                  {/* Letra S grande */}
-                  <path d="M50 50 C55 50 58 47 58 42 C58 38 55 35 50 35 C45 35 42 38 42 42 M42 58 C42 62 45 65 50 65 C58 65 62 68 62 75 C62 82 58 85 50 85 C45 85 42 82 42 78"
-                    fill="none" stroke="#EE4D2D" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                <span>Nossa loja Shopee</span>
+                <img src="/shopee-logo.svg" alt="Shopee" className="w-6 h-6" style={{ filter: "brightness(0) invert(1)" }} />
+                <span>Veja também nossa loja na Shopee</span>
               </a>
             </div>
 
