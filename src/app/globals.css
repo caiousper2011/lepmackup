@@ -157,6 +157,21 @@ body {
   animation: countdown-pulse 1s ease-in-out infinite;
 }
 
+/* Hero carousel slide-progress fill (5s, matches SLIDE_DURATION_MS) */
+@keyframes carousel-progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.carousel-progress {
+  width: 0%;
+  animation: carousel-progress 5s linear forwards;
+}
+
 /* ===== GRADIENTS ===== */
 .gradient-berry {
   background: linear-gradient(135deg, #9b1b5a 0%, #e11d48 50%, #c9952c 100%);
@@ -220,7 +235,8 @@ body {
   .animate-slide-up,
   .animate-fade-in,
   .badge-bounce,
-  .countdown-pulse {
+  .countdown-pulse,
+  .carousel-progress {
     animation: none;
   }
   .card-lift:hover {

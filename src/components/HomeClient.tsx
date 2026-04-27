@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
+import HeroCarousel from "@/components/HeroCarousel";
 import { Product } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import ContactFormSection from "@/components/ContactFormSection";
@@ -16,51 +17,6 @@ interface HomeClientProps {
   products: Product[];
   categories: string[];
   categoryLinks?: CategoryLink[];
-}
-
-function CountdownTimer() {
-  function getTimeLeft() {
-    const now = new Date();
-    const endOfDay = new Date(now);
-    endOfDay.setHours(23, 59, 59, 999);
-    const diff = endOfDay.getTime() - now.getTime();
-    return {
-      hours: Math.floor(diff / (1000 * 60 * 60)),
-      minutes: Math.floor((diff / (1000 * 60)) % 60),
-      seconds: Math.floor((diff / 1000) % 60),
-    };
-  }
-
-  const [timeLeft, setTimeLeft] = useState<{
-    hours: number;
-    minutes: number;
-    seconds: number;
-  } | null>(null);
-
-  useEffect(() => {
-    setTimeLeft(getTimeLeft());
-    const interval = setInterval(() => setTimeLeft(getTimeLeft()), 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const display = timeLeft ?? { hours: 0, minutes: 0, seconds: 0 };
-
-  return (
-    <div className="flex items-center gap-1.5">
-      {[
-        { value: display.hours, label: "h" },
-        { value: display.minutes, label: "m" },
-        { value: display.seconds, label: "s" },
-      ].map((t, i) => (
-        <div key={i} className="flex flex-col items-center">
-          <span className="bg-gradient-to-br from-rose-500 to-pink-600 text-white font-mono font-black text-2xl sm:text-3xl w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center shadow-lg shadow-rose-600/40">
-            {String(t.value).padStart(2, "0")}
-          </span>
-          <span className="text-xs font-bold text-rose-600 mt-1">{t.label}</span>
-        </div>
-      ))}
-    </div>
-  );
 }
 
 export default function HomeClient({
@@ -94,105 +50,8 @@ export default function HomeClient({
         </div>
       </div>
 
-      {/* ULTRA HERO SECTION - Bold & Feminine */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-rose-50 via-pink-50 to-white pt-8 pb-12 sm:pt-12 sm:pb-16">
-        {/* Animated background blobs */}
-        <div className="absolute top-0 left-5% w-96 h-96 bg-gradient-to-br from-rose-200/40 to-pink-200/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 right-5% w-80 h-80 bg-gradient-to-tl from-purple-200/30 to-pink-100/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
-        <div className="absolute top-1/3 right-20 w-64 h-64 bg-gradient-to-bl from-gold-100/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "2s" }} />
-
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            {/* MEGA HEADLINE */}
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tighter mb-4 leading-tight font-[family-name:var(--font-heading)]">
-              <span className="block">Maquiagem Profissional</span>
-              <span className="block bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 bg-clip-text text-transparent">
-                Por Preços Imbatíveis
-              </span>
-            </h1>
-
-            {/* PRICE HIGHLIGHT */}
-            <div className="mb-6 flex flex-wrap items-center justify-center gap-3">
-              <span className="text-base sm:text-xl text-gray-600 line-through">
-                De R$18,99
-              </span>
-              <span className="text-4xl sm:text-5xl font-black bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">
-                R$ 6,99
-              </span>
-              <span className="text-sm sm:text-base font-bold bg-gold-400 text-rose-900 px-3 py-1 rounded-full animate-bounce">
-                -63% OFF
-              </span>
-            </div>
-
-            <p className="text-lg sm:text-xl text-gray-700 mb-6 max-w-2xl mx-auto font-medium">
-              Leve <span className="font-black text-rose-600">4+ itens</span> e pague ainda <span className="font-black text-rose-600">menos</span>
-            </p>
-
-            {/* BIG COUNTDOWN */}
-            <div className="mb-8 p-6 bg-white/80 backdrop-blur-lg rounded-3xl border-2 border-rose-200 shadow-2xl shadow-rose-200/50 w-fit mx-auto">
-              <p className="text-xs sm:text-sm text-gray-600 font-bold mb-3 uppercase tracking-wider">⏰ Oferta termina em:</p>
-              <CountdownTimer />
-            </div>
-
-            {/* TRUST BADGES - Right under hero */}
-            <div className="mb-8 flex flex-wrap items-center justify-center gap-4 sm:gap-6">
-              <div className="flex items-center gap-2 bg-white/70 backdrop-blur px-4 py-2 rounded-full border border-green-200">
-                <span className="text-2xl">✓</span>
-                <span className="text-sm font-semibold text-gray-700">100% Seguro</span>
-              </div>
-              <div className="flex items-center gap-2 bg-white/70 backdrop-blur px-4 py-2 rounded-full border border-blue-200">
-                <span className="text-2xl">🚚</span>
-                <span className="text-sm font-semibold text-gray-700">Entrega 24h</span>
-              </div>
-              <div className="flex items-center gap-2 bg-white/70 backdrop-blur px-4 py-2 rounded-full border border-purple-200">
-                <span className="text-2xl">↩️</span>
-                <span className="text-sm font-semibold text-gray-700">Devolução 30d</span>
-              </div>
-            </div>
-
-            {/* BUTTONS CONTAINER */}
-            <div className="flex flex-col gap-4 items-center justify-center mt-8">
-              {/* PRIMARY CTA - HUGE */}
-              <a
-                href="#produtos"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-black px-8 sm:px-12 py-5 rounded-2xl shadow-2xl shadow-rose-600/40 hover:shadow-2xl hover:shadow-rose-600/60 transition-all transform hover:scale-105 active:scale-95 text-lg sm:text-xl w-full sm:w-auto justify-center"
-              >
-                <span>Ver Oferta Especial</span>
-                <span className="text-2xl animate-pulse">→</span>
-              </a>
-
-              {/* SHOPEE BUTTON - ABAIXO do botão principal */}
-              <a
-                href="https://shopee.com.br/leticia.guardian?entryPoint=ShopByPDP&tab=product"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2.5 text-white font-bold px-7 sm:px-8 py-4 rounded-2xl shadow-lg transition-all transform hover:scale-105 active:scale-95 w-full sm:w-auto justify-center text-sm sm:text-base"
-                style={{ backgroundColor: "#EE4D2D" }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#D63D1A"}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "#EE4D2D"}
-              >
-                <img src="/shopee-logo.svg" alt="Shopee" className="w-6 h-6" />
-                <span>Veja também nossa loja na Shopee</span>
-              </a>
-            </div>
-
-            {/* SOCIAL PROOF - Stars & Testimonial Count */}
-            <div className="mt-8 flex flex-col items-center gap-3">
-              <div className="flex items-center gap-1">
-                {[1, 2, 3, 4, 5].map((s) => (
-                  <span key={s} className="text-2xl">⭐</span>
-                ))}
-              </div>
-              <p className="text-gray-700 font-semibold">
-                <span className="text-rose-600 font-black">4.9/5</span> — <span className="text-gray-600">+500 clientes</span>
-              </p>
-              <p className="text-xs text-gray-500">
-                ✓ Pagamento 100% Seguro | ✓ Entrega Rastreada | ✓ Suporte 24/7
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Hero Carousel: 4 slides com autoplay de 5s — Ruby Rose, hero principal, Vivai Ultra Black, Pó Banana Fenzza */}
+      <HeroCarousel products={products} />
 
       {/* CATEGORIES - Modern Pills */}
       <section className="py-8 bg-white border-b-2 border-rose-100">
