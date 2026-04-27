@@ -120,7 +120,7 @@ function ShopeeLink({ tabIndex }: { tabIndex: number }) {
 function MainHeroSlide({ isActive }: { isActive: boolean }) {
   const tab = isActive ? 0 : -1;
   return (
-    <div className="relative h-full overflow-hidden bg-gradient-to-b from-rose-50 via-pink-50 to-white pt-8 pb-12 sm:pt-12 sm:pb-16">
+    <div className="relative overflow-hidden bg-gradient-to-b from-rose-50 via-pink-50 to-white pt-8 pb-12 sm:pt-12 sm:pb-16">
       <div className="absolute top-0 left-[5%] w-96 h-96 bg-gradient-to-br from-rose-200/40 to-pink-200/20 rounded-full blur-3xl animate-pulse" />
       <div
         className="absolute bottom-0 right-[5%] w-80 h-80 bg-gradient-to-tl from-purple-200/30 to-pink-100/20 rounded-full blur-3xl animate-pulse"
@@ -294,7 +294,7 @@ function ProductSlide({
 
   return (
     <div
-      className={`relative h-full overflow-hidden ${theme.surface} pt-8 pb-12 sm:pt-12 sm:pb-16`}
+      className={`relative overflow-hidden ${theme.surface} pt-8 pb-12 sm:pt-12 sm:pb-16`}
     >
       <div
         className={`absolute top-0 left-[5%] w-96 h-96 ${theme.blob1} rounded-full blur-3xl animate-pulse`}
@@ -571,7 +571,7 @@ export default function HeroCarousel({ products }: HeroCarouselProps) {
   return (
     <section
       ref={containerRef}
-      className="relative isolate overflow-hidden"
+      className="relative isolate"
       aria-roledescription="carousel"
       aria-label="Ofertas em destaque"
       onMouseEnter={() => setPaused(true)}
@@ -582,7 +582,8 @@ export default function HeroCarousel({ products }: HeroCarouselProps) {
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
     >
-      <div className="relative min-h-[860px] sm:min-h-[880px] lg:min-h-[920px]">
+      {/* CSS grid stacking: all slides share the same cell, tallest drives height */}
+      <div className="grid">
         {slides.map((slide, i) => {
           const isActive = i === safeCurrent;
           return (
@@ -592,7 +593,7 @@ export default function HeroCarousel({ products }: HeroCarouselProps) {
               aria-roledescription="slide"
               aria-label={`${slide.label} (${i + 1} de ${total})`}
               aria-hidden={!isActive}
-              className={`absolute inset-0 transition-opacity ease-in-out ${
+              className={`[grid-area:1/1] transition-opacity ease-in-out ${
                 isActive
                   ? "opacity-100 z-10 pointer-events-auto"
                   : "opacity-0 z-0 pointer-events-none"
@@ -605,13 +606,49 @@ export default function HeroCarousel({ products }: HeroCarouselProps) {
         })}
       </div>
 
+      {/* Dots navigation — in normal flow below slides, never overlaps content */}
+      {total > 1 && (
+        <div className="relative z-20 flex justify-center py-5">
+          <div className="flex items-center gap-2.5 bg-white/80 backdrop-blur-md rounded-full px-3 py-2 shadow-xl border-2 border-rose-200">
+            {slides.map((slide, i) => {
+              const isActive = i === safeCurrent;
+              return (
+                <button
+                  key={slide.key}
+                  type="button"
+                  onClick={() => goTo(i)}
+                  aria-label={`Ir para slide ${i + 1}: ${slide.label}`}
+                  aria-current={isActive ? "true" : "false"}
+                  className={`relative h-2 rounded-full overflow-hidden transition-all duration-500 ${
+                    isActive
+                      ? "w-10 bg-rose-100"
+                      : "w-2 bg-rose-300/60 hover:bg-rose-400/80"
+                  }`}
+                >
+                  {isActive && !paused && (
+                    <span
+                      key={`progress-${safeCurrent}`}
+                      className="absolute inset-y-0 left-0 bg-gradient-to-r from-rose-600 to-pink-600 carousel-progress"
+                    />
+                  )}
+                  {isActive && paused && (
+                    <span className="absolute inset-0 bg-gradient-to-r from-rose-600 to-pink-600" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Arrow buttons — positioned relative to the whole section */}
       {total > 1 && (
         <>
           <button
             type="button"
             onClick={prev}
             aria-label="Slide anterior"
-            className="hidden sm:flex absolute left-3 lg:left-5 top-1/2 -translate-y-1/2 z-20 h-12 w-12 items-center justify-center rounded-full bg-white/90 backdrop-blur-md text-rose-600 shadow-2xl border-2 border-rose-200 hover:bg-white hover:scale-110 hover:shadow-2xl transition-all active:scale-95"
+            className="hidden sm:flex absolute left-3 lg:left-5 top-[45%] -translate-y-1/2 z-20 h-12 w-12 items-center justify-center rounded-full bg-white/90 backdrop-blur-md text-rose-600 shadow-2xl border-2 border-rose-200 hover:bg-white hover:scale-110 hover:shadow-2xl transition-all active:scale-95"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -632,7 +669,7 @@ export default function HeroCarousel({ products }: HeroCarouselProps) {
             type="button"
             onClick={next}
             aria-label="Próximo slide"
-            className="hidden sm:flex absolute right-3 lg:right-5 top-1/2 -translate-y-1/2 z-20 h-12 w-12 items-center justify-center rounded-full bg-white/90 backdrop-blur-md text-rose-600 shadow-2xl border-2 border-rose-200 hover:bg-white hover:scale-110 hover:shadow-2xl transition-all active:scale-95"
+            className="hidden sm:flex absolute right-3 lg:right-5 top-[45%] -translate-y-1/2 z-20 h-12 w-12 items-center justify-center rounded-full bg-white/90 backdrop-blur-md text-rose-600 shadow-2xl border-2 border-rose-200 hover:bg-white hover:scale-110 hover:shadow-2xl transition-all active:scale-95"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -650,38 +687,6 @@ export default function HeroCarousel({ products }: HeroCarouselProps) {
             </svg>
           </button>
         </>
-      )}
-
-      {total > 1 && (
-        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2.5 bg-white/80 backdrop-blur-md rounded-full px-3 py-2 shadow-xl border-2 border-rose-200">
-          {slides.map((slide, i) => {
-            const isActive = i === safeCurrent;
-            return (
-              <button
-                key={slide.key}
-                type="button"
-                onClick={() => goTo(i)}
-                aria-label={`Ir para slide ${i + 1}: ${slide.label}`}
-                aria-current={isActive ? "true" : "false"}
-                className={`relative h-2 rounded-full overflow-hidden transition-all duration-500 ${
-                  isActive
-                    ? "w-10 bg-rose-100"
-                    : "w-2 bg-rose-300/60 hover:bg-rose-400/80"
-                }`}
-              >
-                {isActive && !paused && (
-                  <span
-                    key={`progress-${safeCurrent}`}
-                    className="absolute inset-y-0 left-0 bg-gradient-to-r from-rose-600 to-pink-600 carousel-progress"
-                  />
-                )}
-                {isActive && paused && (
-                  <span className="absolute inset-0 bg-gradient-to-r from-rose-600 to-pink-600" />
-                )}
-              </button>
-            );
-          })}
-        </div>
       )}
     </section>
   );
