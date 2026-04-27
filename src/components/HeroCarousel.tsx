@@ -120,7 +120,7 @@ function ShopeeLink({ tabIndex }: { tabIndex: number }) {
 function MainHeroSlide({ isActive }: { isActive: boolean }) {
   const tab = isActive ? 0 : -1;
   return (
-    <div className="relative overflow-hidden bg-gradient-to-b from-rose-50 via-pink-50 to-white pt-8 pb-12 sm:pt-12 sm:pb-16">
+    <div className="relative overflow-hidden bg-gradient-to-b from-rose-50 via-pink-50 to-white pt-8 pb-12 sm:pt-12 sm:pb-16 h-full flex flex-col justify-center">
       <div className="absolute top-0 left-[5%] w-96 h-96 bg-gradient-to-br from-rose-200/40 to-pink-200/20 rounded-full blur-3xl animate-pulse" />
       <div
         className="absolute bottom-0 right-[5%] w-80 h-80 bg-gradient-to-tl from-purple-200/30 to-pink-100/20 rounded-full blur-3xl animate-pulse"
@@ -294,7 +294,7 @@ function ProductSlide({
 
   return (
     <div
-      className={`relative overflow-hidden ${theme.surface} pt-8 pb-12 sm:pt-12 sm:pb-16`}
+      className={`relative overflow-hidden ${theme.surface} pt-8 pb-12 sm:pt-12 sm:pb-16 h-full flex flex-col justify-center`}
     >
       <div
         className={`absolute top-0 left-[5%] w-96 h-96 ${theme.blob1} rounded-full blur-3xl animate-pulse`}
@@ -428,67 +428,151 @@ export default function HeroCarousel({ products }: HeroCarouselProps) {
   );
 
   const slides = useMemo<SlideConfig[]>(() => {
-    const ruby = productMap.get("sombra-sobrancelha");
-    const vivai = productMap.get("delineador-vivai-ultra-black");
-    const banana = productMap.get("po-de-banana");
+    const productSlideConfigs: {
+      slug: string;
+      label: string;
+      theme: ProductSlideTheme;
+      pillLabel: string;
+      headlinePrefix: string;
+      tagline: string;
+    }[] = [
+      {
+        slug: "sombra-sobrancelha",
+        label: "Paleta Ruby Rose em oferta",
+        theme: THEME_RUBY,
+        pillLabel: "✨ Destaque Ruby Rose",
+        headlinePrefix: "Em Oferta:",
+        tagline:
+          "Sobrancelhas marcantes e bem desenhadas. Tons versáteis para corrigir falhas e definir com acabamento profissional.",
+      },
+      {
+        slug: "delineador-vivai-ultra-black",
+        label: "Delineador Vivai Ultra Black em oferta",
+        theme: THEME_NOIR,
+        pillLabel: "🖤 Destaque Vivai",
+        headlinePrefix: "Traço Marcante:",
+        tagline:
+          "Pigmentação ultra black, secagem rápida e ultra fixação. O delineado preciso que dura o dia inteiro sem borrar.",
+      },
+      {
+        slug: "po-de-banana",
+        label: "Pó Banana Fenzza em oferta",
+        theme: THEME_GOLD,
+        pillLabel: "🍌 Destaque Fenzza",
+        headlinePrefix: "Acabamento Matte:",
+        tagline:
+          "Sela base e corretivo, controla a oleosidade e deixa a pele lisa e iluminada por horas. Fórmula translúcida.",
+      },
+      {
+        slug: "cilios-posticos-aurora-5d",
+        label: "Cílios Aurora 5D em oferta",
+        theme: THEME_NOIR,
+        pillLabel: "👁️ Destaque Aurora",
+        headlinePrefix: "Olhar Marcante:",
+        tagline:
+          "Volume e definição com efeito 5D. Cílios cheios, alongados e leves para um olhar irresistível.",
+      },
+      {
+        slug: "mascara-cilios-maxlove",
+        label: "Máscara de Cílios Maxlove em oferta",
+        theme: THEME_RUBY,
+        pillLabel: "💖 Destaque Maxlove",
+        headlinePrefix: "Cílios Perfeitos:",
+        tagline:
+          "Mega alongamento e volume com biotina e vitamina E. Fórmula que fortalece e auxilia no crescimento dos cílios.",
+      },
+      {
+        slug: "cola-cilios-lua-neve",
+        label: "Cola para Cílios Lua&Neve em oferta",
+        theme: THEME_GOLD,
+        pillLabel: "✨ Destaque Lua&Neve",
+        headlinePrefix: "Fixação Profissional:",
+        tagline:
+          "Cola branca que seca transparente. Super fixação à prova d'água, mantém os cílios firmes o dia inteiro.",
+      },
+      {
+        slug: "paleta-multifuncional",
+        label: "Paleta Multifuncional Dapop em oferta",
+        theme: THEME_RUBY,
+        pillLabel: "🌸 Destaque Dapop",
+        headlinePrefix: "Beleza Versátil:",
+        tagline:
+          "Contorno, blush e iluminador na mesma paleta. Textura aveludada, vegana e fácil de esfumar.",
+      },
+      {
+        slug: "gloss-magico-bellafeme",
+        label: "Gloss Mágico Bellafeme em oferta",
+        theme: THEME_RUBY,
+        pillLabel: "💋 Destaque Bellafeme",
+        headlinePrefix: "Lábios Mágicos:",
+        tagline:
+          "Muda de cor ao contato com seus lábios. Hidratação com partículas douradas e brilho sofisticado.",
+      },
+      {
+        slug: "lip-gloss-vivai-cute-gloss",
+        label: "Lip Gloss Vivai Cute Gloss em oferta",
+        theme: THEME_GOLD,
+        pillLabel: "🦄 Destaque Vivai Cute",
+        headlinePrefix: "Brilho Divertido:",
+        tagline:
+          "Lip gloss com personagens fofíssimos. Brilho intenso, hidratação leve e estilo único no dia a dia.",
+      },
+      {
+        slug: "lip-oil-mahav-cereja-morango",
+        label: "Lip Oil Mahav em oferta",
+        theme: THEME_NOIR,
+        pillLabel: "🍒 Destaque Mahav",
+        headlinePrefix: "Hidratação com Brilho:",
+        tagline:
+          "Lip oil com aromas de cereja e morango. Brilho natural e textura leve, sem pegajoso.",
+      },
+      {
+        slug: "esponja-maquiagem-gota",
+        label: "Esponja de Maquiagem Gota em oferta",
+        theme: THEME_GOLD,
+        pillLabel: "🎨 Destaque Esponja",
+        headlinePrefix: "Acabamento Perfeito:",
+        tagline:
+          "Esponja 2 em 1 chanfrada e em gota. Espalha base, corretivo e pó com precisão e maciez.",
+      },
+    ];
+
+    const buildProductSlide = (cfg: (typeof productSlideConfigs)[number]) => {
+      const product = productMap.get(cfg.slug);
+      if (!product) return null;
+      return {
+        key: cfg.slug,
+        label: cfg.label,
+        render: (isActive: boolean) => (
+          <ProductSlide
+            isActive={isActive}
+            product={product}
+            theme={cfg.theme}
+            pillLabel={cfg.pillLabel}
+            headlinePrefix={cfg.headlinePrefix}
+            tagline={cfg.tagline}
+          />
+        ),
+      } as SlideConfig;
+    };
 
     const items: SlideConfig[] = [];
 
-    if (ruby) {
-      items.push({
-        key: "ruby",
-        label: "Paleta Ruby Rose em oferta",
-        render: (isActive) => (
-          <ProductSlide
-            isActive={isActive}
-            product={ruby}
-            theme={THEME_RUBY}
-            pillLabel="✨ Destaque Ruby Rose"
-            headlinePrefix="Em Oferta:"
-            tagline="Sobrancelhas marcantes e bem desenhadas. Tons versáteis para corrigir falhas e definir com acabamento profissional."
-          />
-        ),
-      });
-    }
+    // First slide: Ruby Rose
+    const ruby = buildProductSlide(productSlideConfigs[0]);
+    if (ruby) items.push(ruby);
 
+    // Second slide: main hero
     items.push({
       key: "main",
       label: "Maquiagem profissional por preços imbatíveis",
       render: (isActive) => <MainHeroSlide isActive={isActive} />,
     });
 
-    if (vivai) {
-      items.push({
-        key: "vivai",
-        label: "Delineador Vivai Ultra Black em oferta",
-        render: (isActive) => (
-          <ProductSlide
-            isActive={isActive}
-            product={vivai}
-            theme={THEME_NOIR}
-            pillLabel="🖤 Destaque Vivai"
-            headlinePrefix="Traço Marcante:"
-            tagline="Pigmentação ultra black, secagem rápida e ultra fixação. O delineado preciso que dura o dia inteiro sem borrar."
-          />
-        ),
-      });
-    }
-
-    if (banana) {
-      items.push({
-        key: "banana",
-        label: "Pó Banana Fenzza em oferta",
-        render: (isActive) => (
-          <ProductSlide
-            isActive={isActive}
-            product={banana}
-            theme={THEME_GOLD}
-            pillLabel="🍌 Destaque Fenzza"
-            headlinePrefix="Acabamento Matte:"
-            tagline="Sela base e corretivo, controla a oleosidade e deixa a pele lisa e iluminada por horas. Fórmula translúcida."
-          />
-        ),
-      });
+    // Remaining product slides
+    for (const cfg of productSlideConfigs.slice(1)) {
+      const slide = buildProductSlide(cfg);
+      if (slide) items.push(slide);
     }
 
     return items;
