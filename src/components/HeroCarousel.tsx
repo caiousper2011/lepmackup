@@ -327,12 +327,12 @@ function ProductSlide({
           </h1>
 
           {/* Product image medallion */}
-          <div className="relative mx-auto mb-6 w-40 h-40 sm:w-48 sm:h-48">
+          <Link href={`/produto/${product.slug}`} tabIndex={tab} className="relative mx-auto mb-6 w-40 h-40 sm:w-48 sm:h-48 block group/img">
             <div
               className={`absolute inset-0 -m-4 bg-gradient-to-br ${theme.imageGlow} rounded-full blur-2xl`}
             />
             <div
-              className={`relative w-full h-full rounded-full overflow-hidden shadow-2xl ring-4 ${theme.imageRing} bg-white/40 backdrop-blur-sm`}
+              className={`relative w-full h-full rounded-full overflow-hidden shadow-2xl ring-4 ${theme.imageRing} bg-white/40 backdrop-blur-sm group-hover/img:ring-rose-400 transition-all duration-300`}
             >
               <Image
                 src={product.images[0]}
@@ -340,7 +340,7 @@ function ProductSlide({
                 fill
                 priority={isActive}
                 sizes="(max-width: 640px) 160px, 192px"
-                className="object-cover"
+                className="object-cover group-hover/img:scale-110 transition-transform duration-300"
               />
             </div>
             <div
@@ -348,7 +348,7 @@ function ProductSlide({
             >
               -{offPercent}% OFF
             </div>
-          </div>
+          </Link>
 
           {/* Price block */}
           <div className="mb-6 flex flex-wrap items-center justify-center gap-3">
