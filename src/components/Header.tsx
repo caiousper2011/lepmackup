@@ -46,44 +46,54 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    function handleResize() {
+      if (window.innerWidth >= 768) {
+        setMobileOpen(false);
+      }
+    }
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-white/95 backdrop-blur-xl shadow-lg shadow-berry-600/5"
-          : "bg-white/80 backdrop-blur-xl"
-      } border-b border-rose-100/60`}
+          ? "bg-white/95 backdrop-blur-xl shadow-[0_1px_0_rgba(155,27,90,0.04)]"
+          : "bg-background/95 backdrop-blur-xl"
+      } border-b border-rose-100/90`}
     >
-      {/* Promo banner */}
-      <div className="shimmer-bg text-white text-center py-2 text-xs font-semibold tracking-wide">
-        <span className="inline-flex items-center gap-1.5">
-          <span className="animate-pulse">✨</span>
-          MEGA PROMOÇÃO — Todos por R$ 7,99 | Acima de 4 itens: R$ 6,99 cada!
-          <span className="animate-pulse">✨</span>
+      {/* Promo banner — shimmer */}
+      <div className="shimmer-bg text-white text-center py-2.5 px-4 text-xs sm:text-sm font-bold tracking-wide">
+        <span className="inline-flex items-center gap-1.5 flex-wrap justify-center">
+          <span>⚡</span>
+          <span className="font-black">OFERTA RELÂMPAGO AGORA</span>
+          <span className="opacity-70">·</span>
+          <span>-63% EM TUDO</span>
+          <span className="opacity-70">·</span>
+          <span>ESTOQUES ACABANDO 🔥</span>
         </span>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-17 md:h-19 gap-4 md:gap-6">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="relative w-10 h-10 rounded-full overflow-hidden shadow-lg ring-2 ring-rose-200/50 group-hover:ring-berry-600/30 transition-all group-hover:scale-105">
+          <Link href="/" className="flex items-center gap-3 group shrink-0">
+            <div className="lp-brand-mark relative w-12 h-12 ring-2 ring-rose-200/60 group-hover:ring-rose-300/80 transition-all duration-300 group-hover:scale-105">
               <Image
-                src="/favicon.png"
+                src="/brand/logo-lp-circle.png"
                 alt="L&PMakeUp"
                 fill
-                sizes="40px"
+                sizes="48px"
                 className="object-cover"
                 priority
               />
             </div>
-            <div className="flex flex-col">
-              <span className="text-lg font-bold font-[family-name:var(--font-heading)] bg-gradient-to-r from-berry-600 to-rose-500 bg-clip-text text-transparent">
-                L&PMakeUp
-              </span>
-              <span className="text-[10px] text-gold-500 -mt-1 tracking-[0.2em] uppercase font-medium">
-                Beauty Store
-              </span>
+            <div className="flex flex-col leading-none">
+              <span className="lp-brand-wordmark text-[24px]">L&PMakeUp</span>
+              <span className="lp-brand-tagline">Beauty Store</span>
             </div>
           </Link>
 
@@ -94,15 +104,15 @@ export default function Header() {
           >
             <Link
               href="/"
-              className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-berry-600 hover:bg-rose-50/60 transition-all"
+              className="px-3.5 py-2 rounded-xl text-sm font-semibold text-gray-700 hover:text-berry-600 hover:bg-white transition-all"
             >
               Início
             </Link>
             <Link
               href="/#produtos"
-              className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-berry-600 hover:bg-rose-50/60 transition-all"
+              className="px-3.5 py-2 rounded-xl text-sm font-semibold text-gray-700 hover:text-berry-600 hover:bg-white transition-all"
             >
-              Produtos
+              Ofertas
             </Link>
             <div className="relative" ref={categoriesRef}>
               <button
@@ -110,7 +120,7 @@ export default function Header() {
                 onClick={() => setCategoriesOpen((v) => !v)}
                 aria-haspopup="menu"
                 aria-expanded={categoriesOpen}
-                className="px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-berry-600 hover:bg-rose-50/60 transition-all flex items-center gap-1"
+                className="px-3.5 py-2 rounded-xl text-sm font-semibold text-gray-700 hover:text-berry-600 hover:bg-white transition-all flex items-center gap-1.5"
               >
                 Categorias
                 <svg
@@ -131,7 +141,7 @@ export default function Header() {
               {categoriesOpen && (
                 <div
                   role="menu"
-                  className="absolute left-1/2 -translate-x-1/2 mt-2 w-60 bg-white rounded-2xl shadow-2xl shadow-berry-600/10 border border-rose-100/60 py-2 z-50"
+                  className="absolute left-1/2 -translate-x-1/2 mt-3 w-64 bg-white rounded-3xl shadow-[0_20px_40px_-12px_rgba(155,27,90,0.18)] border border-rose-100/60 py-2 z-50"
                 >
                   {CATEGORIES.map((c) => (
                     <Link
@@ -139,7 +149,7 @@ export default function Header() {
                       href={`/categoria/${c.slug}`}
                       onClick={() => setCategoriesOpen(false)}
                       role="menuitem"
-                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-600 hover:bg-gradient-to-r hover:from-rose-50 hover:to-transparent hover:text-berry-600 transition-all"
+                      className="flex items-center gap-2.5 px-4 py-3 text-sm text-gray-700 hover:bg-linear-to-r hover:from-rose-50 hover:to-transparent hover:text-berry-600 transition-all"
                     >
                       <span aria-hidden="true" className="text-base">
                         {c.emoji}
@@ -150,23 +160,29 @@ export default function Header() {
                 </div>
               )}
             </div>
-            <Link
-              href="/#promo"
-              className="px-3 py-2 rounded-lg text-sm font-semibold text-berry-600 hover:bg-berry-600/5 transition-all flex items-center gap-1"
-            >
-              <span className="text-xs">🔥</span>
-              Promoção
-            </Link>
             <a
               href="https://shopee.com.br/leticia.guardian?entryPoint=ShopByPDP&tab=product"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-4 py-2 rounded-lg text-sm font-bold text-white transition-all flex items-center gap-1.5 shadow-md"
+              className="px-4 py-2.5 rounded-full text-sm font-bold text-white transition-all flex items-center gap-1 shadow-[0_8px_16px_-4px_rgba(238,77,45,0.35)] hover:shadow-[0_12px_24px_-6px_rgba(238,77,45,0.45)]"
               style={{ backgroundColor: "#EE4D2D" }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#D63D1A"}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "#EE4D2D"}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.backgroundColor = "#D63D1A")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.backgroundColor = "#EE4D2D")
+              }
             >
-              <img src="/shopee-logo.svg" alt="Shopee" className="w-4 h-4" />
+              <Image
+                src="/shopee-logo.png?v=white"
+                alt=""
+                aria-hidden="true"
+                width={24}
+                height={24}
+                sizes="24px"
+                unoptimized
+                className="h-6 w-6 object-contain shrink-0"
+              />
               Shopee
             </a>
           </nav>
@@ -177,12 +193,12 @@ export default function Header() {
               <div className="relative" ref={userMenuRef}>
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="p-2.5 rounded-full bg-rose-50/80 hover:bg-rose-100 transition-all group"
+                  className="lp-icon-btn"
                   aria-label="Minha conta"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-berry-600"
+                    className="h-5 w-5 text-gray-900"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -196,7 +212,7 @@ export default function Header() {
                   </svg>
                 </button>
                 {userMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-60 bg-white rounded-2xl shadow-2xl shadow-berry-600/10 border border-rose-100/60 py-2 z-50">
+                  <div className="absolute right-0 mt-3 w-64 bg-white rounded-3xl shadow-[0_20px_40px_-12px_rgba(155,27,90,0.18)] border border-rose-100/60 py-2 z-50">
                     <div className="px-4 py-3 border-b border-rose-100/60">
                       <p className="text-sm font-semibold text-gray-900 truncate">
                         {user.name || user.email}
@@ -298,7 +314,7 @@ export default function Header() {
             ) : (
               <button
                 onClick={() => openLogin()}
-                className="hidden md:flex items-center gap-1.5 px-4 py-2 rounded-full bg-rose-50/80 hover:bg-rose-100 text-berry-600 text-sm font-medium transition-all hover:shadow-md hover:shadow-berry-600/10"
+                className="hidden md:inline-flex items-center gap-1.5 px-4 h-11 rounded-full border-2 border-rose-200 bg-white hover:border-rose-300 hover:text-berry-600 text-gray-900 text-sm font-semibold transition-all"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -321,12 +337,12 @@ export default function Header() {
             {/* Cart */}
             <button
               onClick={() => setIsOpen(true)}
-              className="relative p-2.5 rounded-full bg-gradient-to-br from-berry-600 to-rose-500 hover:from-berry-700 hover:to-rose-600 transition-all group shadow-lg shadow-berry-600/20 hover:shadow-xl hover:shadow-berry-600/30 hover:scale-105"
+              className="lp-icon-btn relative"
               aria-label="Abrir carrinho"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-white"
+                className="h-5 w-5"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -339,7 +355,7 @@ export default function Header() {
                 />
               </svg>
               {totalQuantity > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 bg-gold-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center ring-2 ring-white">
+                <span className="absolute -top-1.5 -right-1.5 bg-linear-to-br from-gold-500 to-gold-600 text-white text-[10px] font-black min-w-5 h-5 px-1.5 rounded-full flex items-center justify-center ring-2 ring-white">
                   {totalQuantity}
                 </span>
               )}
@@ -348,7 +364,7 @@ export default function Header() {
             {/* Mobile menu toggle */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-rose-50/60 transition-all"
+              className="lp-icon-btn inline-flex! md:hidden!"
               aria-label="Menu"
             >
               <svg
@@ -381,21 +397,21 @@ export default function Header() {
         {mobileOpen && (
           <nav
             aria-label="Mobile"
-            className="md:hidden pb-4 border-t border-rose-100/60 pt-4 flex flex-col gap-1"
+            className="md:hidden pb-4 border-t border-rose-100/60 pt-4 px-4 sm:px-6 bg-white/95 backdrop-blur-xl flex flex-col gap-1"
           >
             <Link
               href="/"
               onClick={() => setMobileOpen(false)}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:text-berry-600 hover:bg-rose-50/60 transition-all"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-semibold text-gray-700 hover:text-berry-600 hover:bg-rose-50/60 transition-all"
             >
               Início
             </Link>
             <Link
               href="/#produtos"
               onClick={() => setMobileOpen(false)}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:text-berry-600 hover:bg-rose-50/60 transition-all"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-semibold text-gray-700 hover:text-berry-600 hover:bg-rose-50/60 transition-all"
             >
-              Produtos
+              Ofertas
             </Link>
             <div className="px-3 py-2">
               <p className="text-[10px] uppercase tracking-[0.15em] text-gold-500 font-semibold mb-2 px-1">
@@ -407,7 +423,7 @@ export default function Header() {
                     key={c.slug}
                     href={`/categoria/${c.slug}`}
                     onClick={() => setMobileOpen(false)}
-                    className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm text-gray-600 hover:text-berry-600 bg-rose-50/40 hover:bg-rose-50 transition-all"
+                    className="flex items-center gap-2 px-3 py-2.5 rounded-2xl text-sm text-gray-700 hover:text-berry-600 bg-rose-50/40 hover:bg-rose-50 transition-all"
                   >
                     <span aria-hidden="true">{c.emoji}</span>
                     <span className="truncate">{c.dbName}</span>
@@ -415,24 +431,30 @@ export default function Header() {
                 ))}
               </div>
             </div>
-            <Link
-              href="/#promo"
-              onClick={() => setMobileOpen(false)}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-berry-600 hover:bg-berry-600/5 transition-all"
-            >
-              🔥 Promoção
-            </Link>
             <a
               href="https://shopee.com.br/leticia.guardian?entryPoint=ShopByPDP&tab=product"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setMobileOpen(false)}
-              className="flex items-center gap-3 mx-1 px-4 py-2.5 rounded-xl text-sm font-bold text-white transition-all shadow-md"
+              className="flex items-center gap-3 mx-1 px-4 py-3 rounded-full text-sm font-bold text-white transition-all shadow-[0_8px_16px_-4px_rgba(238,77,45,0.35)]"
               style={{ backgroundColor: "#EE4D2D" }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#D63D1A"}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "#EE4D2D"}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.backgroundColor = "#D63D1A")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.backgroundColor = "#EE4D2D")
+              }
             >
-              <img src="/shopee-logo.svg" alt="Shopee" className="w-4 h-4" />
+              <Image
+                src="/shopee-logo.png?v=white"
+                alt=""
+                aria-hidden="true"
+                width={24}
+                height={24}
+                sizes="24px"
+                unoptimized
+                className="h-6 w-6 object-contain shrink-0"
+              />
               Shopee
             </a>
             {!user && (
@@ -441,7 +463,7 @@ export default function Header() {
                   setMobileOpen(false);
                   openLogin();
                 }}
-                className="mt-2 mx-1 gradient-cta text-white text-sm font-semibold rounded-2xl px-4 py-3 text-center shadow-lg shadow-berry-600/20 active:scale-[0.98] transition-transform"
+                className="mt-2 mx-1 lp-btn-primary text-sm"
               >
                 Entrar / Criar Conta
               </button>

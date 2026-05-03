@@ -8,7 +8,7 @@ export default function manifest(): MetadataRoute.Manifest {
       "Loja online de maquiagem profissional com preços imbatíveis. Cílios, delineadores, gloss e paletas a partir de R$ 6,99.",
     start_url: "/",
     display: "standalone",
-    background_color: "#ffffff",
+    background_color: "#fffaf8",
     theme_color: "#9b1b5a",
     icons: [
       {

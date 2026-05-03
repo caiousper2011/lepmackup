@@ -369,6 +369,7 @@ export type OrderWhereInput = {
   coupon?: Prisma.XOR<Prisma.CouponNullableScalarRelationFilter, Prisma.CouponWhereInput> | null
   items?: Prisma.OrderItemListRelationFilter
   webhookLogs?: Prisma.WebhookLogListRelationFilter
+  supportMessages?: Prisma.SupportMessageListRelationFilter
 }
 
 export type OrderOrderByWithRelationInput = {
@@ -399,6 +400,7 @@ export type OrderOrderByWithRelationInput = {
   coupon?: Prisma.CouponOrderByWithRelationInput
   items?: Prisma.OrderItemOrderByRelationAggregateInput
   webhookLogs?: Prisma.WebhookLogOrderByRelationAggregateInput
+  supportMessages?: Prisma.SupportMessageOrderByRelationAggregateInput
 }
 
 export type OrderWhereUniqueInput = Prisma.AtLeast<{
@@ -432,6 +434,7 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   coupon?: Prisma.XOR<Prisma.CouponNullableScalarRelationFilter, Prisma.CouponWhereInput> | null
   items?: Prisma.OrderItemListRelationFilter
   webhookLogs?: Prisma.WebhookLogListRelationFilter
+  supportMessages?: Prisma.SupportMessageListRelationFilter
 }, "id" | "orderNumber">
 
 export type OrderOrderByWithAggregationInput = {
@@ -517,6 +520,7 @@ export type OrderCreateInput = {
   coupon?: Prisma.CouponCreateNestedOneWithoutOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
   webhookLogs?: Prisma.WebhookLogCreateNestedManyWithoutOrderInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateInput = {
@@ -544,6 +548,7 @@ export type OrderUncheckedCreateInput = {
   updatedAt?: Date | string
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
   webhookLogs?: Prisma.WebhookLogUncheckedCreateNestedManyWithoutOrderInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUpdateInput = {
@@ -570,6 +575,7 @@ export type OrderUpdateInput = {
   coupon?: Prisma.CouponUpdateOneWithoutOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
   webhookLogs?: Prisma.WebhookLogUpdateManyWithoutOrderNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateInput = {
@@ -597,6 +603,7 @@ export type OrderUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   webhookLogs?: Prisma.WebhookLogUncheckedUpdateManyWithoutOrderNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderCreateManyInput = {
@@ -943,6 +950,20 @@ export type OrderUpdateOneWithoutWebhookLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrderUpdateToOneWithWhereWithoutWebhookLogsInput, Prisma.OrderUpdateWithoutWebhookLogsInput>, Prisma.OrderUncheckedUpdateWithoutWebhookLogsInput>
 }
 
+export type OrderCreateNestedOneWithoutSupportMessagesInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutSupportMessagesInput, Prisma.OrderUncheckedCreateWithoutSupportMessagesInput>
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutSupportMessagesInput
+  connect?: Prisma.OrderWhereUniqueInput
+}
+
+export type OrderUpdateOneRequiredWithoutSupportMessagesNestedInput = {
+  create?: Prisma.XOR<Prisma.OrderCreateWithoutSupportMessagesInput, Prisma.OrderUncheckedCreateWithoutSupportMessagesInput>
+  connectOrCreate?: Prisma.OrderCreateOrConnectWithoutSupportMessagesInput
+  upsert?: Prisma.OrderUpsertWithoutSupportMessagesInput
+  connect?: Prisma.OrderWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrderUpdateToOneWithWhereWithoutSupportMessagesInput, Prisma.OrderUpdateWithoutSupportMessagesInput>, Prisma.OrderUncheckedUpdateWithoutSupportMessagesInput>
+}
+
 export type OrderCreateWithoutUserInput = {
   id?: string
   orderNumber?: number
@@ -967,6 +988,7 @@ export type OrderCreateWithoutUserInput = {
   coupon?: Prisma.CouponCreateNestedOneWithoutOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
   webhookLogs?: Prisma.WebhookLogCreateNestedManyWithoutOrderInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutUserInput = {
@@ -993,6 +1015,7 @@ export type OrderUncheckedCreateWithoutUserInput = {
   updatedAt?: Date | string
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
   webhookLogs?: Prisma.WebhookLogUncheckedCreateNestedManyWithoutOrderInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutUserInput = {
@@ -1073,6 +1096,7 @@ export type OrderCreateWithoutAddressInput = {
   coupon?: Prisma.CouponCreateNestedOneWithoutOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
   webhookLogs?: Prisma.WebhookLogCreateNestedManyWithoutOrderInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutAddressInput = {
@@ -1099,6 +1123,7 @@ export type OrderUncheckedCreateWithoutAddressInput = {
   updatedAt?: Date | string
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
   webhookLogs?: Prisma.WebhookLogUncheckedCreateNestedManyWithoutOrderInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutAddressInput = {
@@ -1151,6 +1176,7 @@ export type OrderCreateWithoutItemsInput = {
   address?: Prisma.AddressCreateNestedOneWithoutOrdersInput
   coupon?: Prisma.CouponCreateNestedOneWithoutOrdersInput
   webhookLogs?: Prisma.WebhookLogCreateNestedManyWithoutOrderInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutItemsInput = {
@@ -1177,6 +1203,7 @@ export type OrderUncheckedCreateWithoutItemsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   webhookLogs?: Prisma.WebhookLogUncheckedCreateNestedManyWithoutOrderInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutItemsInput = {
@@ -1218,6 +1245,7 @@ export type OrderUpdateWithoutItemsInput = {
   address?: Prisma.AddressUpdateOneWithoutOrdersNestedInput
   coupon?: Prisma.CouponUpdateOneWithoutOrdersNestedInput
   webhookLogs?: Prisma.WebhookLogUpdateManyWithoutOrderNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutItemsInput = {
@@ -1244,6 +1272,7 @@ export type OrderUncheckedUpdateWithoutItemsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   webhookLogs?: Prisma.WebhookLogUncheckedUpdateManyWithoutOrderNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderCreateWithoutCouponInput = {
@@ -1270,6 +1299,7 @@ export type OrderCreateWithoutCouponInput = {
   address?: Prisma.AddressCreateNestedOneWithoutOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
   webhookLogs?: Prisma.WebhookLogCreateNestedManyWithoutOrderInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutCouponInput = {
@@ -1296,6 +1326,7 @@ export type OrderUncheckedCreateWithoutCouponInput = {
   updatedAt?: Date | string
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
   webhookLogs?: Prisma.WebhookLogUncheckedCreateNestedManyWithoutOrderInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutCouponInput = {
@@ -1348,6 +1379,7 @@ export type OrderCreateWithoutWebhookLogsInput = {
   address?: Prisma.AddressCreateNestedOneWithoutOrdersInput
   coupon?: Prisma.CouponCreateNestedOneWithoutOrdersInput
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutOrderInput
 }
 
 export type OrderUncheckedCreateWithoutWebhookLogsInput = {
@@ -1374,6 +1406,7 @@ export type OrderUncheckedCreateWithoutWebhookLogsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutOrderInput
 }
 
 export type OrderCreateOrConnectWithoutWebhookLogsInput = {
@@ -1415,6 +1448,7 @@ export type OrderUpdateWithoutWebhookLogsInput = {
   address?: Prisma.AddressUpdateOneWithoutOrdersNestedInput
   coupon?: Prisma.CouponUpdateOneWithoutOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutWebhookLogsInput = {
@@ -1441,6 +1475,130 @@ export type OrderUncheckedUpdateWithoutWebhookLogsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutOrderNestedInput
+}
+
+export type OrderCreateWithoutSupportMessagesInput = {
+  id?: string
+  orderNumber?: number
+  status?: $Enums.OrderStatus
+  subtotal: number
+  shipping?: number
+  discount?: number
+  total: number
+  paymentId?: string | null
+  paymentStatus?: $Enums.PaymentStatus
+  paymentMethod?: string | null
+  mercadoPagoId?: string | null
+  trackingCode?: string | null
+  trackingUrl?: string | null
+  shippingLabelUrl?: string | null
+  melhorEnvioShipmentId?: string | null
+  shippingMethod?: string | null
+  addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutOrdersInput
+  address?: Prisma.AddressCreateNestedOneWithoutOrdersInput
+  coupon?: Prisma.CouponCreateNestedOneWithoutOrdersInput
+  items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
+  webhookLogs?: Prisma.WebhookLogCreateNestedManyWithoutOrderInput
+}
+
+export type OrderUncheckedCreateWithoutSupportMessagesInput = {
+  id?: string
+  orderNumber?: number
+  userId: string
+  addressId?: string | null
+  status?: $Enums.OrderStatus
+  subtotal: number
+  shipping?: number
+  discount?: number
+  total: number
+  couponId?: string | null
+  paymentId?: string | null
+  paymentStatus?: $Enums.PaymentStatus
+  paymentMethod?: string | null
+  mercadoPagoId?: string | null
+  trackingCode?: string | null
+  trackingUrl?: string | null
+  shippingLabelUrl?: string | null
+  melhorEnvioShipmentId?: string | null
+  shippingMethod?: string | null
+  addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
+  webhookLogs?: Prisma.WebhookLogUncheckedCreateNestedManyWithoutOrderInput
+}
+
+export type OrderCreateOrConnectWithoutSupportMessagesInput = {
+  where: Prisma.OrderWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrderCreateWithoutSupportMessagesInput, Prisma.OrderUncheckedCreateWithoutSupportMessagesInput>
+}
+
+export type OrderUpsertWithoutSupportMessagesInput = {
+  update: Prisma.XOR<Prisma.OrderUpdateWithoutSupportMessagesInput, Prisma.OrderUncheckedUpdateWithoutSupportMessagesInput>
+  create: Prisma.XOR<Prisma.OrderCreateWithoutSupportMessagesInput, Prisma.OrderUncheckedCreateWithoutSupportMessagesInput>
+  where?: Prisma.OrderWhereInput
+}
+
+export type OrderUpdateToOneWithWhereWithoutSupportMessagesInput = {
+  where?: Prisma.OrderWhereInput
+  data: Prisma.XOR<Prisma.OrderUpdateWithoutSupportMessagesInput, Prisma.OrderUncheckedUpdateWithoutSupportMessagesInput>
+}
+
+export type OrderUpdateWithoutSupportMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
+  discount?: Prisma.FloatFieldUpdateOperationsInput | number
+  total?: Prisma.FloatFieldUpdateOperationsInput | number
+  paymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mercadoPagoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shippingLabelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  melhorEnvioShipmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shippingMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutOrdersNestedInput
+  address?: Prisma.AddressUpdateOneWithoutOrdersNestedInput
+  coupon?: Prisma.CouponUpdateOneWithoutOrdersNestedInput
+  items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
+  webhookLogs?: Prisma.WebhookLogUpdateManyWithoutOrderNestedInput
+}
+
+export type OrderUncheckedUpdateWithoutSupportMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderNumber?: Prisma.IntFieldUpdateOperationsInput | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  addressId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
+  discount?: Prisma.FloatFieldUpdateOperationsInput | number
+  total?: Prisma.FloatFieldUpdateOperationsInput | number
+  couponId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paymentMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mercadoPagoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  trackingUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shippingLabelUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  melhorEnvioShipmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shippingMethod?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  addressSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
+  webhookLogs?: Prisma.WebhookLogUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderCreateManyUserInput = {
@@ -1490,6 +1648,7 @@ export type OrderUpdateWithoutUserInput = {
   coupon?: Prisma.CouponUpdateOneWithoutOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
   webhookLogs?: Prisma.WebhookLogUpdateManyWithoutOrderNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutUserInput = {
@@ -1516,6 +1675,7 @@ export type OrderUncheckedUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   webhookLogs?: Prisma.WebhookLogUncheckedUpdateManyWithoutOrderNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateManyWithoutUserInput = {
@@ -1589,6 +1749,7 @@ export type OrderUpdateWithoutAddressInput = {
   coupon?: Prisma.CouponUpdateOneWithoutOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
   webhookLogs?: Prisma.WebhookLogUpdateManyWithoutOrderNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutAddressInput = {
@@ -1615,6 +1776,7 @@ export type OrderUncheckedUpdateWithoutAddressInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   webhookLogs?: Prisma.WebhookLogUncheckedUpdateManyWithoutOrderNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateManyWithoutAddressInput = {
@@ -1688,6 +1850,7 @@ export type OrderUpdateWithoutCouponInput = {
   address?: Prisma.AddressUpdateOneWithoutOrdersNestedInput
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
   webhookLogs?: Prisma.WebhookLogUpdateManyWithoutOrderNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateWithoutCouponInput = {
@@ -1714,6 +1877,7 @@ export type OrderUncheckedUpdateWithoutCouponInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
   webhookLogs?: Prisma.WebhookLogUncheckedUpdateManyWithoutOrderNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutOrderNestedInput
 }
 
 export type OrderUncheckedUpdateManyWithoutCouponInput = {
@@ -1748,11 +1912,13 @@ export type OrderUncheckedUpdateManyWithoutCouponInput = {
 export type OrderCountOutputType = {
   items: number
   webhookLogs: number
+  supportMessages: number
 }
 
 export type OrderCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   items?: boolean | OrderCountOutputTypeCountItemsArgs
   webhookLogs?: boolean | OrderCountOutputTypeCountWebhookLogsArgs
+  supportMessages?: boolean | OrderCountOutputTypeCountSupportMessagesArgs
 }
 
 /**
@@ -1777,6 +1943,13 @@ export type OrderCountOutputTypeCountItemsArgs<ExtArgs extends runtime.Types.Ext
  */
 export type OrderCountOutputTypeCountWebhookLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.WebhookLogWhereInput
+}
+
+/**
+ * OrderCountOutputType without action
+ */
+export type OrderCountOutputTypeCountSupportMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SupportMessageWhereInput
 }
 
 
@@ -1808,6 +1981,7 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   coupon?: boolean | Prisma.Order$couponArgs<ExtArgs>
   items?: boolean | Prisma.Order$itemsArgs<ExtArgs>
   webhookLogs?: boolean | Prisma.Order$webhookLogsArgs<ExtArgs>
+  supportMessages?: boolean | Prisma.Order$supportMessagesArgs<ExtArgs>
   _count?: boolean | Prisma.OrderCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["order"]>
 
@@ -1899,6 +2073,7 @@ export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   coupon?: boolean | Prisma.Order$couponArgs<ExtArgs>
   items?: boolean | Prisma.Order$itemsArgs<ExtArgs>
   webhookLogs?: boolean | Prisma.Order$webhookLogsArgs<ExtArgs>
+  supportMessages?: boolean | Prisma.Order$supportMessagesArgs<ExtArgs>
   _count?: boolean | Prisma.OrderCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrderIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1920,6 +2095,7 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     coupon: Prisma.$CouponPayload<ExtArgs> | null
     items: Prisma.$OrderItemPayload<ExtArgs>[]
     webhookLogs: Prisma.$WebhookLogPayload<ExtArgs>[]
+    supportMessages: Prisma.$SupportMessagePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2343,6 +2519,7 @@ export interface Prisma__OrderClient<T, Null = never, ExtArgs extends runtime.Ty
   coupon<T extends Prisma.Order$couponArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$couponArgs<ExtArgs>>): Prisma.Prisma__CouponClient<runtime.Types.Result.GetResult<Prisma.$CouponPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   items<T extends Prisma.Order$itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   webhookLogs<T extends Prisma.Order$webhookLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$webhookLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WebhookLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  supportMessages<T extends Prisma.Order$supportMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Order$supportMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2878,6 +3055,30 @@ export type Order$webhookLogsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.WebhookLogScalarFieldEnum | Prisma.WebhookLogScalarFieldEnum[]
+}
+
+/**
+ * Order.supportMessages
+ */
+export type Order$supportMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SupportMessage
+   */
+  select?: Prisma.SupportMessageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SupportMessage
+   */
+  omit?: Prisma.SupportMessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SupportMessageInclude<ExtArgs> | null
+  where?: Prisma.SupportMessageWhereInput
+  orderBy?: Prisma.SupportMessageOrderByWithRelationInput | Prisma.SupportMessageOrderByWithRelationInput[]
+  cursor?: Prisma.SupportMessageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SupportMessageScalarFieldEnum | Prisma.SupportMessageScalarFieldEnum[]
 }
 
 /**

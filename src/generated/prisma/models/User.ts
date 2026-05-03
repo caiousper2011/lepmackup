@@ -221,6 +221,7 @@ export type UserWhereInput = {
   sessions?: Prisma.SessionListRelationFilter
   referralRewards?: Prisma.ReferralRewardListRelationFilter
   referredRewards?: Prisma.ReferralRewardListRelationFilter
+  supportMessages?: Prisma.SupportMessageListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -240,6 +241,7 @@ export type UserOrderByWithRelationInput = {
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   referralRewards?: Prisma.ReferralRewardOrderByRelationAggregateInput
   referredRewards?: Prisma.ReferralRewardOrderByRelationAggregateInput
+  supportMessages?: Prisma.SupportMessageOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -262,6 +264,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   sessions?: Prisma.SessionListRelationFilter
   referralRewards?: Prisma.ReferralRewardListRelationFilter
   referredRewards?: Prisma.ReferralRewardListRelationFilter
+  supportMessages?: Prisma.SupportMessageListRelationFilter
 }, "id" | "email" | "referralCode">
 
 export type UserOrderByWithAggregationInput = {
@@ -310,6 +313,7 @@ export type UserCreateInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   referralRewards?: Prisma.ReferralRewardCreateNestedManyWithoutReferrerInput
   referredRewards?: Prisma.ReferralRewardCreateNestedManyWithoutReferredInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -328,6 +332,7 @@ export type UserUncheckedCreateInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   referralRewards?: Prisma.ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
   referredRewards?: Prisma.ReferralRewardUncheckedCreateNestedManyWithoutReferredInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -346,6 +351,7 @@ export type UserUpdateInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   referralRewards?: Prisma.ReferralRewardUpdateManyWithoutReferrerNestedInput
   referredRewards?: Prisma.ReferralRewardUpdateManyWithoutReferredNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -364,6 +370,7 @@ export type UserUncheckedUpdateInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   referralRewards?: Prisma.ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
   referredRewards?: Prisma.ReferralRewardUncheckedUpdateManyWithoutReferredNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -601,6 +608,20 @@ export type UserUpdateOneRequiredWithoutReferredRewardsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReferredRewardsInput, Prisma.UserUpdateWithoutReferredRewardsInput>, Prisma.UserUncheckedUpdateWithoutReferredRewardsInput>
 }
 
+export type UserCreateNestedOneWithoutSupportMessagesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSupportMessagesInput, Prisma.UserUncheckedCreateWithoutSupportMessagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSupportMessagesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSupportMessagesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSupportMessagesInput, Prisma.UserUncheckedCreateWithoutSupportMessagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSupportMessagesInput
+  upsert?: Prisma.UserUpsertWithoutSupportMessagesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSupportMessagesInput, Prisma.UserUpdateWithoutSupportMessagesInput>, Prisma.UserUncheckedUpdateWithoutSupportMessagesInput>
+}
+
 export type UserCreateWithoutReferralsInput = {
   id?: string
   email: string
@@ -616,6 +637,7 @@ export type UserCreateWithoutReferralsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   referralRewards?: Prisma.ReferralRewardCreateNestedManyWithoutReferrerInput
   referredRewards?: Prisma.ReferralRewardCreateNestedManyWithoutReferredInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutReferralsInput = {
@@ -633,6 +655,7 @@ export type UserUncheckedCreateWithoutReferralsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   referralRewards?: Prisma.ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
   referredRewards?: Prisma.ReferralRewardUncheckedCreateNestedManyWithoutReferredInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutReferralsInput = {
@@ -655,6 +678,7 @@ export type UserCreateWithoutReferredByInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   referralRewards?: Prisma.ReferralRewardCreateNestedManyWithoutReferrerInput
   referredRewards?: Prisma.ReferralRewardCreateNestedManyWithoutReferredInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutReferredByInput = {
@@ -672,6 +696,7 @@ export type UserUncheckedCreateWithoutReferredByInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   referralRewards?: Prisma.ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
   referredRewards?: Prisma.ReferralRewardUncheckedCreateNestedManyWithoutReferredInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutReferredByInput = {
@@ -710,6 +735,7 @@ export type UserUpdateWithoutReferralsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   referralRewards?: Prisma.ReferralRewardUpdateManyWithoutReferrerNestedInput
   referredRewards?: Prisma.ReferralRewardUpdateManyWithoutReferredNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReferralsInput = {
@@ -727,6 +753,7 @@ export type UserUncheckedUpdateWithoutReferralsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   referralRewards?: Prisma.ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
   referredRewards?: Prisma.ReferralRewardUncheckedUpdateManyWithoutReferredNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithWhereUniqueWithoutReferredByInput = {
@@ -775,6 +802,7 @@ export type UserCreateWithoutAddressesInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   referralRewards?: Prisma.ReferralRewardCreateNestedManyWithoutReferrerInput
   referredRewards?: Prisma.ReferralRewardCreateNestedManyWithoutReferredInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAddressesInput = {
@@ -792,6 +820,7 @@ export type UserUncheckedCreateWithoutAddressesInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   referralRewards?: Prisma.ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
   referredRewards?: Prisma.ReferralRewardUncheckedCreateNestedManyWithoutReferredInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAddressesInput = {
@@ -825,6 +854,7 @@ export type UserUpdateWithoutAddressesInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   referralRewards?: Prisma.ReferralRewardUpdateManyWithoutReferrerNestedInput
   referredRewards?: Prisma.ReferralRewardUpdateManyWithoutReferredNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAddressesInput = {
@@ -842,6 +872,7 @@ export type UserUncheckedUpdateWithoutAddressesInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   referralRewards?: Prisma.ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
   referredRewards?: Prisma.ReferralRewardUncheckedUpdateManyWithoutReferredNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -859,6 +890,7 @@ export type UserCreateWithoutSessionsInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   referralRewards?: Prisma.ReferralRewardCreateNestedManyWithoutReferrerInput
   referredRewards?: Prisma.ReferralRewardCreateNestedManyWithoutReferredInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -876,6 +908,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   referralRewards?: Prisma.ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
   referredRewards?: Prisma.ReferralRewardUncheckedCreateNestedManyWithoutReferredInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -909,6 +942,7 @@ export type UserUpdateWithoutSessionsInput = {
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   referralRewards?: Prisma.ReferralRewardUpdateManyWithoutReferrerNestedInput
   referredRewards?: Prisma.ReferralRewardUpdateManyWithoutReferredNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -926,6 +960,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   referralRewards?: Prisma.ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
   referredRewards?: Prisma.ReferralRewardUncheckedUpdateManyWithoutReferredNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutOrdersInput = {
@@ -943,6 +978,7 @@ export type UserCreateWithoutOrdersInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   referralRewards?: Prisma.ReferralRewardCreateNestedManyWithoutReferrerInput
   referredRewards?: Prisma.ReferralRewardCreateNestedManyWithoutReferredInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutOrdersInput = {
@@ -960,6 +996,7 @@ export type UserUncheckedCreateWithoutOrdersInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   referralRewards?: Prisma.ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
   referredRewards?: Prisma.ReferralRewardUncheckedCreateNestedManyWithoutReferredInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutOrdersInput = {
@@ -993,6 +1030,7 @@ export type UserUpdateWithoutOrdersInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   referralRewards?: Prisma.ReferralRewardUpdateManyWithoutReferrerNestedInput
   referredRewards?: Prisma.ReferralRewardUpdateManyWithoutReferredNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOrdersInput = {
@@ -1010,6 +1048,7 @@ export type UserUncheckedUpdateWithoutOrdersInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   referralRewards?: Prisma.ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
   referredRewards?: Prisma.ReferralRewardUncheckedUpdateManyWithoutReferredNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutReferralRewardsInput = {
@@ -1027,6 +1066,7 @@ export type UserCreateWithoutReferralRewardsInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   referredRewards?: Prisma.ReferralRewardCreateNestedManyWithoutReferredInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutReferralRewardsInput = {
@@ -1044,6 +1084,7 @@ export type UserUncheckedCreateWithoutReferralRewardsInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   referredRewards?: Prisma.ReferralRewardUncheckedCreateNestedManyWithoutReferredInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutReferralRewardsInput = {
@@ -1066,6 +1107,7 @@ export type UserCreateWithoutReferredRewardsInput = {
   orders?: Prisma.OrderCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   referralRewards?: Prisma.ReferralRewardCreateNestedManyWithoutReferrerInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutReferredRewardsInput = {
@@ -1083,6 +1125,7 @@ export type UserUncheckedCreateWithoutReferredRewardsInput = {
   orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   referralRewards?: Prisma.ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutReferredRewardsInput = {
@@ -1116,6 +1159,7 @@ export type UserUpdateWithoutReferralRewardsInput = {
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   referredRewards?: Prisma.ReferralRewardUpdateManyWithoutReferredNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReferralRewardsInput = {
@@ -1133,6 +1177,7 @@ export type UserUncheckedUpdateWithoutReferralRewardsInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   referredRewards?: Prisma.ReferralRewardUncheckedUpdateManyWithoutReferredNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutReferredRewardsInput = {
@@ -1161,6 +1206,7 @@ export type UserUpdateWithoutReferredRewardsInput = {
   orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   referralRewards?: Prisma.ReferralRewardUpdateManyWithoutReferrerNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReferredRewardsInput = {
@@ -1178,6 +1224,95 @@ export type UserUncheckedUpdateWithoutReferredRewardsInput = {
   orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   referralRewards?: Prisma.ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutSupportMessagesInput = {
+  id?: string
+  email: string
+  name?: string | null
+  phone?: string | null
+  role?: $Enums.UserRole
+  referralCode: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  referredBy?: Prisma.UserCreateNestedOneWithoutReferralsInput
+  referrals?: Prisma.UserCreateNestedManyWithoutReferredByInput
+  addresses?: Prisma.AddressCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  referralRewards?: Prisma.ReferralRewardCreateNestedManyWithoutReferrerInput
+  referredRewards?: Prisma.ReferralRewardCreateNestedManyWithoutReferredInput
+}
+
+export type UserUncheckedCreateWithoutSupportMessagesInput = {
+  id?: string
+  email: string
+  name?: string | null
+  phone?: string | null
+  role?: $Enums.UserRole
+  referralCode: string
+  referredById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  referrals?: Prisma.UserUncheckedCreateNestedManyWithoutReferredByInput
+  addresses?: Prisma.AddressUncheckedCreateNestedManyWithoutUserInput
+  orders?: Prisma.OrderUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  referralRewards?: Prisma.ReferralRewardUncheckedCreateNestedManyWithoutReferrerInput
+  referredRewards?: Prisma.ReferralRewardUncheckedCreateNestedManyWithoutReferredInput
+}
+
+export type UserCreateOrConnectWithoutSupportMessagesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSupportMessagesInput, Prisma.UserUncheckedCreateWithoutSupportMessagesInput>
+}
+
+export type UserUpsertWithoutSupportMessagesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSupportMessagesInput, Prisma.UserUncheckedUpdateWithoutSupportMessagesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSupportMessagesInput, Prisma.UserUncheckedCreateWithoutSupportMessagesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSupportMessagesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSupportMessagesInput, Prisma.UserUncheckedUpdateWithoutSupportMessagesInput>
+}
+
+export type UserUpdateWithoutSupportMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referredBy?: Prisma.UserUpdateOneWithoutReferralsNestedInput
+  referrals?: Prisma.UserUpdateManyWithoutReferredByNestedInput
+  addresses?: Prisma.AddressUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  referralRewards?: Prisma.ReferralRewardUpdateManyWithoutReferrerNestedInput
+  referredRewards?: Prisma.ReferralRewardUpdateManyWithoutReferredNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSupportMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  referralCode?: Prisma.StringFieldUpdateOperationsInput | string
+  referredById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  referrals?: Prisma.UserUncheckedUpdateManyWithoutReferredByNestedInput
+  addresses?: Prisma.AddressUncheckedUpdateManyWithoutUserNestedInput
+  orders?: Prisma.OrderUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  referralRewards?: Prisma.ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
+  referredRewards?: Prisma.ReferralRewardUncheckedUpdateManyWithoutReferredNestedInput
 }
 
 export type UserCreateManyReferredByInput = {
@@ -1206,6 +1341,7 @@ export type UserUpdateWithoutReferredByInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   referralRewards?: Prisma.ReferralRewardUpdateManyWithoutReferrerNestedInput
   referredRewards?: Prisma.ReferralRewardUpdateManyWithoutReferredNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReferredByInput = {
@@ -1223,6 +1359,7 @@ export type UserUncheckedUpdateWithoutReferredByInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   referralRewards?: Prisma.ReferralRewardUncheckedUpdateManyWithoutReferrerNestedInput
   referredRewards?: Prisma.ReferralRewardUncheckedUpdateManyWithoutReferredNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutReferredByInput = {
@@ -1248,6 +1385,7 @@ export type UserCountOutputType = {
   sessions: number
   referralRewards: number
   referredRewards: number
+  supportMessages: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1257,6 +1395,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   referralRewards?: boolean | UserCountOutputTypeCountReferralRewardsArgs
   referredRewards?: boolean | UserCountOutputTypeCountReferredRewardsArgs
+  supportMessages?: boolean | UserCountOutputTypeCountSupportMessagesArgs
 }
 
 /**
@@ -1311,6 +1450,13 @@ export type UserCountOutputTypeCountReferredRewardsArgs<ExtArgs extends runtime.
   where?: Prisma.ReferralRewardWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSupportMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SupportMessageWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1329,6 +1475,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   referralRewards?: boolean | Prisma.User$referralRewardsArgs<ExtArgs>
   referredRewards?: boolean | Prisma.User$referredRewardsArgs<ExtArgs>
+  supportMessages?: boolean | Prisma.User$supportMessagesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1379,6 +1526,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   referralRewards?: boolean | Prisma.User$referralRewardsArgs<ExtArgs>
   referredRewards?: boolean | Prisma.User$referredRewardsArgs<ExtArgs>
+  supportMessages?: boolean | Prisma.User$supportMessagesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1398,6 +1546,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     referralRewards: Prisma.$ReferralRewardPayload<ExtArgs>[]
     referredRewards: Prisma.$ReferralRewardPayload<ExtArgs>[]
+    supportMessages: Prisma.$SupportMessagePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1810,6 +1959,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   referralRewards<T extends Prisma.User$referralRewardsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$referralRewardsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReferralRewardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   referredRewards<T extends Prisma.User$referredRewardsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$referredRewardsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReferralRewardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  supportMessages<T extends Prisma.User$supportMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$supportMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2409,6 +2559,30 @@ export type User$referredRewardsArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.ReferralRewardScalarFieldEnum | Prisma.ReferralRewardScalarFieldEnum[]
+}
+
+/**
+ * User.supportMessages
+ */
+export type User$supportMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SupportMessage
+   */
+  select?: Prisma.SupportMessageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SupportMessage
+   */
+  omit?: Prisma.SupportMessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SupportMessageInclude<ExtArgs> | null
+  where?: Prisma.SupportMessageWhereInput
+  orderBy?: Prisma.SupportMessageOrderByWithRelationInput | Prisma.SupportMessageOrderByWithRelationInput[]
+  cursor?: Prisma.SupportMessageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SupportMessageScalarFieldEnum | Prisma.SupportMessageScalarFieldEnum[]
 }
 
 /**

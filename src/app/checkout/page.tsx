@@ -477,9 +477,9 @@ export default function CheckoutPage() {
   if (items.length === 0) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-20 text-center">
-        <div className="w-20 h-20 rounded-full bg-blush-50 flex items-center justify-center mx-auto mb-4">
+        <div className="w-20 h-20 rounded-full gradient-berry-soft border border-rose-100 flex items-center justify-center mx-auto mb-5">
           <svg
-            className="w-10 h-10 text-rose-300"
+            className="w-10 h-10 text-berry-600"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -492,33 +492,44 @@ export default function CheckoutPage() {
             />
           </svg>
         </div>
-        <h1 className="text-xl font-bold text-gray-900 mb-2">Carrinho vazio</h1>
-        <p className="text-gray-500 mb-6">
-          Adicione produtos antes de ir ao checkout.
+        <p className="text-[11px] font-black tracking-[0.18em] uppercase text-gold-500 mb-2">
+          Carrinho vazio
         </p>
-        <Link
-          href="/"
-          className="inline-block gradient-berry text-white font-semibold px-6 py-3 rounded-xl transition-colors"
-        >
+        <h1 className="font-heading font-extrabold text-3xl text-gray-900 mb-2">
+          Adicione produtos antes
+        </h1>
+        <p className="text-gray-500 mb-7">
+          Cílios, gloss, paletas e mais — a partir de R$ 6,99.
+        </p>
+        <Link href="/" className="lp-btn-primary">
           Ver Produtos
+          <span className="text-xl">→</span>
         </Link>
       </div>
     );
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold text-gray-900 mb-8 font-[family-name:var(--font-heading)]">
-        Finalizar Compra
-      </h1>
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
+      <div className="text-center mb-10">
+        <p className="text-[11px] font-black tracking-[0.18em] uppercase text-gold-500 mb-2.5">
+          Pagamento seguro · Mercado Pago
+        </p>
+        <h1 className="font-heading font-extrabold text-3xl sm:text-4xl text-gray-900 tracking-tight">
+          Finalizar{" "}
+          <em className="italic font-medium bg-linear-to-r from-berry-600 to-rose-500 bg-clip-text text-transparent">
+            Compra
+          </em>
+        </h1>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left column - Forms */}
         <div className="lg:col-span-2 space-y-6">
           {/* Email section (guest checkout) */}
           {!user && (
-            <div className="bg-white rounded-2xl border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">
+            <div className="bg-white rounded-3xl border border-rose-100 shadow-[0_2px_6px_rgba(155,27,90,0.06)] p-6">
+              <h2 className="font-heading font-bold text-xl text-gray-900 mb-2">
                 Seu E-mail
               </h2>
               <p className="text-xs text-gray-500 mb-4">
@@ -530,14 +541,14 @@ export default function CheckoutPage() {
                 placeholder="seu@email.com"
                 value={guestEmail}
                 onChange={(e) => setGuestEmail(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 border border-rose-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600/60 focus:border-rose-300 bg-white transition-all"
                 autoComplete="email"
               />
             </div>
           )}
 
-          <div className="bg-white rounded-2xl border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">
+          <div className="bg-white rounded-3xl border border-rose-100 shadow-[0_2px_6px_rgba(155,27,90,0.06)] p-6">
+            <h2 className="font-heading font-bold text-xl text-gray-900 mb-2">
               Dados do Destinatário
             </h2>
             <p className="text-xs text-gray-500 mb-4">
@@ -603,8 +614,8 @@ export default function CheckoutPage() {
           </div>
 
           {/* Address section */}
-          <div className="bg-white rounded-2xl border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          <div className="bg-white rounded-3xl border border-rose-100 shadow-[0_2px_6px_rgba(155,27,90,0.06)] p-6">
+            <h2 className="font-heading font-bold text-xl text-gray-900 mb-4">
               Endereço de Entrega
             </h2>
 
@@ -620,10 +631,10 @@ export default function CheckoutPage() {
                 {addresses.map((addr) => (
                   <label
                     key={addr.id}
-                    className={`flex items-start gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all ${
+                    className={`flex items-start gap-3 p-3 rounded-2xl border-2 cursor-pointer transition-all ${
                       selectedAddress === addr.id
-                        ? "border-berry-600 bg-rose-50"
-                        : "border-gray-200 hover:border-gray-300"
+                        ? "border-berry-600 bg-blush-50 shadow-[0_2px_6px_rgba(155,27,90,0.06)]"
+                        : "border-rose-100 hover:border-rose-300 bg-white"
                     }`}
                   >
                     <input
@@ -672,7 +683,7 @@ export default function CheckoutPage() {
                     onChange={(e) =>
                       setNewAddress({ ...newAddress, label: e.target.value })
                     }
-                    className="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
+                    className="px-3 py-2 border border-rose-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600/60 focus:border-rose-300 bg-white transition-all"
                   />
                   <input
                     type="text"
@@ -685,7 +696,7 @@ export default function CheckoutPage() {
                       })
                     }
                     onBlur={(e) => lookupCepInCheckout(e.target.value)}
-                    className="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
+                    className="px-3 py-2 border border-rose-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600/60 focus:border-rose-300 bg-white transition-all"
                   />
                 </div>
                 <div className="grid grid-cols-3 gap-3">
@@ -696,7 +707,7 @@ export default function CheckoutPage() {
                     onChange={(e) =>
                       setNewAddress({ ...newAddress, street: e.target.value })
                     }
-                    className="col-span-2 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
+                    className="col-span-2 px-3 py-2 border border-rose-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600/60 focus:border-rose-300 bg-white transition-all"
                   />
                   <input
                     type="text"
@@ -705,7 +716,7 @@ export default function CheckoutPage() {
                     onChange={(e) =>
                       setNewAddress({ ...newAddress, number: e.target.value })
                     }
-                    className="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
+                    className="px-3 py-2 border border-rose-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600/60 focus:border-rose-300 bg-white transition-all"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
@@ -719,7 +730,7 @@ export default function CheckoutPage() {
                         complement: e.target.value,
                       })
                     }
-                    className="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
+                    className="px-3 py-2 border border-rose-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600/60 focus:border-rose-300 bg-white transition-all"
                   />
                   <input
                     type="text"
@@ -731,7 +742,7 @@ export default function CheckoutPage() {
                         neighborhood: e.target.value,
                       })
                     }
-                    className="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
+                    className="px-3 py-2 border border-rose-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600/60 focus:border-rose-300 bg-white transition-all"
                   />
                 </div>
                 <div className="grid grid-cols-3 gap-3">
@@ -742,7 +753,7 @@ export default function CheckoutPage() {
                     onChange={(e) =>
                       setNewAddress({ ...newAddress, city: e.target.value })
                     }
-                    className="col-span-2 px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
+                    className="col-span-2 px-3 py-2 border border-rose-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600/60 focus:border-rose-300 bg-white transition-all"
                   />
                   <input
                     type="text"
@@ -755,12 +766,12 @@ export default function CheckoutPage() {
                         state: e.target.value.toUpperCase(),
                       })
                     }
-                    className="px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
+                    className="px-3 py-2 border border-rose-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600/60 focus:border-rose-300 bg-white transition-all"
                   />
                 </div>
                 <button
                   onClick={handleSaveAddress}
-                  className="w-full gradient-berry text-white font-semibold py-2.5 rounded-xl text-sm transition-colors"
+                  className="lp-btn-primary w-full text-sm"
                 >
                   Salvar Endereço
                 </button>
@@ -770,18 +781,18 @@ export default function CheckoutPage() {
 
           {/* Shipping section */}
           {shippingOptions.length > 0 && (
-            <div className="bg-white rounded-2xl border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            <div className="bg-white rounded-3xl border border-rose-100 shadow-[0_2px_6px_rgba(155,27,90,0.06)] p-6">
+              <h2 className="font-heading font-bold text-xl text-gray-900 mb-4">
                 Método de Envio
               </h2>
               <div className="space-y-2">
                 {shippingOptions.map((opt) => (
                   <label
                     key={opt.method}
-                    className={`flex items-center justify-between p-3 rounded-xl border-2 cursor-pointer transition-all ${
+                    className={`flex items-center justify-between p-3 rounded-2xl border-2 cursor-pointer transition-all ${
                       selectedShipping === opt.method
-                        ? "border-berry-600 bg-rose-50"
-                        : "border-gray-200 hover:border-gray-300"
+                        ? "border-berry-600 bg-blush-50 shadow-[0_2px_6px_rgba(155,27,90,0.06)]"
+                        : "border-rose-100 hover:border-rose-300 bg-white"
                     }`}
                   >
                     <div className="flex items-center gap-3">
@@ -839,8 +850,8 @@ export default function CheckoutPage() {
           )}
 
           {/* Coupon */}
-          <div className="bg-white rounded-2xl border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          <div className="bg-white rounded-3xl border border-rose-100 shadow-[0_2px_6px_rgba(155,27,90,0.06)] p-6">
+            <h2 className="font-heading font-bold text-xl text-gray-900 mb-4">
               Cupom de Desconto
             </h2>
             <div className="flex gap-2">
@@ -849,12 +860,12 @@ export default function CheckoutPage() {
                 placeholder="Código do cupom"
                 value={couponCode}
                 onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
+                className="flex-1 px-4 py-2.5 border border-rose-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600/60 focus:border-rose-300 bg-white transition-all"
               />
               <button
                 onClick={handleValidateCoupon}
                 disabled={loadingCoupon || !couponCode.trim()}
-                className="px-6 py-2.5 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-xl text-sm transition-colors disabled:opacity-50"
+                className="px-6 py-2.5 gradient-cta text-white font-bold rounded-full text-sm shadow-[0_6px_16px_-4px_rgba(225,29,72,0.4)] hover:shadow-[0_8px_20px_-4px_rgba(225,29,72,0.55)] transition-all disabled:opacity-50"
               >
                 {loadingCoupon ? "..." : "Aplicar"}
               </button>
@@ -873,8 +884,8 @@ export default function CheckoutPage() {
 
         {/* Right column - Summary */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-2xl border border-gray-200 p-6 sticky top-28">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          <div className="bg-white rounded-3xl border border-rose-100 shadow-[0_2px_6px_rgba(155,27,90,0.06)] p-6 sticky top-28">
+            <h2 className="font-heading font-bold text-xl text-gray-900 mb-4">
               Resumo do Pedido
             </h2>
 
@@ -887,7 +898,7 @@ export default function CheckoutPage() {
                       alt={item.product.shortName}
                       fill
                       sizes="48px"
-                      className="object-cover"
+                      className="object-contain p-2"
                     />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -908,7 +919,7 @@ export default function CheckoutPage() {
               ))}
             </div>
 
-            <hr className="border-gray-100 mb-4" />
+            <hr className="border-rose-100 mb-4" />
 
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
@@ -935,10 +946,10 @@ export default function CheckoutPage() {
                   <span>-{formatPrice(discount)}</span>
                 </div>
               )}
-              <hr className="border-gray-100" />
-              <div className="flex justify-between text-lg font-bold">
-                <span className="text-gray-900">Total</span>
-                <span className="text-berry-600">
+              <hr className="border-rose-100" />
+              <div className="flex justify-between items-baseline">
+                <span className="font-bold text-gray-900">Total</span>
+                <span className="font-heading font-black text-2xl text-berry-600 tracking-tight">
                   {formatPrice(finalTotal)}
                 </span>
               </div>
@@ -969,7 +980,7 @@ export default function CheckoutPage() {
                 ![11, 14].includes(normalizeCpfCnpj(cpfCnpj).length) ||
                 customerName.trim().length < 2
               }
-              className="w-full mt-4 bg-linear-to-r from-berry-600 to-rose-500 hover:from-berry-700 hover:to-rose-600 text-white font-bold py-4 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg text-base"
+              className="lp-btn-primary w-full mt-4 text-base disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {authLoading
                 ? "Verificando e-mail..."

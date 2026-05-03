@@ -87,3 +87,13 @@ export type WebhookLog = Prisma.WebhookLogModel
  * 
  */
 export type AuditLog = Prisma.AuditLogModel
+/**
+ * Model SupportMessage
+ * 
+ */
+export type SupportMessage = Prisma.SupportMessageModel
+/**
+ * Model ContactForm
+ * 
+ */
+export type ContactForm = Prisma.ContactFormModel

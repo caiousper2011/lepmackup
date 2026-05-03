@@ -47,17 +47,17 @@ function useCountdown() {
 function CountdownBlocks() {
   const t = useCountdown();
   return (
-    <div className="flex items-center gap-1.5">
+    <div className="flex items-center gap-1 sm:gap-1.5">
       {[
         { value: t.hours, label: "h" },
         { value: t.minutes, label: "m" },
         { value: t.seconds, label: "s" },
       ].map((u, i) => (
         <div key={i} className="flex flex-col items-center">
-          <span className="bg-gradient-to-br from-rose-500 to-pink-600 text-white font-mono font-black text-2xl sm:text-3xl w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center shadow-lg shadow-rose-600/40">
+          <span className="gradient-cta text-white font-heading font-black text-xl sm:text-3xl w-10 h-10 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shadow-[0_8px_24px_-4px_rgba(225,29,72,0.4)]">
             {String(u.value).padStart(2, "0")}
           </span>
-          <span className="text-xs font-bold text-rose-600 mt-1">
+          <span className="text-[11px] font-black tracking-[0.18em] uppercase text-berry-600 mt-1.5">
             {u.label}
           </span>
         </div>
@@ -66,128 +66,199 @@ function CountdownBlocks() {
   );
 }
 
-function CountdownCard() {
+function CountdownCard({ className = "" }: { className?: string }) {
   return (
-    <div className="mb-8 p-6 bg-white/80 backdrop-blur-lg rounded-3xl border-2 border-rose-200 shadow-2xl shadow-rose-200/50 w-fit mx-auto">
-      <p className="text-xs sm:text-sm text-gray-600 font-bold mb-3 uppercase tracking-wider">
-        ⏰ Oferta termina em:
+    <div
+      className={`mb-6 sm:mb-8 p-4 sm:p-6 bg-white/85 backdrop-blur-xl rounded-[26px] sm:rounded-3xl border border-rose-100 shadow-[0_12px_28px_-8px_rgba(155,27,90,0.18)] w-fit mx-auto ${className}`}
+    >
+      <p className="text-[10px] sm:text-[11px] font-black tracking-[0.18em] uppercase text-gold-500 mb-2.5 sm:mb-3 inline-flex items-center gap-1.5">
+        <span>⏰</span>
+        <span>Oferta termina em</span>
       </p>
       <CountdownBlocks />
     </div>
   );
 }
 
-function TrustBadges() {
+function TrustBadges({ className = "" }: { className?: string }) {
   return (
-    <div className="mb-8 flex flex-wrap items-center justify-center gap-4 sm:gap-6">
-      <div className="flex items-center gap-2 bg-white/70 backdrop-blur px-4 py-2 rounded-full border border-green-200">
-        <span className="text-2xl">✓</span>
-        <span className="text-sm font-semibold text-gray-700">100% Seguro</span>
-      </div>
-      <div className="flex items-center gap-2 bg-white/70 backdrop-blur px-4 py-2 rounded-full border border-blue-200">
-        <span className="text-2xl">🚚</span>
-        <span className="text-sm font-semibold text-gray-700">Entrega 24h</span>
-      </div>
-      <div className="flex items-center gap-2 bg-white/70 backdrop-blur px-4 py-2 rounded-full border border-purple-200">
-        <span className="text-2xl">↩️</span>
-        <span className="text-sm font-semibold text-gray-700">
-          Devolução 30d
-        </span>
-      </div>
+    <div
+      className={`mb-6 sm:mb-8 flex flex-wrap items-center justify-center gap-2 sm:gap-3 ${className}`}
+    >
+      <span className="inline-flex items-center gap-2 bg-white/85 backdrop-blur px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-rose-100 shadow-[0_2px_6px_rgba(155,27,90,0.06)] text-[11px] sm:text-[13px] font-semibold text-gray-700">
+        <span>🔒</span> Mercado Pago SSL
+      </span>
+      <span className="inline-flex items-center gap-2 bg-white/85 backdrop-blur px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-rose-100 shadow-[0_2px_6px_rgba(155,27,90,0.06)] text-[11px] sm:text-[13px] font-semibold text-gray-700">
+        <span>🚚</span> Frete 24h em SP
+      </span>
+      <span className="inline-flex items-center gap-2 bg-white/85 backdrop-blur px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-rose-100 shadow-[0_2px_6px_rgba(155,27,90,0.06)] text-[11px] sm:text-[13px] font-semibold text-gray-700">
+        <span>⭐</span> 4,9/5 · 500+ clientes
+      </span>
     </div>
   );
 }
 
-function ShopeeLink({ tabIndex }: { tabIndex: number }) {
+function ShopeeLink({
+  tabIndex,
+  className = "",
+}: {
+  tabIndex: number;
+  className?: string;
+}) {
   return (
     <a
       href="https://shopee.com.br/leticia.guardian?entryPoint=ShopByPDP&tab=product"
       target="_blank"
       rel="noopener noreferrer"
       tabIndex={tabIndex}
-      className="inline-flex items-center gap-2.5 text-white font-bold px-7 sm:px-8 py-4 rounded-2xl shadow-lg transition-all transform hover:scale-105 active:scale-95 w-full sm:w-auto justify-center text-sm sm:text-base"
+      className={`inline-flex items-center gap-2.5 text-white font-bold px-7 sm:px-8 py-4 rounded-2xl shadow-lg transition-all transform hover:scale-105 active:scale-95 w-full sm:w-auto justify-center text-sm sm:text-base ${className}`}
       style={{ backgroundColor: "#EE4D2D" }}
       onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#D63D1A")}
       onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#EE4D2D")}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/shopee-logo.svg" alt="Shopee" className="w-6 h-6" />
+      <Image
+        src="/shopee-logo.png?v=white"
+        alt=""
+        aria-hidden="true"
+        width={28}
+        height={28}
+        sizes="28px"
+        unoptimized
+        className="h-7 w-7 object-contain shrink-0"
+      />
       <span>Veja também nossa loja na Shopee</span>
     </a>
   );
 }
 
-function MainHeroSlide({ isActive }: { isActive: boolean }) {
+function MainHeroSlide({
+  isActive,
+  featuredProduct,
+}: {
+  isActive: boolean;
+  featuredProduct?: Product | null;
+}) {
   const tab = isActive ? 0 : -1;
+  const heroProduct = featuredProduct ?? null;
+  const heroPrice = heroProduct
+    ? formatPrice(heroProduct.bulkPrice)
+    : "R$ 6,99";
+  const heroStrike = heroProduct
+    ? formatPrice(heroProduct.originalPrice)
+    : "R$ 18,99";
   return (
-    <div className="relative overflow-hidden bg-gradient-to-b from-rose-50 via-pink-50 to-white pt-8 pb-12 sm:pt-12 sm:pb-16 h-full flex flex-col justify-center">
-      <div className="absolute top-0 left-[5%] w-96 h-96 bg-gradient-to-br from-rose-200/40 to-pink-200/20 rounded-full blur-3xl animate-pulse" />
+    <div className="relative overflow-hidden gradient-berry-soft pt-5 pb-6 sm:pt-14 sm:pb-16 lg:pt-16 lg:pb-20 h-full flex flex-col justify-center">
+      <div className="absolute top-0 left-[5%] w-96 h-96 bg-linear-to-br from-rose-200/50 to-blush-50/0 rounded-full blur-3xl animate-pulse" />
       <div
-        className="absolute bottom-0 right-[5%] w-80 h-80 bg-gradient-to-tl from-purple-200/30 to-pink-100/20 rounded-full blur-3xl animate-pulse"
+        className="absolute bottom-0 right-[5%] w-80 h-80 bg-linear-to-tl from-gold-100/40 to-rose-100/20 rounded-full blur-3xl animate-pulse"
         style={{ animationDelay: "1s" }}
       />
       <div
-        className="absolute top-1/3 right-20 w-64 h-64 bg-gradient-to-bl from-gold-100/30 rounded-full blur-3xl animate-pulse"
+        className="absolute top-1/3 right-20 w-64 h-64 bg-linear-to-bl from-gold-200/40 rounded-full blur-3xl animate-pulse"
         style={{ animationDelay: "2s" }}
       />
 
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tighter mb-4 leading-tight font-[family-name:var(--font-heading)]">
-            <span className="block">Maquiagem Profissional</span>
-            <span className="block bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 bg-clip-text text-transparent">
-              Por Preços Imbatíveis
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid items-center gap-6 sm:gap-10 lg:gap-12 lg:grid-cols-[1.05fr_.95fr]">
+          <div className="text-center lg:text-left">
+            <span className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full border border-gold-200 shadow-[0_2px_6px_rgba(155,27,90,0.06)] mb-4 sm:mb-5 text-[11px] font-black tracking-[0.18em] uppercase text-gold-500">
+              <span>⚡</span>
+              <span>Oferta Relâmpago · -63% OFF</span>
             </span>
-          </h1>
 
-          <div className="mb-6 flex flex-wrap items-center justify-center gap-3">
-            <span className="text-base sm:text-xl text-gray-600 line-through">
-              De R$18,99
-            </span>
-            <span className="text-4xl sm:text-5xl font-black bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">
-              R$ 6,99
-            </span>
-            <span className="text-sm sm:text-base font-bold bg-gold-400 text-rose-900 px-3 py-1 rounded-full animate-bounce">
-              -63% OFF
-            </span>
-          </div>
+            <h1 className="font-heading font-black text-4xl sm:text-5xl lg:text-[64px] leading-[1.05] tracking-[-0.02em] mb-5 text-gray-900">
+              <span className="block">Maquiagem</span>
+              <em className="block italic font-medium bg-linear-to-r from-berry-600 via-rose-500 to-gold-500 bg-clip-text text-transparent">
+                Profissional
+              </em>
+              <span className="block">a partir de R$ 6,99</span>
+            </h1>
 
-          <p className="text-lg sm:text-xl text-gray-700 mb-6 max-w-2xl mx-auto font-medium">
-            Leve <span className="font-black text-rose-600">4+ itens</span> e
-            pague ainda <span className="font-black text-rose-600">menos</span>
-          </p>
+            <p className="text-base sm:text-[19px] text-[#3a1822] mb-5 sm:mb-6 max-w-2xl mx-auto lg:mx-0 leading-[1.55]">
+              Cílios, gloss, paletas e mais — direto do nosso estoque em SP, pra
+              todo o Brasil. Mesma qualidade dos profissionais, preço que cabe
+              no seu bolso. <b>Frete em 24h em SP.</b>
+            </p>
 
-          <CountdownCard />
-
-          <TrustBadges />
-
-          <div className="flex flex-col gap-4 items-center justify-center mt-8">
-            <a
-              href="#produtos"
-              tabIndex={tab}
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-black px-8 sm:px-12 py-5 rounded-2xl shadow-2xl shadow-rose-600/40 hover:shadow-2xl hover:shadow-rose-600/60 transition-all transform hover:scale-105 active:scale-95 text-lg sm:text-xl w-full sm:w-auto justify-center"
-            >
-              <span>Ver Oferta Especial</span>
-              <span className="text-2xl animate-pulse">→</span>
-            </a>
-            <ShopeeLink tabIndex={tab} />
-          </div>
-
-          <div className="mt-8 flex flex-col items-center gap-3">
-            <div className="flex items-center gap-1">
-              {[1, 2, 3, 4, 5].map((s) => (
-                <span key={s} className="text-2xl">
-                  ⭐
-                </span>
-              ))}
+            <div className="flex flex-col sm:flex-row gap-3 items-center justify-center lg:justify-start">
+              <a
+                href="#produtos"
+                tabIndex={tab}
+                className="lp-btn-primary w-full sm:w-auto text-[17px]"
+              >
+                <span>Comprar Agora com Desconto</span>
+                <span className="text-xl">→</span>
+              </a>
+              <Link
+                href="/#produtos"
+                tabIndex={tab}
+                className="lp-btn-secondary w-full sm:w-auto"
+              >
+                Ver Ofertas
+              </Link>
             </div>
-            <p className="text-gray-700 font-semibold">
-              <span className="text-rose-600 font-black">4.9/5</span> —{" "}
-              <span className="text-gray-600">+500 clientes</span>
-            </p>
-            <p className="text-xs text-gray-500">
-              ✓ Pagamento 100% Seguro | ✓ Entrega Rastreada | ✓ Suporte 24/7
-            </p>
+
+            <CountdownCard className="mt-6 sm:mt-8 lg:mx-0" />
+
+            <TrustBadges className="justify-center lg:justify-start mb-0" />
+
+            <div className="mt-6 sm:mt-8 flex flex-col items-center lg:items-start gap-2">
+              <div className="flex items-center gap-1">
+                {[1, 2, 3, 4, 5].map((s) => (
+                  <span key={s} className="text-lg">
+                    ⭐
+                  </span>
+                ))}
+              </div>
+              <p className="text-gray-700 text-sm font-semibold">
+                <span className="text-berry-600 font-black">4,9/5</span>{" "}
+                <span className="text-gray-500">
+                  — +500 clientes satisfeitas
+                </span>
+              </p>
+            </div>
+          </div>
+
+          <div className="relative">
+            <div className="relative aspect-square rounded-4xl gradient-berry shadow-[0_32px_64px_-16px_rgba(155,27,90,0.4)] overflow-hidden flex items-center justify-center p-2 sm:p-4 lg:p-6">
+              <span className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20 bg-white text-rose-600 rounded-full px-3 py-1.5 sm:px-4 sm:py-2 text-[10px] sm:text-xs font-black tracking-[0.04em] shadow-[0_8px_20px_-4px_rgba(0,0,0,0.2)] inline-flex items-center gap-1.5 whitespace-nowrap">
+                <span>⚡</span>
+                <span>OFERTA RELÂMPAGO</span>
+              </span>
+              {heroProduct ? (
+                <Image
+                  src={heroProduct.images[0]}
+                  alt={heroProduct.name}
+                  fill
+                  priority={isActive}
+                  sizes="(max-width: 1024px) 80vw, 42vw"
+                  className="z-0 object-contain scale-[1.45] sm:scale-[1.55] lg:scale-[1.65] p-0 sm:p-1 lg:p-2 drop-shadow-[0_16px_32px_rgba(0,0,0,0.25)]"
+                />
+              ) : null}
+
+              <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 z-20 bg-white rounded-[18px] px-4 py-3 sm:px-5 sm:py-4 shadow-[0_12px_28px_-8px_rgba(0,0,0,0.25)] text-left max-w-55">
+                <p className="text-[10px] font-black tracking-[0.18em] uppercase text-gold-500">
+                  A partir de
+                </p>
+                <p className="font-heading font-black text-[32px] text-berry-600 leading-none mt-1">
+                  {heroPrice}
+                </p>
+                <p className="text-[13px] font-semibold text-slate-400 line-through mt-2">
+                  {heroStrike}
+                </p>
+              </div>
+            </div>
+
+            {heroProduct && (
+              <div className="mt-4 flex flex-col items-center text-center">
+                <p className="text-[11px] font-black tracking-[0.18em] uppercase text-gold-500 mb-1">
+                  Destaque da semana
+                </p>
+                <p className="font-heading font-bold text-xl text-gray-900">
+                  {heroProduct.shortName}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -213,59 +284,59 @@ interface ProductSlideTheme {
 }
 
 const THEME_RUBY: ProductSlideTheme = {
-  surface: "bg-gradient-to-b from-rose-50 via-pink-50 to-white text-gray-900",
-  pill: "bg-gradient-to-r from-rose-600 to-pink-600 text-white",
-  blob1: "bg-gradient-to-br from-rose-200/40 to-pink-200/20",
-  blob2: "bg-gradient-to-tl from-purple-200/30 to-pink-100/20",
-  blob3: "bg-gradient-to-bl from-gold-100/30",
+  surface: "gradient-berry-soft text-gray-900",
+  pill: "gradient-cta text-white",
+  blob1: "bg-linear-to-br from-rose-200/50 to-rose-100/0",
+  blob2: "bg-linear-to-tl from-gold-100/40 to-rose-100/0",
+  blob3: "bg-linear-to-bl from-gold-200/40",
   headlineGradient:
-    "bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 bg-clip-text text-transparent",
+    "bg-linear-to-r from-berry-600 via-rose-500 to-gold-500 bg-clip-text text-transparent",
   headlineSolid: "text-gray-900",
   body: "text-gray-700",
   imageRing: "ring-white/70",
-  priceGradient:
-    "bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent",
-  offBadge: "bg-gold-400 text-rose-900",
-  imageGlow: "from-rose-300/40 via-transparent to-pink-300/40",
-  starsTone: "text-rose-600",
+  priceGradient: "text-berry-600",
+  offBadge:
+    "gradient-cta text-white shadow-[0_4px_10px_-2px_rgba(155,27,90,0.4)]",
+  imageGlow: "from-rose-300/40 via-transparent to-gold-300/30",
+  starsTone: "text-berry-600",
   starsLabel: "text-gray-700",
 };
 
 const THEME_NOIR: ProductSlideTheme = {
   surface:
-    "bg-gradient-to-br from-gray-950 via-rose-900 to-gray-900 text-white",
+    "bg-gradient-to-br from-slate-950 via-berry-800 to-slate-900 text-white",
   pill: "bg-white/15 backdrop-blur-md text-white border border-white/30",
-  blob1: "bg-rose-700/40",
+  blob1: "bg-berry-600/40",
   blob2: "bg-gold-500/15",
-  blob3: "bg-purple-700/20",
+  blob3: "bg-rose-700/30",
   headlineGradient:
-    "bg-gradient-to-r from-white via-rose-100 to-gold-200 bg-clip-text text-transparent",
+    "bg-linear-to-r from-white via-rose-100 to-gold-200 bg-clip-text text-transparent",
   headlineSolid: "text-white",
   body: "text-rose-100/90",
   imageRing: "ring-white/20",
-  priceGradient:
-    "bg-gradient-to-r from-rose-200 via-white to-gold-200 bg-clip-text text-transparent",
-  offBadge: "bg-gold-400 text-gray-900",
+  priceGradient: "text-white",
+  offBadge:
+    "bg-gradient-to-br from-gold-500 to-gold-600 text-white shadow-[0_4px_10px_-2px_rgba(155,27,90,0.4)]",
   imageGlow: "from-rose-500/40 via-transparent to-gold-400/30",
   starsTone: "text-gold-300",
   starsLabel: "text-rose-100/90",
 };
 
 const THEME_GOLD: ProductSlideTheme = {
-  surface: "bg-gradient-to-b from-gold-50 via-rose-50 to-white text-gray-900",
-  pill: "bg-gradient-to-r from-gold-500 to-rose-600 text-white",
-  blob1: "bg-gradient-to-br from-gold-200/40 to-rose-100/20",
-  blob2: "bg-gradient-to-tl from-rose-200/30 to-gold-100/20",
-  blob3: "bg-gradient-to-bl from-gold-300/30",
+  surface: "bg-gradient-to-b from-gold-100 via-blush-50 to-white text-gray-900",
+  pill: "bg-linear-to-r from-gold-500 to-berry-600 text-white",
+  blob1: "bg-linear-to-br from-gold-200/50 to-rose-100/20",
+  blob2: "bg-linear-to-tl from-rose-200/30 to-gold-100/20",
+  blob3: "bg-linear-to-bl from-gold-300/40",
   headlineGradient:
-    "bg-gradient-to-r from-rose-600 via-gold-600 to-rose-700 bg-clip-text text-transparent",
+    "bg-linear-to-r from-berry-600 via-gold-500 to-berry-700 bg-clip-text text-transparent",
   headlineSolid: "text-gray-900",
   body: "text-gray-700",
   imageRing: "ring-white/70",
-  priceGradient:
-    "bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent",
-  offBadge: "bg-gradient-to-r from-rose-600 to-pink-600 text-white",
-  imageGlow: "from-gold-300/40 via-transparent to-rose-300/30",
+  priceGradient: "text-berry-600",
+  offBadge:
+    "gradient-cta text-white shadow-[0_4px_10px_-2px_rgba(155,27,90,0.4)]",
+  imageGlow: "from-gold-300/50 via-transparent to-rose-300/30",
   starsTone: "text-gold-500",
   starsLabel: "text-gray-700",
 };
@@ -294,7 +365,7 @@ function ProductSlide({
 
   return (
     <div
-      className={`relative overflow-hidden ${theme.surface} pt-8 pb-12 sm:pt-12 sm:pb-16 h-full flex flex-col justify-center`}
+      className={`relative overflow-hidden ${theme.surface} pt-5 pb-6 sm:pt-14 sm:pb-16 lg:pt-16 lg:pb-20 h-full flex flex-col justify-center`}
     >
       <div
         className={`absolute top-0 left-[5%] w-96 h-96 ${theme.blob1} rounded-full blur-3xl animate-pulse`}
@@ -311,28 +382,34 @@ function ProductSlide({
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <span
-            className={`inline-flex items-center gap-2 ${theme.pill} rounded-full px-5 py-2 mb-5 shadow-lg text-xs sm:text-sm font-black uppercase tracking-wider`}
+            className={`inline-flex items-center gap-2 ${theme.pill} rounded-full px-3 py-1.5 sm:px-4 sm:py-2 mb-4 sm:mb-5 shadow-[0_8px_24px_-4px_rgba(225,29,72,0.4)] text-[10px] sm:text-[12px] font-black uppercase tracking-[0.18em]`}
           >
-            <span className="w-2 h-2 rounded-full bg-current animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
             {pillLabel}
           </span>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tighter mb-4 leading-tight font-[family-name:var(--font-heading)]">
+          <h1 className="font-heading font-black text-4xl sm:text-5xl lg:text-7xl leading-[1.05] tracking-[-0.02em] mb-5">
             <span className={`block ${theme.headlineSolid}`}>
               {headlinePrefix}
             </span>
-            <span className={`block ${theme.headlineGradient}`}>
+            <em
+              className={`block italic font-medium ${theme.headlineGradient}`}
+            >
               {product.shortName}
-            </span>
+            </em>
           </h1>
 
           {/* Product image medallion */}
-          <Link href={`/produto/${product.slug}`} tabIndex={tab} className="relative mx-auto mb-6 w-40 h-40 sm:w-48 sm:h-48 block group/img">
+          <Link
+            href={`/produto/${product.slug}`}
+            tabIndex={tab}
+            className="relative mx-auto mb-4 sm:mb-6 w-36 h-36 sm:w-48 sm:h-48 block group/img"
+          >
             <div
-              className={`absolute inset-0 -m-4 bg-gradient-to-br ${theme.imageGlow} rounded-full blur-2xl`}
+              className={`absolute inset-0 -m-4 bg-linear-to-br ${theme.imageGlow} rounded-full blur-2xl`}
             />
             <div
-              className={`relative w-full h-full rounded-full overflow-hidden shadow-2xl ring-4 ${theme.imageRing} bg-white/40 backdrop-blur-sm group-hover/img:ring-rose-400 transition-all duration-300`}
+              className={`relative w-full h-full rounded-full overflow-hidden shadow-[0_32px_64px_-16px_rgba(155,27,90,0.4)] ring-4 ${theme.imageRing} bg-white backdrop-blur-sm group-hover/img:ring-rose-300 transition-all duration-300`}
             >
               <Image
                 src={product.images[0]}
@@ -340,73 +417,71 @@ function ProductSlide({
                 fill
                 priority={isActive}
                 sizes="(max-width: 640px) 160px, 192px"
-                className="object-cover group-hover/img:scale-110 transition-transform duration-300"
+                className="object-cover object-center scale-105 group-hover/img:scale-110 transition-transform duration-300"
               />
             </div>
             <div
-              className={`absolute -top-2 -right-2 ${theme.offBadge} text-xs font-extrabold px-3 py-1.5 rounded-full rotate-6 shadow-xl animate-bounce`}
+              className={`absolute -top-2 -right-2 ${theme.offBadge} text-[11px] font-black tracking-[0.04em] px-3 py-1.5 rounded-full rotate-6`}
             >
               -{offPercent}% OFF
             </div>
           </Link>
 
           {/* Price block */}
-          <div className="mb-6 flex flex-wrap items-center justify-center gap-3">
+          <div className="mb-4 sm:mb-6 flex flex-wrap items-center justify-center gap-3">
             <span className={`text-base sm:text-xl line-through ${theme.body}`}>
               De {formatPrice(product.originalPrice)}
             </span>
             <span
-              className={`text-4xl sm:text-5xl font-black ${theme.priceGradient}`}
+              className={`font-heading font-black text-4xl sm:text-5xl tracking-tight ${theme.priceGradient}`}
             >
               {formatPrice(product.bulkPrice)}
             </span>
             <span
-              className={`text-sm sm:text-base font-bold ${theme.offBadge} px-3 py-1 rounded-full animate-bounce`}
+              className={`text-[11px] sm:text-xs font-black tracking-[0.04em] ${theme.offBadge} px-3 py-1.5 rounded-full`}
             >
               -{offPercent}% OFF
             </span>
           </div>
 
           <p
-            className={`text-base sm:text-lg ${theme.body} mb-3 max-w-2xl mx-auto font-medium`}
+            className={`text-base sm:text-lg ${theme.body} mb-2 sm:mb-3 max-w-2xl mx-auto leading-relaxed`}
           >
             {tagline}
           </p>
           <p
-            className={`text-base sm:text-lg ${theme.body} mb-6 max-w-2xl mx-auto font-medium`}
+            className={`text-base sm:text-lg ${theme.body} mb-4 sm:mb-6 max-w-2xl mx-auto`}
           >
-            Leve <span className="font-black text-rose-500">4+ itens</span> e
-            pague ainda{" "}
-            <span className="font-black text-rose-500">menos</span>
+            Leve <span className="font-black text-berry-600">4+ itens</span> e
+            pague ainda <span className="font-black text-berry-600">menos</span>
+            .
           </p>
 
-          <CountdownCard />
+          <TrustBadges className="mb-4 sm:mb-6" />
 
-          <TrustBadges />
-
-          <div className="flex flex-col gap-4 items-center justify-center mt-8">
+          <div className="flex flex-col gap-2.5 sm:gap-3 items-center justify-center mt-6 sm:mt-8">
             <Link
               href={`/produto/${product.slug}`}
               tabIndex={tab}
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-black px-8 sm:px-12 py-5 rounded-2xl shadow-2xl shadow-rose-600/40 hover:shadow-2xl hover:shadow-rose-600/60 transition-all transform hover:scale-105 active:scale-95 text-lg sm:text-xl w-full sm:w-auto justify-center"
+              className="lp-btn-primary w-full sm:w-auto text-[17px] sm:text-lg"
             >
               <span>Ver Oferta Especial</span>
-              <span className="text-2xl animate-pulse">→</span>
+              <span className="text-xl">→</span>
             </Link>
             <ShopeeLink tabIndex={tab} />
           </div>
 
-          <div className="mt-8 flex flex-col items-center gap-3">
+          <div className="mt-6 sm:mt-8 flex flex-col items-center gap-2">
             <div className="flex items-center gap-1">
               {[1, 2, 3, 4, 5].map((s) => (
-                <span key={s} className="text-2xl">
+                <span key={s} className="text-lg">
                   ⭐
                 </span>
               ))}
             </div>
-            <p className={`font-semibold ${theme.starsLabel}`}>
-              <span className={`${theme.starsTone} font-black`}>4.9/5</span> —{" "}
-              <span className="opacity-80">+500 clientes</span>
+            <p className={`text-sm font-semibold ${theme.starsLabel}`}>
+              <span className={`${theme.starsTone} font-black`}>4,9/5</span>{" "}
+              <span className="opacity-80">— +500 clientes satisfeitas</span>
             </p>
           </div>
         </div>
@@ -562,11 +637,19 @@ export default function HeroCarousel({ products }: HeroCarouselProps) {
     const ruby = buildProductSlide(productSlideConfigs[0]);
     if (ruby) items.push(ruby);
 
+    const mainHeroProduct =
+      productMap.get("paleta-multifuncional") ??
+      productMap.get("gloss-magico-bellafeme") ??
+      Array.from(productMap.values())[0] ??
+      null;
+
     // Second slide: main hero
     items.push({
       key: "main",
       label: "Maquiagem profissional por preços imbatíveis",
-      render: (isActive) => <MainHeroSlide isActive={isActive} />,
+      render: (isActive) => (
+        <MainHeroSlide isActive={isActive} featuredProduct={mainHeroProduct} />
+      ),
     });
 
     // Remaining product slides
@@ -666,34 +749,21 @@ export default function HeroCarousel({ products }: HeroCarouselProps) {
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
     >
-      {/* CSS grid stacking: all slides share the same cell, tallest drives height */}
-      <div className="grid">
-        {slides.map((slide, i) => {
-          const isActive = i === safeCurrent;
-          return (
-            <div
-              key={slide.key}
-              role="group"
-              aria-roledescription="slide"
-              aria-label={`${slide.label} (${i + 1} de ${total})`}
-              aria-hidden={!isActive}
-              className={`[grid-area:1/1] transition-opacity ease-in-out ${
-                isActive
-                  ? "opacity-100 z-10 pointer-events-auto"
-                  : "opacity-0 z-0 pointer-events-none"
-              }`}
-              style={{ transitionDuration: `${TRANSITION_MS}ms` }}
-            >
-              {slide.render(isActive)}
-            </div>
-          );
-        })}
+      <div
+        key={slides[safeCurrent].key}
+        role="group"
+        aria-roledescription="slide"
+        aria-label={`${slides[safeCurrent].label} (${safeCurrent + 1} de ${total})`}
+        className="animate-fade-in"
+        style={{ animationDuration: `${TRANSITION_MS}ms` }}
+      >
+        {slides[safeCurrent].render(true)}
       </div>
 
       {/* Dots navigation — in normal flow below slides, never overlaps content */}
       {total > 1 && (
-        <div className="relative z-20 flex justify-center py-5">
-          <div className="flex items-center gap-2.5 bg-white/80 backdrop-blur-md rounded-full px-3 py-2 shadow-xl border-2 border-rose-200">
+        <div className="relative z-20 flex justify-center pt-2 pb-3 sm:py-5">
+          <div className="flex items-center gap-2.5 bg-white/85 backdrop-blur-md rounded-full px-3 py-2 shadow-[0_8px_16px_-4px_rgba(155,27,90,0.10)] border border-rose-100">
             {slides.map((slide, i) => {
               const isActive = i === safeCurrent;
               return (
@@ -706,17 +776,17 @@ export default function HeroCarousel({ products }: HeroCarouselProps) {
                   className={`relative h-2 rounded-full overflow-hidden transition-all duration-500 ${
                     isActive
                       ? "w-10 bg-rose-100"
-                      : "w-2 bg-rose-300/60 hover:bg-rose-400/80"
+                      : "w-2 bg-rose-200 hover:bg-rose-300"
                   }`}
                 >
                   {isActive && !paused && (
                     <span
                       key={`progress-${safeCurrent}`}
-                      className="absolute inset-y-0 left-0 bg-gradient-to-r from-rose-600 to-pink-600 carousel-progress"
+                      className="absolute inset-y-0 left-0 gradient-cta carousel-progress"
                     />
                   )}
                   {isActive && paused && (
-                    <span className="absolute inset-0 bg-gradient-to-r from-rose-600 to-pink-600" />
+                    <span className="absolute inset-0 gradient-cta" />
                   )}
                 </button>
               );
@@ -732,7 +802,7 @@ export default function HeroCarousel({ products }: HeroCarouselProps) {
             type="button"
             onClick={prev}
             aria-label="Slide anterior"
-            className="hidden sm:flex absolute left-3 lg:left-5 top-[45%] -translate-y-1/2 z-20 h-12 w-12 items-center justify-center rounded-full bg-white/90 backdrop-blur-md text-rose-600 shadow-2xl border-2 border-rose-200 hover:bg-white hover:scale-110 hover:shadow-2xl transition-all active:scale-95"
+            className="hidden sm:flex absolute left-3 lg:left-5 top-[45%] -translate-y-1/2 z-20 h-12 w-12 items-center justify-center rounded-full bg-white/90 backdrop-blur-md text-berry-600 shadow-[0_12px_28px_-8px_rgba(155,27,90,0.18)] border border-rose-100 hover:bg-white hover:scale-110 transition-all active:scale-95"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -753,7 +823,7 @@ export default function HeroCarousel({ products }: HeroCarouselProps) {
             type="button"
             onClick={next}
             aria-label="Próximo slide"
-            className="hidden sm:flex absolute right-3 lg:right-5 top-[45%] -translate-y-1/2 z-20 h-12 w-12 items-center justify-center rounded-full bg-white/90 backdrop-blur-md text-rose-600 shadow-2xl border-2 border-rose-200 hover:bg-white hover:scale-110 hover:shadow-2xl transition-all active:scale-95"
+            className="hidden sm:flex absolute right-3 lg:right-5 top-[45%] -translate-y-1/2 z-20 h-12 w-12 items-center justify-center rounded-full bg-white/90 backdrop-blur-md text-berry-600 shadow-[0_12px_28px_-8px_rgba(155,27,90,0.18)] border border-rose-100 hover:bg-white hover:scale-110 transition-all active:scale-95"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

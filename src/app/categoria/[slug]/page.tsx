@@ -152,39 +152,54 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Breadcrumb visível (importante para usuários e Google) */}
-        <nav
-          aria-label="Breadcrumb"
-          className="flex items-center gap-2 text-sm text-gray-500 mb-6"
-        >
-          <Link href="/" className="hover:text-berry-600 transition-colors">
-            Início
-          </Link>
-          <span aria-hidden="true">/</span>
-          <Link
-            href="/#categorias"
-            className="hover:text-berry-600 transition-colors"
+      {/* Hero header with soft gradient */}
+      <section className="gradient-berry-soft py-14 lg:py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Breadcrumb */}
+          <nav
+            aria-label="Breadcrumb"
+            className="flex items-center gap-2 text-[13px] text-gray-500 mb-8"
           >
-            Categorias
-          </Link>
-          <span aria-hidden="true">/</span>
-          <span className="text-gray-900 font-medium">{category.dbName}</span>
-        </nav>
+            <Link href="/" className="hover:text-berry-600 transition-colors">
+              Início
+            </Link>
+            <span aria-hidden="true" className="text-rose-200">
+              /
+            </span>
+            <Link
+              href="/#produtos"
+              className="hover:text-berry-600 transition-colors"
+            >
+              Ofertas
+            </Link>
+            <span aria-hidden="true" className="text-rose-200">
+              /
+            </span>
+            <span className="text-gray-900 font-medium">{category.dbName}</span>
+          </nav>
 
-        <header className="text-center mb-10">
-          <span className="text-4xl block mb-3" aria-hidden="true">
-            {category.emoji}
-          </span>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4">
-            {category.h1}
-          </h1>
-          <p className="category-intro max-w-2xl mx-auto text-gray-600 leading-relaxed">
-            {category.intro}
-          </p>
-        </header>
+          <header className="text-center max-w-2xl mx-auto">
+            <p className="text-[11px] font-black tracking-[0.18em] uppercase text-gold-500 mb-3">
+              Maquiagem L&amp;PMakeUp · {category.dbName}
+            </p>
+            <span
+              className="text-5xl sm:text-6xl block mb-4"
+              aria-hidden="true"
+            >
+              {category.emoji}
+            </span>
+            <h1 className="font-(family-name:--font-heading) font-black text-3xl sm:text-4xl lg:text-[48px] leading-[1.1] tracking-tight text-gray-900 mb-4">
+              {category.h1}
+            </h1>
+            <p className="category-intro text-gray-700 text-base leading-relaxed">
+              {category.intro}
+            </p>
+          </header>
+        </div>
+      </section>
 
-        {/* Outras categorias — linkagem interna */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+        {/* Outras categorias */}
         <nav
           aria-label="Outras categorias"
           className="flex flex-wrap justify-center gap-2 mb-10"
@@ -193,9 +208,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             <Link
               key={c.slug}
               href={`/categoria/${c.slug}`}
-              className="px-4 py-1.5 rounded-full text-xs font-medium bg-blush-50 text-berry-600 hover:bg-blush-100 transition-colors"
+              className="px-5 py-2.5 rounded-full text-sm font-bold bg-white text-berry-700 border-2 border-rose-200 hover:border-rose-400 transition-all"
             >
-              {c.emoji} {c.dbName}
+              <span className="mr-1.5">{c.emoji}</span>
+              {c.dbName}
             </Link>
           ))}
         </nav>
@@ -207,48 +223,58 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               {products.length} produto{products.length === 1 ? "" : "s"} em{" "}
               {category.dbName}
             </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
               {products.map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}
             </div>
           </section>
         ) : (
-          <p className="text-center text-gray-500 py-12">
-            Nenhum produto disponível nesta categoria no momento.{" "}
+          <div className="text-center py-16 bg-white rounded-3xl border border-rose-100">
+            <p className="text-gray-600 mb-3">
+              Nenhum produto disponível nesta categoria no momento.
+            </p>
             <Link
               href="/"
-              className="text-berry-600 hover:underline font-medium"
+              className="inline-flex items-center gap-2 gradient-cta text-white font-bold px-6 py-3 rounded-full shadow-[0_8px_24px_-4px_rgba(225,29,72,0.4)]"
             >
-              Ver todos os produtos
+              Ver todos os produtos →
             </Link>
-          </p>
+          </div>
         )}
 
-        {/* Conteúdo SEO/GEO — FAQ específica da categoria */}
+        {/* FAQ específica da categoria */}
         <section
           aria-labelledby="faq-titulo"
-          className="mt-16 pt-12 border-t border-rose-100/60 max-w-3xl mx-auto"
+          className="mt-16 lg:mt-20 pt-12 border-t border-rose-100 max-w-3xl mx-auto"
         >
-          <h2
-            id="faq-titulo"
-            className="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-8"
-          >
-            Perguntas frequentes sobre {category.dbName.toLowerCase()}
-          </h2>
-          <div className="category-faq space-y-4">
+          <div className="text-center mb-8">
+            <p className="text-[11px] font-black tracking-[0.18em] uppercase text-gold-500 mb-2.5">
+              Dúvidas comuns
+            </p>
+            <h2
+              id="faq-titulo"
+              className="font-(family-name:--font-heading) font-extrabold text-2xl sm:text-3xl text-gray-900 tracking-tight"
+            >
+              Perguntas frequentes sobre{" "}
+              <em className="italic font-medium bg-linear-to-r from-berry-600 to-rose-500 bg-clip-text text-transparent">
+                {category.dbName.toLowerCase()}
+              </em>
+            </h2>
+          </div>
+          <div className="category-faq space-y-3">
             {category.faqs.map((faq, i) => (
               <details
                 key={i}
-                className="group bg-white rounded-xl border border-rose-100/60 hover:border-berry-600/20 transition-colors"
+                className="group bg-white rounded-2xl border-2 border-rose-100 hover:border-rose-300 hover:shadow-[0_8px_16px_-4px_rgba(155,27,90,0.10)] transition-all"
               >
                 <summary className="flex items-center justify-between p-5 cursor-pointer list-none">
-                  <span className="font-medium text-gray-900 text-sm">
+                  <span className="font-semibold text-gray-900 text-sm pr-4">
                     {faq.q}
                   </span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-berry-600/50 group-open:rotate-180 transition-transform"
+                    className="h-5 w-5 text-berry-600 group-open:rotate-180 transition-transform shrink-0"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -261,7 +287,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                     />
                   </svg>
                 </summary>
-                <div className="px-5 pb-5 text-sm text-gray-600 leading-relaxed">
+                <div className="px-5 pb-5 text-sm text-gray-700 leading-relaxed border-t border-rose-100 pt-4">
                   {faq.a}
                 </div>
               </details>
