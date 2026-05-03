@@ -8,7 +8,8 @@
       "Bash(bash .vercel/env-upload.sh)",
       "Bash(CI=true npx vercel env add DEBUG_TEST_VAR preview --value \"hello\" --force --yes)",
       "Bash(rm -f .vercel/.env.preview.check)",
-      "Bash(rm -f .vercel/env-upload.sh)"
+      "Bash(rm -f .vercel/env-upload.sh)",
+      "Bash(npx eslint *)"
     ]
   }
 }

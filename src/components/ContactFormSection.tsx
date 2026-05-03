@@ -46,76 +46,88 @@ export default function ContactFormSection() {
   };
 
   return (
-    <section className="py-16 bg-gradient-to-b from-white to-rose-50">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-16 lg:py-20 bg-background">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
-          <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-3 font-[family-name:var(--font-heading)]">
-            Tem uma Dúvida? ✨
+          <p className="text-[11px] font-black tracking-[0.18em] uppercase text-gold-500 mb-2.5">
+            Fale com a gente
+          </p>
+          <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-extrabold text-gray-900 mb-3 font-heading tracking-tight">
+            Tem uma{" "}
+            <em className="italic font-medium bg-linear-to-r from-berry-600 to-rose-500 bg-clip-text text-transparent">
+              Dúvida
+            </em>
+            ? ✨
           </h2>
           <p className="text-gray-600 text-base">
-            Envie sua pergunta para nosso time. Responderemos o mais rápido possível!
+            Envie sua pergunta para nosso time. Respondemos no seu email em
+            minutos. 💌
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl border-2 border-rose-200 p-8 shadow-lg">
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-2">
-                Seu Email 📧
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="seuemail@exemplo.com"
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-600 focus:border-transparent text-sm"
-                disabled={loading}
-              />
+        <div className="lp-panel-soft rounded-4xl p-1.5 sm:p-2 shadow-[0_12px_28px_-8px_rgba(155,27,90,0.15)]">
+          <div className="bg-white rounded-[28px] border border-white/70 p-7 sm:p-9">
+            <div className="flex flex-wrap justify-center gap-2.5 mb-6">
+              <span className="lp-badge-verified">💬 Resposta rápida</span>
+              <span className="lp-badge-gold">📍 Loja física em SP</span>
+              <span className="lp-badge-glass">💕 Atendimento com carinho</span>
             </div>
 
-            {/* Question */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-2">
-                Sua Dúvida 💭
-              </label>
-              <textarea
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
-                placeholder="Descreva sua dúvida de forma clara e detalhada..."
-                rows={5}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-600 focus:border-transparent text-sm resize-none"
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <label className="block text-[13px] font-semibold text-gray-900 mb-2">
+                  Seu email 📧
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="seuemail@exemplo.com"
+                  className="lp-input"
+                  disabled={loading}
+                />
+              </div>
+
+              <div>
+                <label className="block text-[13px] font-semibold text-gray-900 mb-2">
+                  Sua dúvida 💭
+                </label>
+                <textarea
+                  value={question}
+                  onChange={(e) => setQuestion(e.target.value)}
+                  placeholder="Descreva sua dúvida de forma clara e detalhada..."
+                  rows={5}
+                  className="lp-textarea resize-none"
+                  disabled={loading}
+                />
+              </div>
+
+              {error && (
+                <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
+                  {error}
+                </div>
+              )}
+
+              {success && (
+                <div className="p-3 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm font-medium">
+                  ✓ Dúvida enviada com sucesso! Responderemos em breve.
+                </div>
+              )}
+
+              <button
+                type="submit"
                 disabled={loading}
-              />
-            </div>
+                className="lp-btn-primary w-full text-base disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {loading ? "Enviando..." : "Enviar Dúvida"}
+              </button>
 
-            {/* Error Message */}
-            {error && (
-              <div className="p-3 bg-red-100 border border-red-300 rounded-lg text-red-700 text-sm">
-                {error}
-              </div>
-            )}
-
-            {/* Success Message */}
-            {success && (
-              <div className="p-3 bg-green-100 border border-green-300 rounded-lg text-green-700 text-sm font-medium">
-                ✓ Dúvida enviada com sucesso! Responderemos em breve.
-              </div>
-            )}
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-bold py-3 rounded-lg transition-all transform hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed text-lg"
-            >
-              {loading ? "Enviando..." : "Enviar Dúvida"}
-            </button>
-
-            <p className="text-xs text-gray-500 text-center">
-              Sua pergunta será enviada para lepmakeup3@gmail.com. Responderemos no seu email! 💌
-            </p>
-          </form>
+              <p className="text-[11px] text-gray-400 text-center">
+                Sua pergunta vai para lepmakeup3@gmail.com. Respondemos no seu
+                email com carinho 💕
+              </p>
+            </form>
+          </div>
         </div>
       </div>
     </section>

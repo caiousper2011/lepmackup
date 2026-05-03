@@ -62,7 +62,7 @@ export async function generateMetadata({
     currency: "BRL",
   });
 
-  const imageUrl = product.images[0] || "/icon.png";
+  const imageUrl = product.images[0] || "/brand/logo-lp-circle.png";
 
   // Title focado em CTR: nome → preço → marca
   const title = `${product.name} por ${promoPrice} | L&PMakeUp`;
@@ -139,10 +139,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
     ? `${siteUrl}/categoria/${categoryMeta.slug}`
     : siteUrl;
 
-  // Validade da oferta: 30 dias à frente (Google exige priceValidUntil)
-  const priceValidUntil = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
-    .toISOString()
-    .split("T")[0];
+  // Validade da oferta: 30 dias à frente a partir da última atualização do produto
+  const priceValidUntilDate = new Date(product.updatedAt);
+  priceValidUntilDate.setDate(priceValidUntilDate.getDate() + 30);
+  const priceValidUntil = priceValidUntilDate.toISOString().split("T")[0];
 
   // FAQ específica do produto — gerada a partir dos atributos do banco.
   // Visível na página + schema FAQPage para snippets ricos do Google e citação por IA.
@@ -281,7 +281,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         product={product}
         relatedProducts={related}
         categoryHref={
-          categoryMeta ? `/categoria/${categoryMeta.slug}` : "/#categorias"
+          categoryMeta ? `/categoria/${categoryMeta.slug}` : "/#produtos"
         }
         faqs={productFaqs}
       />

@@ -67,11 +67,11 @@ export default async function HomePage() {
         url: siteUrl,
         logo: {
           "@type": "ImageObject",
-          url: `${siteUrl}/icon.png`,
-          width: 512,
-          height: 512,
+          url: `${siteUrl}/brand/logo-lp-circle.png`,
+          width: 768,
+          height: 768,
         },
-        image: `${siteUrl}/icon.png`,
+        image: `${siteUrl}/brand/logo-lp-circle.png`,
         description:
           "Loja de maquiagem profissional com produtos a partir de R$ 6,99. Cílios postiços, delineadores, gloss labial, paletas e acessórios. Entrega para todo o Brasil.",
         slogan: "Maquiagem profissional a partir de R$ 6,99",

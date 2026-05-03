@@ -64,7 +64,9 @@ export const ModelName = {
   Coupon: 'Coupon',
   ReferralReward: 'ReferralReward',
   WebhookLog: 'WebhookLog',
-  AuditLog: 'AuditLog'
+  AuditLog: 'AuditLog',
+  SupportMessage: 'SupportMessage',
+  ContactForm: 'ContactForm'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -307,6 +309,32 @@ export const AuditLogScalarFieldEnum = {
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const SupportMessageScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  userId: 'userId',
+  message: 'message',
+  senderType: 'senderType',
+  attachmentUrl: 'attachmentUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SupportMessageScalarFieldEnum = (typeof SupportMessageScalarFieldEnum)[keyof typeof SupportMessageScalarFieldEnum]
+
+
+export const ContactFormScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  question: 'question',
+  read: 'read',
+  respondedAt: 'respondedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type ContactFormScalarFieldEnum = (typeof ContactFormScalarFieldEnum)[keyof typeof ContactFormScalarFieldEnum]
 
 
 export const SortOrder = {

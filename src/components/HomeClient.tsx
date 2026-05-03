@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
 import HeroCarousel from "@/components/HeroCarousel";
 import { Product } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import ContactFormSection from "@/components/ContactFormSection";
+import { CATEGORIES } from "@/lib/categories";
 
 interface CategoryLink {
   name: string;
@@ -19,17 +19,9 @@ interface HomeClientProps {
   categoryLinks?: CategoryLink[];
 }
 
-export default function HomeClient({
-  products,
-  categories,
-  categoryLinks,
-}: HomeClientProps) {
+export default function HomeClient({ products, categories }: HomeClientProps) {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const { setIsOpen, totalQuantity } = useCart();
-
-  const categoryHrefMap = new Map(
-    (categoryLinks ?? []).map((c) => [c.name, c.href]),
-  );
 
   const filtered = activeCategory
     ? products.filter((p) => p.category === activeCategory)
@@ -37,107 +29,93 @@ export default function HomeClient({
 
   return (
     <>
-      {/* OFERTA RELÂMPAGO URGENCY BAR - Extremamente agressivo */}
-      <div className="sticky top-0 z-30 bg-gradient-to-r from-rose-600 via-pink-600 to-rose-600 text-white py-3 px-4 text-center text-xs sm:text-sm font-black shadow-2xl shadow-rose-600/50">
-        <div className="flex items-center justify-center gap-2 flex-wrap">
-          <span className="animate-bounce">⚡</span>
-          <span>OFERTA RELÂMPAGO AGORA</span>
-          <span>|</span>
-          <span className="text-gold-300">-63% EM TUDO</span>
-          <span>|</span>
-          <span className="animate-pulse">📦 ESTOQUES ACABANDO</span>
-          <span className="animate-bounce">⚡</span>
-        </div>
-      </div>
-
-      {/* Hero Carousel: 4 slides com autoplay de 5s — Ruby Rose, hero principal, Vivai Ultra Black, Pó Banana Fenzza */}
+      {/* Hero Carousel — autoplay, design system surfaces */}
       <HeroCarousel products={products} />
 
-      {/* CATEGORIES - Modern Pills */}
-      <section className="py-8 bg-white border-b-2 border-rose-100">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-sm font-bold text-gray-600 uppercase tracking-wider mb-5">
-            Encontre o que você procura
-          </p>
-          <div className="flex flex-wrap justify-center gap-2">
-            <button
-              onClick={() => setActiveCategory(null)}
-              className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-200 ${
-                !activeCategory
-                  ? "bg-gradient-to-r from-rose-600 to-pink-600 text-white shadow-lg shadow-rose-600/40"
-                  : "bg-rose-50 text-rose-700 hover:bg-rose-100 border-2 border-rose-200"
-              }`}
-            >
-              Todos
-            </button>
-            {categories.map((cat) => {
-              const emoji =
-                cat === "Olhos"
-                  ? "👁️"
-                  : cat === "Lábios"
-                    ? "💋"
-                    : cat === "Rosto"
-                      ? "✨"
-                      : cat === "Sobrancelhas"
-                        ? "✏️"
-                        : cat === "Acessórios"
-                          ? "🧽"
-                          : "💄";
-              return (
-                <button
-                  key={cat}
-                  onClick={() =>
-                    setActiveCategory(cat === activeCategory ? null : cat)
-                  }
-                  className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-200 ${
-                    activeCategory === cat
-                      ? "bg-gradient-to-r from-rose-600 to-pink-600 text-white shadow-lg shadow-rose-600/40"
-                      : "bg-rose-50 text-rose-700 hover:bg-rose-100 border-2 border-rose-200"
-                  }`}
-                >
-                  {emoji} {cat}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* PRODUCTS GRID - FEATURED SECTION */}
+      {/* PRODUCTS GRID — Mais Vendidos da Semana */}
       <section
         id="produtos"
-        className="py-16 lg:py-20 bg-gradient-to-b from-white via-rose-50/30 to-white"
+        className="pt-8 pb-12 sm:py-16 lg:py-20 gradient-berry-soft"
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-rose-600 to-pink-600 text-white px-4 py-1.5 rounded-full text-xs font-black mb-4 shadow-lg">
-              ⚡ OFERTA RELÂMPAGO
-            </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 mb-3 font-[family-name:var(--font-heading)]">
-              {activeCategory
-                ? `${activeCategory} — Exclusivo da Promoção`
-                : "Maquiagem Premium Agora em Oferta"}
+          {/* Section head */}
+          <div className="text-center mb-10">
+            <p className="text-[11px] font-black tracking-[0.18em] uppercase text-gold-500 mb-2.5 inline-flex items-center gap-1.5">
+              <span>⚡</span>
+              <span>Ofertas Relâmpago</span>
+            </p>
+            <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-extrabold text-gray-900 mb-3 font-(family-name:--font-heading) tracking-tight">
+              {activeCategory ? (
+                <>
+                  {activeCategory} —{" "}
+                  <em className="italic font-medium bg-linear-to-r from-berry-600 to-rose-500 bg-clip-text text-transparent">
+                    Em Destaque
+                  </em>
+                </>
+              ) : (
+                <>
+                  Mais{" "}
+                  <em className="italic font-medium bg-linear-to-r from-berry-600 to-rose-500 bg-clip-text text-transparent">
+                    Vendidos
+                  </em>{" "}
+                  da Semana
+                </>
+              )}
             </h2>
-            <p className="text-gray-600 text-base max-w-2xl mx-auto">
-              Apenas <span className="font-black text-rose-600">{filtered.length}</span> produtos disponíveis nesta categoria
-              <br />
-              <span className="text-sm text-gold-600 font-bold">
-                Compre 4+ e economize ainda mais! 🎁
+            <p className="text-gray-600 text-base max-w-xl mx-auto">
+              Os queridinhos das nossas clientes — e dos profissionais.{" "}
+              <span className="block sm:inline mt-1 sm:mt-0 text-gold-600 font-semibold">
+                Compre 4+ e economize ainda mais 🎁
               </span>
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
+          {/* Filter pills */}
+          <div className="mb-8 sm:mb-10 -mx-4 px-4 pb-1 overflow-x-auto hide-scrollbar">
+            <div className="flex min-w-max sm:min-w-full items-center justify-start sm:justify-center gap-1.5 sm:gap-2.5">
+              <button
+                onClick={() => setActiveCategory(null)}
+                className={`whitespace-nowrap rounded-full px-3 py-1.5 sm:px-5 sm:py-2.5 text-[12px] sm:text-sm font-bold transition-all duration-200 ${
+                  !activeCategory
+                    ? "gradient-cta text-white shadow-[0_8px_24px_-4px_rgba(225,29,72,0.4)]"
+                    : "bg-white text-berry-700 border-2 border-rose-200 hover:border-rose-400"
+                }`}
+              >
+                Todos
+              </button>
+              {categories.map((cat) => {
+                const meta = CATEGORIES.find((c) => c.dbName === cat);
+                const emoji = meta?.emoji ?? "💄";
+                return (
+                  <button
+                    key={cat}
+                    onClick={() =>
+                      setActiveCategory(cat === activeCategory ? null : cat)
+                    }
+                    className={`whitespace-nowrap rounded-full px-3 py-1.5 sm:px-5 sm:py-2.5 text-[12px] sm:text-sm font-bold transition-all duration-200 ${
+                      activeCategory === cat
+                        ? "gradient-cta text-white shadow-[0_8px_24px_-4px_rgba(225,29,72,0.4)]"
+                        : "bg-white text-berry-700 border-2 border-rose-200 hover:border-rose-400"
+                    }`}
+                  >
+                    <span className="hidden sm:inline mr-1.5">{emoji}</span>
+                    {cat}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
             {filtered.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
 
-          {/* CTA BUTTON - AFTER PRODUCTS */}
           <div className="text-center mt-12">
             <a
-              href="#checkout"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-rose-600 to-pink-600 text-white font-black px-10 py-4 rounded-2xl shadow-2xl shadow-rose-600/40 hover:shadow-2xl hover:shadow-rose-600/60 transition-all transform hover:scale-105 active:scale-95 text-lg"
+              href="#produtos"
+              className="inline-flex items-center gap-2 gradient-cta text-white font-extrabold px-8 sm:px-10 py-4 sm:py-4.5 rounded-full shadow-[0_8px_24px_-4px_rgba(225,29,72,0.4)] hover:shadow-[0_12px_28px_-4px_rgba(225,29,72,0.55)] transition-all transform hover:scale-[1.04] active:scale-[0.97] text-base sm:text-[17px]"
             >
               Comprar Agora com Desconto
               <span className="text-xl">→</span>
@@ -146,102 +124,117 @@ export default function HomeClient({
         </div>
       </section>
 
-      {/* TRUST & SECURITY SECTION - Build confidence */}
-      <section className="py-14 bg-gradient-to-r from-slate-900 to-slate-800 text-white">
+      {/* HOW TO BUY — White panel, rounded-3xl */}
+      <section className="py-16 lg:py-20 bg-background">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl sm:text-3xl font-black text-center mb-10">
-            Compre com Total Segurança 🔒
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="text-center mb-10">
+            <p className="text-[11px] font-black tracking-[0.18em] uppercase text-gold-500 mb-2.5">
+              Simples &amp; Seguro
+            </p>
+            <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-extrabold text-gray-900 font-(family-name:--font-heading) tracking-tight">
+              Compre em{" "}
+              <em className="italic font-medium bg-linear-to-r from-berry-600 to-rose-500 bg-clip-text text-transparent">
+                3 Passos
+              </em>
+            </h2>
+          </div>
+
+          <div className="bg-white border border-rose-100 rounded-4xl p-8 sm:p-12 grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 shadow-[0_2px_6px_rgba(155,27,90,0.06)]">
+            {[
+              {
+                num: "01",
+                title: "Escolha seus produtos",
+                desc: "Adicione tudo o que quiser ao carrinho. Quanto mais leva, mais economiza 🎁",
+              },
+              {
+                num: "02",
+                title: "Pague com segurança",
+                desc: "Mercado Pago SSL 256-bit. PIX, cartão ou boleto — você escolhe.",
+              },
+              {
+                num: "03",
+                title: "Receba em casa",
+                desc: "Em SP, 24h. Brasil inteiro, 3 a 7 dias. Acompanhe em tempo real.",
+              },
+            ].map((step) => (
+              <div key={step.num} className="text-center">
+                <div className="font-(family-name:--font-heading) font-black text-5xl sm:text-[48px] leading-none mb-2 bg-linear-to-br from-berry-600 via-rose-500 to-gold-500 bg-clip-text text-transparent">
+                  {step.num}
+                </div>
+                <h3 className="font-(family-name:--font-heading) font-bold text-xl text-gray-900 mb-2">
+                  {step.title}
+                </h3>
+                <p className="text-sm text-gray-600 leading-relaxed">
+                  {step.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* TRUST BLOCK — Dark slate inside soft gradient surface */}
+      <section className="py-16 lg:py-20 gradient-berry-soft">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-slate-900 text-white rounded-4xl p-10 sm:p-14 grid grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10">
             {[
               {
                 icon: "🔐",
-                title: "Pagamento Seguro",
-                desc: "Mercado Pago com criptografia SSL 256-bit. Seus dados 100% protegidos.",
+                title: "SSL 256-bit",
+                desc: "Mercado Pago. Seus dados protegidos do início ao fim.",
               },
               {
-                icon: "✓",
-                title: "Garantia 30 Dias",
-                desc: "Não gostou? Devolva e receba seu dinheiro de volta.",
+                icon: "💳",
+                title: "Pague como quiser",
+                desc: "PIX, cartão em até 6× ou boleto. Aprovação imediata.",
               },
               {
                 icon: "🚚",
-                title: "Entrega Rastreada",
-                desc: "Acompanhe seu pedido em tempo real de SP até sua casa.",
+                title: "Entrega rápida",
+                desc: "SP em 24h. Brasil 3-7 dias. Frete grátis acima de R$ 99.",
               },
               {
                 icon: "💬",
-                title: "Suporte 24/7",
-                desc: "Chat ao vivo, WhatsApp e email. Sempre pronto para ajudar.",
+                title: "Suporte direto",
+                desc: "WhatsApp seg-sáb 9h-18h. Resposta em minutos.",
               },
             ].map((item, i) => (
-              <div key={i} className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl border border-white/20 text-center hover:bg-white/15 transition-all">
-                <div className="text-4xl mb-3">{item.icon}</div>
-                <h3 className="font-black mb-2">{item.title}</h3>
-                <p className="text-sm text-gray-300">{item.desc}</p>
+              <div key={i} className="text-center">
+                <div className="text-3xl sm:text-[34px] leading-none mb-2.5">
+                  {item.icon}
+                </div>
+                <h4 className="font-(family-name:--font-heading) font-bold text-lg mb-1.5">
+                  {item.title}
+                </h4>
+                <p className="text-[13px] text-slate-400 leading-relaxed">
+                  {item.desc}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* HOW TO BUY - SIMPLIFIED */}
-      <section className="py-14 bg-white">
+      {/* TESTIMONIALS — Editorial review cards */}
+      <section className="py-16 lg:py-20 bg-background">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-black text-center mb-12 text-gray-900">
-            Compre em 3 Passos Simples
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                num: "1",
-                emoji: "🛍️",
-                title: "Escolha seus Produtos",
-                desc: "Navegue pelas categorias e adicione ao carrinho. Leve 4+ para melhor preço!",
-              },
-              {
-                num: "2",
-                emoji: "💳",
-                title: "Pague com Segurança",
-                desc: "PIX, Cartão ou Boleto via Mercado Pago. Pronto em segundos!",
-              },
-              {
-                num: "3",
-                emoji: "📦",
-                title: "Receba em Casa",
-                desc: "Entregamos em até 24h em SP. Brasil inteiro em 3-7 dias.",
-              },
-            ].map((item) => (
-              <div key={item.num} className="relative">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-gradient-to-r from-rose-600 to-pink-600 text-white rounded-full flex items-center justify-center font-black text-sm">
-                  {item.num}
-                </div>
-                <div className="bg-gradient-to-br from-rose-50 to-pink-50 p-8 rounded-2xl border-2 border-rose-200 text-center h-full">
-                  <div className="text-5xl mb-4">{item.emoji}</div>
-                  <h3 className="font-black text-lg text-gray-900 mb-2">
-                    {item.title}
-                  </h3>
-                  <p className="text-gray-700 text-sm leading-relaxed">
-                    {item.desc}
-                  </p>
-                </div>
-              </div>
-            ))}
+          <div className="text-center mb-10">
+            <p className="text-[11px] font-black tracking-[0.18em] uppercase text-gold-500 mb-2.5">
+              500+ Clientes Satisfeitas
+            </p>
+            <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-extrabold text-gray-900 mb-3 font-(family-name:--font-heading) tracking-tight">
+              Milhares de{" "}
+              <em className="italic font-medium bg-linear-to-r from-berry-600 to-rose-500 bg-clip-text text-transparent">
+                Clientes
+              </em>{" "}
+              Satisfeitas 💕
+            </h2>
+            <p className="text-gray-600 text-base">
+              Veja por que 500+ mulheres confiam em nós.
+            </p>
           </div>
-        </div>
-      </section>
 
-      {/* TESTIMONIALS - HIGHLY VISIBLE */}
-      <section className="py-16 bg-gradient-to-b from-rose-50 to-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl sm:text-4xl font-black text-center mb-4 text-gray-900">
-            Milhares de Clientes Satisfeitas 💕
-          </h2>
-          <p className="text-center text-gray-600 font-semibold mb-12">
-            Veja por que 500+ mulheres confiam em nós
-          </p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
               {
                 name: "Ana Paula",
@@ -288,15 +281,17 @@ export default function HomeClient({
             ].map((review, i) => (
               <div
                 key={i}
-                className="bg-white p-6 rounded-2xl border-2 border-rose-200 hover:border-rose-400 hover:shadow-lg hover:shadow-rose-200/50 transition-all"
+                className="bg-white p-6 rounded-3xl border-2 border-rose-100 hover:border-rose-300 transition-all duration-300 hover:shadow-[0_12px_28px_-8px_rgba(155,27,90,0.15)]"
               >
-                <div className="flex items-center justify-between mb-3">
+                <div className="flex items-start justify-between mb-3">
                   <div>
-                    <h4 className="font-black text-gray-900">{review.name}</h4>
-                    <p className="text-xs text-gray-500">{review.city}</p>
+                    <h4 className="font-bold text-gray-900 font-(family-name:--font-heading)">
+                      {review.name}
+                    </h4>
+                    <p className="text-xs text-gray-400">{review.city}</p>
                   </div>
                   {review.verified && (
-                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold flex items-center gap-1">
+                    <span className="text-[10px] bg-green-100 text-green-700 px-2.5 py-1 rounded-full font-bold flex items-center gap-1 shrink-0">
                       ✓ Verificada
                     </span>
                   )}
@@ -305,22 +300,35 @@ export default function HomeClient({
                   {Array(review.stars)
                     .fill(0)
                     .map((_, j) => (
-                      <span key={j} className="text-lg">⭐</span>
+                      <span key={j} className="text-base">
+                        ⭐
+                      </span>
                     ))}
                 </div>
-                <p className="text-gray-700 text-sm italic">"{review.text}"</p>
+                <p className="text-gray-700 text-sm leading-relaxed italic">
+                  &ldquo;{review.text}&rdquo;
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* FAQ - Quick answers */}
-      <section className="py-14 bg-white">
+      {/* FAQ */}
+      <section className="py-14 bg-background">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-black text-center text-gray-900 mb-10">
-            Dúvidas? Respondemos Aqui ✨
-          </h2>
+          <div className="text-center mb-10">
+            <p className="text-[11px] font-black tracking-[0.18em] uppercase text-gold-500 mb-2.5">
+              Dúvidas? Respondemos
+            </p>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 font-(family-name:--font-heading) tracking-tight">
+              Perguntas{" "}
+              <em className="italic font-medium bg-linear-to-r from-berry-600 to-rose-500 bg-clip-text text-transparent">
+                Frequentes
+              </em>{" "}
+              ✨
+            </h2>
+          </div>
           <div className="space-y-3">
             {[
               {
@@ -350,13 +358,15 @@ export default function HomeClient({
             ].map((faq, i) => (
               <details
                 key={i}
-                className="group bg-white border-2 border-rose-200 rounded-xl hover:border-rose-400 hover:shadow-md transition-all"
+                className="group bg-white border-2 border-rose-100 rounded-2xl hover:border-rose-300 hover:shadow-[0_8px_16px_-4px_rgba(155,27,90,0.10)] transition-all"
               >
                 <summary className="flex items-center gap-3 p-5 cursor-pointer font-bold text-gray-900 text-sm">
-                  <span className="text-rose-600 group-open:rotate-90 transition-transform">→</span>
+                  <span className="text-berry-600 group-open:rotate-90 transition-transform">
+                    →
+                  </span>
                   {faq.q}
                 </summary>
-                <div className="px-5 pb-5 text-gray-700 text-sm border-t border-rose-100">
+                <div className="px-5 pb-5 text-gray-700 text-sm border-t border-rose-100 pt-4 leading-relaxed">
                   {faq.a}
                 </div>
               </details>
@@ -365,25 +375,32 @@ export default function HomeClient({
         </div>
       </section>
 
-      {/* FINAL CTA - Don't miss out */}
-      <section className="py-14 bg-gradient-to-r from-rose-600 via-pink-600 to-rose-600 text-white text-center relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent" />
-        </div>
-        <div className="relative z-10 max-w-2xl mx-auto px-4">
-          <h2 className="text-3xl sm:text-4xl font-black mb-4">
-            Não deixe para depois! 🔥
-          </h2>
-          <p className="text-lg mb-8 text-rose-100">
-            A oferta termina em poucas horas. Preço normal volta depois.
-          </p>
-          <a
-            href="#produtos"
-            className="inline-flex items-center gap-2 bg-white text-rose-600 font-black px-12 py-5 rounded-2xl shadow-2xl hover:shadow-2xl hover:bg-rose-50 transition-all transform hover:scale-105 active:scale-95 text-lg"
-          >
-            <span>Aproveitar Oferta Agora</span>
-            <span className="text-2xl">🚀</span>
-          </a>
+      {/* FINAL CTA — gradient block panel inside light bg */}
+      <section className="py-12 lg:py-16 bg-background">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative overflow-hidden rounded-4xl gradient-berry text-white text-center px-6 sm:px-12 py-14 sm:py-16">
+            {/* Decorative blobs */}
+            <div className="absolute -top-24 -right-12 w-72 h-72 rounded-full bg-white/10 pointer-events-none" />
+            <div className="absolute -bottom-20 -left-10 w-60 h-60 rounded-full bg-white/10 pointer-events-none" />
+
+            <div className="relative z-10 max-w-2xl mx-auto">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black font-(family-name:--font-heading) tracking-tight leading-tight mb-4">
+                Não deixe pra{" "}
+                <em className="italic font-medium text-gold-100">depois</em> 🔥
+              </h2>
+              <p className="text-base sm:text-[17px] opacity-95 mb-7">
+                500+ clientes já garantiram suas favoritas com até 63% OFF.
+                Estoques acabando hoje.
+              </p>
+              <a
+                href="#produtos"
+                className="inline-flex items-center gap-2.5 bg-white text-rose-600 font-black px-8 sm:px-10 py-4 sm:py-4.5 rounded-full shadow-[0_12px_28px_-6px_rgba(0,0,0,0.3)] hover:shadow-2xl transition-all transform hover:scale-105 active:scale-95 text-base sm:text-[18px]"
+              >
+                Aproveitar Oferta Agora
+                <span className="text-2xl">🚀</span>
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -394,7 +411,7 @@ export default function HomeClient({
       {totalQuantity > 0 && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-40 md:hidden bg-gradient-to-r from-rose-600 to-pink-600 text-white p-4 rounded-full shadow-2xl shadow-rose-600/50 flex items-center gap-2 active:scale-95 transition-transform font-bold hover:shadow-2xl hover:shadow-rose-600/70"
+          className="fixed bottom-6 right-6 z-40 md:hidden gradient-cta text-white p-4 rounded-full shadow-2xl shadow-rose-600/50 flex items-center gap-2 active:scale-95 transition-transform font-bold hover:shadow-2xl hover:shadow-rose-600/70"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

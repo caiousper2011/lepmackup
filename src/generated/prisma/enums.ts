@@ -57,3 +57,11 @@ export const CouponAppliesTo = {
 } as const
 
 export type CouponAppliesTo = (typeof CouponAppliesTo)[keyof typeof CouponAppliesTo]
+
+
+export const SenderType = {
+  USER: 'USER',
+  ADMIN: 'ADMIN'
+} as const
+
+export type SenderType = (typeof SenderType)[keyof typeof SenderType]

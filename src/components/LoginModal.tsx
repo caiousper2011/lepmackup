@@ -188,13 +188,13 @@ export default function LoginModal() {
       />
       <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
         <div
-          className="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 relative animate-fade-up"
+          className="bg-white rounded-[28px] shadow-[0_20px_40px_-12px_rgba(155,27,90,0.18)] border border-rose-100 w-full max-w-sm p-7 relative animate-fade-up"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Close */}
           <button
             onClick={handleClose}
-            className="absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100 transition-colors"
+            className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-rose-50 transition-colors"
             aria-label="Fechar"
           >
             <svg
@@ -214,27 +214,42 @@ export default function LoginModal() {
 
           {/* Logo */}
           <div className="text-center mb-6">
-            <div className="w-14 h-14 rounded-full gradient-berry flex items-center justify-center mx-auto mb-3 shadow-lg shadow-berry-600/20">
-              <span className="text-white font-bold text-lg">L&P</span>
+            <div className="w-16 h-16 rounded-full gradient-berry flex items-center justify-center mx-auto mb-4 shadow-[0_12px_28px_-8px_rgba(155,27,90,0.4)]">
+              <span className="text-white font-bold font-[family-name:var(--font-heading)] text-xl">
+                L&amp;P
+              </span>
             </div>
-            <h2 className="text-lg font-bold text-gray-900 font-[family-name:var(--font-heading)]">
-              {step === "email" ? "Entrar na sua conta" : "Digite o código"}
+            <p className="text-[11px] font-black tracking-[0.18em] uppercase text-gold-500 mb-1.5">
+              {step === "email" ? "Entrar" : "Verificar código"}
+            </p>
+            <h2 className="text-2xl font-extrabold text-gray-900 font-[family-name:var(--font-heading)] tracking-tight">
+              {step === "email" ? (
+                <>
+                  Bem-vinda{" "}
+                  <em className="italic font-medium bg-gradient-to-r from-berry-600 to-rose-500 bg-clip-text text-transparent">
+                    de volta
+                  </em>{" "}
+                  💕
+                </>
+              ) : (
+                "Digite o código"
+              )}
             </h2>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-gray-500 mt-2">
               {step === "email"
-                ? "Enviaremos um código para seu e-mail"
+                ? "Enviaremos um código para seu e-mail."
                 : `Código enviado para ${email}`}
             </p>
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl p-3 mb-4">
+            <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-2xl p-3 mb-4">
               {error}
             </div>
           )}
 
           {info && (
-            <div className="bg-blue-50 border border-blue-200 text-blue-700 text-sm rounded-xl p-3 mb-4">
+            <div className="bg-blush-50 border border-rose-100 text-berry-700 text-sm rounded-2xl p-3 mb-4">
               {info}
             </div>
           )}
@@ -244,7 +259,7 @@ export default function LoginModal() {
               <div>
                 <label
                   htmlFor="login-email"
-                  className="block text-sm font-medium text-gray-700 mb-1.5"
+                  className="block text-sm font-semibold text-gray-900 mb-2"
                 >
                   E-mail
                 </label>
@@ -256,13 +271,13 @@ export default function LoginModal() {
                   placeholder="seu@email.com"
                   required
                   autoFocus
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border border-rose-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600/60 focus:border-rose-300 bg-white transition-all"
                 />
               </div>
               <button
                 type="submit"
                 disabled={loading || !email}
-                className="w-full gradient-cta text-white font-semibold py-3 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-berry-600/20"
+                className="w-full gradient-cta text-white font-extrabold py-[14px] rounded-full shadow-[0_8px_24px_-4px_rgba(225,29,72,0.4)] hover:shadow-[0_12px_28px_-4px_rgba(225,29,72,0.55)] transition-all transform hover:scale-[1.02] active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? "Enviando..." : "Enviar Código"}
               </button>
@@ -286,7 +301,7 @@ export default function LoginModal() {
                     value={digit}
                     onChange={(e) => handleCodeChange(i, e.target.value)}
                     onKeyDown={(e) => handleCodeKeyDown(i, e)}
-                    className="w-11 h-13 text-center text-xl font-bold border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-berry-600 focus:border-transparent transition-all"
+                    className="w-11 h-13 text-center text-xl font-[family-name:var(--font-heading)] font-black border border-rose-100 rounded-2xl focus:outline-none focus:ring-2 focus:ring-berry-600/60 focus:border-rose-300 bg-white transition-all"
                     disabled={loading}
                   />
                 ))}
@@ -302,7 +317,7 @@ export default function LoginModal() {
                   <button
                     onClick={handleResend}
                     disabled={loading}
-                    className="text-sm text-berry-600 hover:text-berry-700 font-medium transition-colors"
+                    className="text-sm text-berry-600 hover:text-berry-700 font-semibold transition-colors"
                   >
                     Reenviar código
                   </button>
@@ -317,14 +332,14 @@ export default function LoginModal() {
                   setError("");
                   setInfo("");
                 }}
-                className="w-full py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+                className="w-full py-2 text-sm text-gray-500 hover:text-berry-600 transition-colors"
               >
                 ← Usar outro e-mail
               </button>
             </div>
           )}
 
-          <p className="text-[10px] text-gray-400 text-center mt-4">
+          <p className="text-[10px] text-gray-400 text-center mt-5">
             Ao continuar, você aceita nossos Termos de Uso e Política de
             Privacidade.
           </p>

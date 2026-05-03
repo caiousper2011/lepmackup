@@ -122,33 +122,50 @@ export default function MinhaContaPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8 space-y-8">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14 space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Minha Conta</h1>
-        <p className="text-sm text-gray-500 mt-1">{user?.email}</p>
+        <p className="text-[11px] font-black tracking-[0.18em] uppercase text-gold-500 mb-2">
+          Sua área pessoal
+        </p>
+        <h1 className="font-[family-name:var(--font-heading)] font-extrabold text-3xl sm:text-4xl text-gray-900 tracking-tight">
+          Minha{" "}
+          <em className="italic font-medium bg-gradient-to-r from-berry-600 to-rose-500 bg-clip-text text-transparent">
+            Conta
+          </em>
+        </h1>
+        <p className="text-sm text-gray-500 mt-2">{user?.email}</p>
       </div>
 
       {/* Quick links */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <Link
           href="/minha-conta/pedidos"
-          className="bg-white rounded-2xl border border-gray-200 p-5 hover:border-berry-600/20 transition-colors"
+          className="group bg-white rounded-3xl border-2 border-rose-100 shadow-[0_2px_6px_rgba(155,27,90,0.06)] p-5 hover:border-rose-300 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_-8px_rgba(155,27,90,0.18)] transition-all"
         >
-          <p className="font-semibold text-gray-900">Meus Pedidos</p>
+          <span className="text-2xl block mb-2">📦</span>
+          <p className="font-bold font-[family-name:var(--font-heading)] text-gray-900">
+            Meus Pedidos
+          </p>
           <p className="text-sm text-gray-500 mt-1">Acompanhe suas compras</p>
         </Link>
         <Link
           href="/minha-conta/indicacoes"
-          className="bg-white rounded-2xl border border-gray-200 p-5 hover:border-berry-600/20 transition-colors"
+          className="group bg-white rounded-3xl border-2 border-rose-100 shadow-[0_2px_6px_rgba(155,27,90,0.06)] p-5 hover:border-rose-300 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_-8px_rgba(155,27,90,0.18)] transition-all"
         >
-          <p className="font-semibold text-gray-900">Indicar Amigas</p>
+          <span className="text-2xl block mb-2">💕</span>
+          <p className="font-bold font-[family-name:var(--font-heading)] text-gray-900">
+            Indicar Amigas
+          </p>
           <p className="text-sm text-gray-500 mt-1">
             Ganhe descontos indicando
           </p>
         </Link>
-        <div className="bg-white rounded-2xl border border-gray-200 p-5">
-          <p className="font-semibold text-gray-900">Código de Indicação</p>
-          <p className="text-lg font-mono text-berry-600 mt-1">
+        <div className="bg-white rounded-3xl border-2 border-rose-100 shadow-[0_2px_6px_rgba(155,27,90,0.06)] p-5">
+          <span className="text-2xl block mb-2">🎀</span>
+          <p className="font-bold font-[family-name:var(--font-heading)] text-gray-900">
+            Código de Indicação
+          </p>
+          <p className="font-[family-name:var(--font-heading)] font-black text-xl text-berry-600 mt-1 tracking-tight">
             {user?.referralCode || "—"}
           </p>
         </div>
@@ -157,14 +174,16 @@ export default function MinhaContaPage() {
       {/* Addresses */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-gray-900">Meus Endereços</h2>
+          <h2 className="font-[family-name:var(--font-heading)] font-bold text-2xl text-gray-900">
+            Meus Endereços
+          </h2>
           <button
             onClick={() => {
               setForm(emptyForm);
               setEditingId(null);
               setShowForm(true);
             }}
-            className="text-sm text-berry-600 hover:text-berry-700 font-medium"
+            className="text-sm text-berry-600 hover:text-berry-700 font-bold"
           >
             + Novo Endereço
           </button>
@@ -173,7 +192,7 @@ export default function MinhaContaPage() {
         {showForm && (
           <form
             onSubmit={handleSubmit}
-            className="bg-white rounded-2xl border border-gray-200 p-5 mb-4 space-y-3"
+            className="bg-white rounded-3xl border border-rose-100 shadow-[0_2px_6px_rgba(155,27,90,0.06)] p-5 mb-4 space-y-3"
           >
             <div className="grid grid-cols-2 gap-3">
               <div className="col-span-2">
@@ -185,7 +204,7 @@ export default function MinhaContaPage() {
                   value={form.label}
                   onChange={(e) => setForm({ ...form, label: e.target.value })}
                   placeholder="Casa, Trabalho..."
-                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
+                  className="w-full px-3 py-2 border border-rose-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600/60 focus:border-rose-300 bg-white transition-all"
                   required
                 />
               </div>
@@ -198,7 +217,7 @@ export default function MinhaContaPage() {
                   onBlur={(e) => lookupCep(e.target.value)}
                   placeholder="00000-000"
                   maxLength={9}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
+                  className="w-full px-3 py-2 border border-rose-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600/60 focus:border-rose-300 bg-white transition-all"
                   required
                 />
               </div>
@@ -210,7 +229,7 @@ export default function MinhaContaPage() {
                   type="text"
                   value={form.number}
                   onChange={(e) => setForm({ ...form, number: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
+                  className="w-full px-3 py-2 border border-rose-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600/60 focus:border-rose-300 bg-white transition-all"
                   required
                 />
               </div>
@@ -220,7 +239,7 @@ export default function MinhaContaPage() {
                   type="text"
                   value={form.street}
                   onChange={(e) => setForm({ ...form, street: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
+                  className="w-full px-3 py-2 border border-rose-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600/60 focus:border-rose-300 bg-white transition-all"
                   required
                 />
               </div>
@@ -235,7 +254,7 @@ export default function MinhaContaPage() {
                     setForm({ ...form, complement: e.target.value })
                   }
                   placeholder="Apto, Bloco..."
-                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
+                  className="w-full px-3 py-2 border border-rose-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600/60 focus:border-rose-300 bg-white transition-all"
                 />
               </div>
               <div>
@@ -248,7 +267,7 @@ export default function MinhaContaPage() {
                   onChange={(e) =>
                     setForm({ ...form, neighborhood: e.target.value })
                   }
-                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
+                  className="w-full px-3 py-2 border border-rose-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600/60 focus:border-rose-300 bg-white transition-all"
                   required
                 />
               </div>
@@ -260,7 +279,7 @@ export default function MinhaContaPage() {
                   type="text"
                   value={form.city}
                   onChange={(e) => setForm({ ...form, city: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
+                  className="w-full px-3 py-2 border border-rose-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600/60 focus:border-rose-300 bg-white transition-all"
                   required
                 />
               </div>
@@ -273,7 +292,7 @@ export default function MinhaContaPage() {
                   value={form.state}
                   onChange={(e) => setForm({ ...form, state: e.target.value })}
                   maxLength={2}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600"
+                  className="w-full px-3 py-2 border border-rose-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-berry-600/60 focus:border-rose-300 bg-white transition-all"
                   required
                 />
               </div>
@@ -296,14 +315,14 @@ export default function MinhaContaPage() {
                   setShowForm(false);
                   setEditingId(null);
                 }}
-                className="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50"
+                className="flex-1 py-2.5 border border-rose-100 rounded-full text-sm font-bold text-gray-700 hover:border-berry-300 hover:bg-rose-50/40 transition-all"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
                 disabled={saving}
-                className="flex-1 gradient-berry text-white py-2.5 rounded-xl text-sm font-medium disabled:opacity-50"
+                className="flex-1 gradient-cta text-white font-bold py-2.5 rounded-full text-sm shadow-[0_6px_16px_-4px_rgba(225,29,72,0.4)] hover:shadow-[0_8px_20px_-4px_rgba(225,29,72,0.55)] transition-all disabled:opacity-50"
               >
                 {saving ? "Salvando..." : editingId ? "Atualizar" : "Salvar"}
               </button>
@@ -326,7 +345,7 @@ export default function MinhaContaPage() {
             {addresses.map((a) => (
               <div
                 key={a.id}
-                className="bg-white rounded-2xl border border-gray-200 p-4 flex items-start justify-between"
+                className="bg-white rounded-3xl border border-rose-100 shadow-[0_2px_6px_rgba(155,27,90,0.06)] p-4 flex items-start justify-between"
               >
                 <div>
                   <div className="flex items-center gap-2">

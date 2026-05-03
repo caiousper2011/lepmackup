@@ -51,27 +51,27 @@ export default function CartDrawer() {
       />
 
       {/* Drawer */}
-      <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white z-50 shadow-2xl flex flex-col animate-slide-in">
+      <div className="fixed right-0 top-0 h-full w-full max-w-md bg-[#fffaf8] border-l border-rose-100 z-50 shadow-2xl flex flex-col animate-slide-in">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-rose-100/60">
+        <div className="flex items-center justify-between px-6 py-5 border-b border-rose-100 bg-white/95 backdrop-blur-xl">
           <div>
-            <h2 className="text-lg font-bold text-gray-900 font-[family-name:var(--font-heading)]">
-              Seu Carrinho
-            </h2>
-            <p className="text-xs text-gray-500">
+            <p className="text-[10px] font-black tracking-[0.18em] uppercase text-gold-500">
+              Seu carrinho
+            </p>
+            <h2 className="text-xl font-extrabold text-gray-900 font-[family-name:var(--font-heading)] leading-tight">
               {totalQuantity} {totalQuantity === 1 ? "item" : "itens"}
               {isBulkPricing && (
-                <span className="text-berry-600 font-semibold ml-1">
-                  • Desconto ativado!
+                <span className="ml-2 text-[11px] font-bold tracking-wide text-berry-600">
+                  · Desconto ativado!
                 </span>
               )}
-            </p>
+            </h2>
           </div>
           <button
             onClick={() => {
               setIsOpen(false);
             }}
-            className="p-2 rounded-full hover:bg-blush-50 transition-colors"
+            className="lp-icon-btn"
             aria-label="Fechar carrinho"
           >
             <svg
@@ -130,29 +130,29 @@ export default function CartDrawer() {
               )}
 
               {!isBulkPricing && (
-                <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-3 text-center">
-                  <p className="text-xs font-medium text-amber-800">
+                <div className="gradient-berry-soft border border-rose-100 rounded-2xl p-3.5 text-center">
+                  <p className="text-[12px] font-medium text-berry-700">
                     🔥 Adicione mais {4 - totalQuantity}{" "}
                     {4 - totalQuantity === 1 ? "item" : "itens"} e pague apenas{" "}
-                    <span className="font-bold text-berry-600">R$ 6,99</span>{" "}
+                    <span className="font-black text-berry-600">R$ 6,99</span>{" "}
                     cada!
                   </p>
                 </div>
               )}
 
               {isBulkPricing && (
-                <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-3 text-center">
-                  <p className="text-xs font-semibold text-green-700">
+                <div className="bg-green-50 border border-green-200 rounded-2xl p-3.5 text-center">
+                  <p className="text-[12px] font-semibold text-green-700">
                     ✅ Desconto ativado! Cada item por apenas R$ 6,99
                   </p>
                 </div>
               )}
 
               {isAtLimit && (
-                <div className="bg-rose-50 border border-rose-200 rounded-xl p-3 text-center">
-                  <p className="text-xs font-medium text-rose-700">
-                    Limite de {maxItemsPerOrder} itens por pedido atingido. Para
-                    comprar mais itens, finalize este pedido e faça um novo.
+                <div className="bg-rose-50 border border-rose-200 rounded-2xl p-3.5 text-center">
+                  <p className="text-[12px] font-medium text-rose-700">
+                    Limite de {maxItemsPerOrder} itens atingido. Finalize este
+                    pedido e faça um novo.
                   </p>
                 </div>
               )}
@@ -160,9 +160,9 @@ export default function CartDrawer() {
               {items.map((item) => (
                 <div
                   key={item.product.id}
-                  className="flex gap-3 bg-blush-50/50 rounded-xl p-3"
+                  className="flex gap-3 bg-white border border-rose-100 rounded-2xl p-3 shadow-[0_2px_6px_rgba(155,27,90,0.06)]"
                 >
-                  <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 relative">
+                  <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 relative bg-gradient-to-br from-blush-50 to-rose-50 border border-rose-100">
                     <Image
                       src={item.product.images[0]}
                       alt={item.product.shortName}
@@ -172,10 +172,10 @@ export default function CartDrawer() {
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-medium text-gray-900 truncate">
+                    <h4 className="text-sm font-semibold text-gray-900 truncate">
                       {item.product.shortName}
                     </h4>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-[11px] text-gray-400">
                       {item.product.brand}
                     </p>
                     <div className="flex items-center justify-between mt-2">
@@ -188,11 +188,11 @@ export default function CartDrawer() {
                             );
                             if (result.message) setCartMessage(result.message);
                           }}
-                          className="w-6 h-6 rounded-full bg-white border border-rose-100/60 flex items-center justify-center text-berry-600 text-xs hover:bg-blush-50 transition-colors"
+                          className="w-7 h-7 rounded-full bg-white border border-rose-100 flex items-center justify-center text-berry-600 text-sm font-bold hover:border-berry-300 hover:bg-blush-50 transition-colors"
                         >
                           −
                         </button>
-                        <span className="text-sm font-semibold w-6 text-center">
+                        <span className="text-sm font-bold w-6 text-center">
                           {item.quantity}
                         </span>
                         <button
@@ -204,17 +204,17 @@ export default function CartDrawer() {
                             if (result.message) setCartMessage(result.message);
                           }}
                           disabled={isAtLimit}
-                          className={`w-6 h-6 rounded-full bg-white border flex items-center justify-center text-xs transition-colors ${
+                          className={`w-7 h-7 rounded-full bg-white border flex items-center justify-center text-sm font-bold transition-colors ${
                             isAtLimit
-                              ? "border-gray-200 text-gray-300 cursor-not-allowed"
-                              : "border-rose-100/60 text-berry-600 hover:bg-blush-50"
+                              ? "border-rose-100 text-gray-300 cursor-not-allowed"
+                              : "border-rose-100 text-berry-600 hover:border-berry-300 hover:bg-blush-50"
                           }`}
                         >
                           +
                         </button>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold text-berry-600">
+                        <span className="font-[family-name:var(--font-heading)] font-black text-base text-berry-600 tracking-tight">
                           {formatPrice(
                             item.quantity * getItemUnitPrice(item.product),
                           )}
@@ -250,21 +250,21 @@ export default function CartDrawer() {
 
         {/* Footer / Checkout */}
         {items.length > 0 && (
-          <div className="border-t border-rose-100/60 px-6 py-4">
+          <div className="border-t border-rose-100 px-6 py-5 bg-white">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-sm text-gray-600">Total</span>
-              <span className="text-xl font-bold text-berry-600">
+              <span className="text-[11px] font-black tracking-[0.18em] uppercase text-gold-500">
+                Total
+              </span>
+              <span className="font-[family-name:var(--font-heading)] font-black text-2xl text-berry-600 tracking-tight">
                 {formatPrice(totalPrice)}
               </span>
             </div>
-            <button
-              onClick={handleCheckout}
-              className="w-full gradient-cta text-white font-semibold py-3 rounded-xl transition-all active:scale-[0.97] shadow-lg shadow-berry-600/20 hover:shadow-xl hover:shadow-berry-600/30"
-            >
+            <button onClick={handleCheckout} className="lp-btn-primary w-full">
               Finalizar Compra
             </button>
-            <p className="text-[10px] text-center text-gray-400 mt-2">
-              Pagamento seguro via Mercado Pago
+            <p className="text-[10px] text-center text-gray-400 mt-3 inline-flex items-center justify-center w-full gap-1">
+              <span>🔒</span>
+              <span>Pagamento seguro via Mercado Pago</span>
             </p>
           </div>
         )}
