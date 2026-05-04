@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npx prisma generate && next build",
+    "build": "npx prisma db execute --file ./prisma/migrations/add_product_max_per_order/migration.sql --schema ./prisma/schema.prisma && npx prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
     "db:generate": "npx prisma generate",

@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE "products" ADD COLUMN "maxPerOrder" INTEGER;
+ALTER TABLE "products" ADD COLUMN IF NOT EXISTS "maxPerOrder" INTEGER;
