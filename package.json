@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npx prisma db execute --file ./prisma/migrations/add_product_max_per_order/migration.sql && npx prisma generate && next build",
+    "build": "npx prisma db execute --file ./prisma/migrations/add_product_max_per_order/migration.sql && npx prisma db execute --file ./prisma/migrations/add_sonic_x3_product/migration.sql && npx prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
     "db:generate": "npx prisma generate",
@@ -15,9 +15,10 @@
     "db:reset": "npx prisma migrate reset --force"
   },
   "dependencies": {
-    "@sendgrid/mail": "^8.1.6",
     "@prisma/adapter-pg": "^7.6.0",
     "@prisma/client": "^7.6.0",
+    "@sendgrid/mail": "^8.1.6",
+    "@vercel/blob": "^2.3.3",
     "bcryptjs": "^3.0.3",
     "jose": "^6.2.2",
     "mercadopago": "^2.12.0",

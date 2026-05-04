@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { ImageManager } from "./ImageManager";
 
 interface Product {
   id: string;
@@ -16,6 +17,12 @@ interface Product {
   maxPerOrder: number | null;
   active: boolean;
   createdAt: string;
+}
+
+function deriveExtension(url: string): string {
+  const path = url.split("?")[0];
+  const match = path.match(/\.([a-z0-9]+)$/i);
+  return match ? match[1].toLowerCase() : "jpg";
 }
 
 export default function AdminProductsPage() {
@@ -40,8 +47,10 @@ export default function AdminProductsPage() {
     shippingWeightGrams: "50",
     maxPerOrder: "",
     tags: "",
+    images: [] as string[],
   };
   const [form, setForm] = useState(emptyForm);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const fetchProducts = useCallback(async () => {
     setLoading(true);
@@ -64,6 +73,7 @@ export default function AdminProductsPage() {
 
   const openCreate = () => {
     setForm(emptyForm);
+    setFormError(null);
     setEditingId(null);
     setShowForm(true);
   };
@@ -91,7 +101,9 @@ export default function AdminProductsPage() {
           maxPerOrder:
             product.maxPerOrder == null ? "" : product.maxPerOrder.toString(),
           tags: (product.tags || []).join(", "),
+          images: product.images || [],
         });
+        setFormError(null);
         setEditingId(id);
         setShowForm(true);
       }
@@ -102,6 +114,13 @@ export default function AdminProductsPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError(null);
+
+    if (form.images.length === 0) {
+      setFormError("Adicione pelo menos 1 imagem.");
+      return;
+    }
+
     setSaving(true);
     try {
       const trimmedMaxPerOrder = form.maxPerOrder.trim();
@@ -121,6 +140,8 @@ export default function AdminProductsPage() {
           .split(",")
           .map((t) => t.trim())
           .filter(Boolean),
+        images: form.images,
+        imageExtension: deriveExtension(form.images[0]),
       };
 
       const url = editingId
@@ -136,9 +157,12 @@ export default function AdminProductsPage() {
       if (res.ok) {
         setShowForm(false);
         fetchProducts();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setFormError(data?.error || "Erro ao salvar produto.");
       }
     } catch {
-      // ignore
+      setFormError("Erro ao salvar produto.");
     } finally {
       setSaving(false);
     }
@@ -293,6 +317,13 @@ export default function AdminProductsPage() {
                 value={form.tags}
                 onChange={(v) => setForm({ ...form, tags: v })}
               />
+              <ImageManager
+                value={form.images}
+                onChange={(images) => setForm({ ...form, images })}
+              />
+              {formError && (
+                <p className="text-sm text-rose-600 -mt-2">{formError}</p>
+              )}
               <div className="flex gap-3 pt-2">
                 <button
                   type="button"
