@@ -68,6 +68,13 @@ export const productSchema = z.object({
     .int("Peso deve ser inteiro em gramas")
     .min(1, "Peso mínimo de 1g")
     .default(50),
+  maxPerOrder: z
+    .number()
+    .int("Limite deve ser inteiro")
+    .min(1, "Limite mínimo de 1 unidade")
+    .max(999, "Limite máximo de 999 unidades")
+    .nullable()
+    .optional(),
   images: z.array(z.string().min(1)).min(1, "Pelo menos 1 imagem"),
   imageExtension: z.string().min(1).max(10),
   tags: z.array(z.string().min(1).max(50)).min(1).max(20),

@@ -52,6 +52,13 @@ function getProductStockQuantity(product: Product): number {
   return Math.max(0, product.stockQuantity);
 }
 
+function getProductMaxPerOrder(product: Product): number {
+  if (typeof product.maxPerOrder !== "number" || product.maxPerOrder <= 0) {
+    return Number.MAX_SAFE_INTEGER;
+  }
+  return product.maxPerOrder;
+}
+
 function readCartFromStorage(): CartItem[] {
   if (typeof window === "undefined") return [];
 
@@ -135,6 +142,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         return { ok: false, message: "Produto indisponível no momento." };
       }
 
+      const productMaxPerOrder = getProductMaxPerOrder(product);
+      const hasProductLimit = productMaxPerOrder !== Number.MAX_SAFE_INTEGER;
+
       // Usa updater funcional para SEMPRE ter o estado mais recente
       // (evita stale closure quando o usuário clica rápido em vários produtos)
       let result: CartActionResult = { ok: true };
@@ -158,13 +168,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           existingQty + quantity,
           stockLimit,
           existingQty + availableSlots,
+          productMaxPerOrder,
         );
 
         if (nextQty <= existingQty) {
           result = {
             ok: false,
             message:
-              "Você já adicionou ao carrinho a quantidade máxima disponível deste produto.",
+              hasProductLimit && existingQty >= productMaxPerOrder
+                ? `Limite de ${productMaxPerOrder} ${
+                    productMaxPerOrder === 1 ? "unidade" : "unidades"
+                  } deste produto por pedido atingido.`
+                : "Você já adicionou ao carrinho a quantidade máxima disponível deste produto.",
           };
           return prev;
         }
@@ -173,11 +188,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           const limitedByOrder =
             nextQty === existingQty + availableSlots &&
             availableSlots < quantity;
+          const limitedByProduct =
+            hasProductLimit && nextQty === productMaxPerOrder;
           result = {
             ok: true,
-            message: limitedByOrder
-              ? `Quantidade ajustada: limite de ${maxItemsPerOrder} itens por pedido. Para comprar mais, faça um novo pedido.`
-              : "A quantidade foi ajustada ao limite de estoque disponível.",
+            message: limitedByProduct
+              ? `Quantidade ajustada: limite de ${productMaxPerOrder} ${
+                  productMaxPerOrder === 1 ? "unidade" : "unidades"
+                } deste produto por pedido.`
+              : limitedByOrder
+                ? `Quantidade ajustada: limite de ${maxItemsPerOrder} itens por pedido. Para comprar mais, faça um novo pedido.`
+                : "A quantidade foi ajustada ao limite de estoque disponível.",
           };
         }
 
@@ -219,12 +240,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         }
 
         const stockLimit = getProductStockQuantity(currentItem.product);
+        const productMaxPerOrder = getProductMaxPerOrder(currentItem.product);
+        const hasProductLimit =
+          productMaxPerOrder !== Number.MAX_SAFE_INTEGER;
         const otherItemsTotal = prev
           .filter((it) => it.product.id !== productId)
           .reduce((sum, it) => sum + it.quantity, 0);
         const maxAllowed = Math.min(
           stockLimit,
           maxItemsPerOrder - otherItemsTotal,
+          productMaxPerOrder,
         );
         const adjustedQuantity = Math.min(quantity, maxAllowed);
 
@@ -237,13 +262,19 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         }
 
         if (adjustedQuantity < quantity) {
+          const limitedByProduct =
+            hasProductLimit && adjustedQuantity === productMaxPerOrder;
           const limitedByOrder =
             adjustedQuantity === maxItemsPerOrder - otherItemsTotal;
           result = {
             ok: true,
-            message: limitedByOrder
-              ? `Limite de ${maxItemsPerOrder} itens por pedido. Para comprar mais, faça um novo pedido.`
-              : "Quantidade ajustada ao limite de estoque disponível.",
+            message: limitedByProduct
+              ? `Limite de ${productMaxPerOrder} ${
+                  productMaxPerOrder === 1 ? "unidade" : "unidades"
+                } deste produto por pedido.`
+              : limitedByOrder
+                ? `Limite de ${maxItemsPerOrder} itens por pedido. Para comprar mais, faça um novo pedido.`
+                : "Quantidade ajustada ao limite de estoque disponível.",
           };
         }
 

@@ -1729,6 +1729,7 @@ export const ProductScalarFieldEnum = {
   bulkPrice: 'bulkPrice',
   stockQuantity: 'stockQuantity',
   shippingWeightGrams: 'shippingWeightGrams',
+  maxPerOrder: 'maxPerOrder',
   images: 'images',
   imageExtension: 'imageExtension',
   tags: 'tags',

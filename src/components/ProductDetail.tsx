@@ -34,10 +34,16 @@ export default function ProductDetail({
 
   const quantityInCart = getProductQuantityInCart(product.id);
   const stockLimit = Math.max(0, product.stockQuantity ?? 0);
+  const productMaxPerOrder =
+    typeof product.maxPerOrder === "number" && product.maxPerOrder > 0
+      ? product.maxPerOrder
+      : Number.MAX_SAFE_INTEGER;
+  const hasProductLimit = productMaxPerOrder !== Number.MAX_SAFE_INTEGER;
   const remainingSlots = Math.max(0, maxItemsPerOrder - totalQuantity);
   const availableToAdd = Math.min(
     Math.max(0, stockLimit - quantityInCart),
     remainingSlots + quantityInCart,
+    Math.max(0, productMaxPerOrder - quantityInCart),
   );
   const isOutOfStock = stockLimit <= 0;
 
@@ -68,6 +74,17 @@ export default function ProductDetail({
     if (totalQuantity + quantity >= maxItemsPerOrder) {
       setCartMessage(
         `Limite de ${maxItemsPerOrder} itens por pedido. Para comprar mais, faça um novo pedido.`,
+      );
+      return;
+    }
+    if (
+      hasProductLimit &&
+      quantityInCart + quantity >= productMaxPerOrder
+    ) {
+      setCartMessage(
+        `Limite de ${productMaxPerOrder} ${
+          productMaxPerOrder === 1 ? "unidade" : "unidades"
+        } deste produto por pedido.`,
       );
       return;
     }

@@ -12,6 +12,7 @@ export interface Product {
   bulkPrice: number;
   stockQuantity?: number;
   shippingWeightGrams?: number;
+  maxPerOrder?: number | null;
   images: string[];
   imageExtension: string;
   tags: string[];

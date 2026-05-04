@@ -62,7 +62,8 @@ export async function PUT(
       );
     }
 
-    const { stockQuantity, shippingWeightGrams, ...updateData } = parsed.data;
+    const { stockQuantity, shippingWeightGrams, maxPerOrder, ...updateData } =
+      parsed.data;
 
     const product = await prisma.$transaction(async (tx) => {
       if (Object.keys(updateData).length > 0) {
@@ -84,6 +85,14 @@ export async function PUT(
         await tx.$executeRaw`
           UPDATE "products"
           SET "shippingWeightGrams" = ${shippingWeightGrams}, "updatedAt" = NOW()
+          WHERE "id" = ${id}
+        `;
+      }
+
+      if (maxPerOrder !== undefined) {
+        await tx.$executeRaw`
+          UPDATE "products"
+          SET "maxPerOrder" = ${maxPerOrder}, "updatedAt" = NOW()
           WHERE "id" = ${id}
         `;
       }

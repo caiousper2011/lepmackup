@@ -32,6 +32,7 @@ export type ProductAvgAggregateOutputType = {
   bulkPrice: number | null
   stockQuantity: number | null
   shippingWeightGrams: number | null
+  maxPerOrder: number | null
 }
 
 export type ProductSumAggregateOutputType = {
@@ -40,6 +41,7 @@ export type ProductSumAggregateOutputType = {
   bulkPrice: number | null
   stockQuantity: number | null
   shippingWeightGrams: number | null
+  maxPerOrder: number | null
 }
 
 export type ProductMinAggregateOutputType = {
@@ -55,6 +57,7 @@ export type ProductMinAggregateOutputType = {
   bulkPrice: number | null
   stockQuantity: number | null
   shippingWeightGrams: number | null
+  maxPerOrder: number | null
   imageExtension: string | null
   active: boolean | null
   createdAt: Date | null
@@ -74,6 +77,7 @@ export type ProductMaxAggregateOutputType = {
   bulkPrice: number | null
   stockQuantity: number | null
   shippingWeightGrams: number | null
+  maxPerOrder: number | null
   imageExtension: string | null
   active: boolean | null
   createdAt: Date | null
@@ -94,6 +98,7 @@ export type ProductCountAggregateOutputType = {
   bulkPrice: number
   stockQuantity: number
   shippingWeightGrams: number
+  maxPerOrder: number
   images: number
   imageExtension: number
   tags: number
@@ -110,6 +115,7 @@ export type ProductAvgAggregateInputType = {
   bulkPrice?: true
   stockQuantity?: true
   shippingWeightGrams?: true
+  maxPerOrder?: true
 }
 
 export type ProductSumAggregateInputType = {
@@ -118,6 +124,7 @@ export type ProductSumAggregateInputType = {
   bulkPrice?: true
   stockQuantity?: true
   shippingWeightGrams?: true
+  maxPerOrder?: true
 }
 
 export type ProductMinAggregateInputType = {
@@ -133,6 +140,7 @@ export type ProductMinAggregateInputType = {
   bulkPrice?: true
   stockQuantity?: true
   shippingWeightGrams?: true
+  maxPerOrder?: true
   imageExtension?: true
   active?: true
   createdAt?: true
@@ -152,6 +160,7 @@ export type ProductMaxAggregateInputType = {
   bulkPrice?: true
   stockQuantity?: true
   shippingWeightGrams?: true
+  maxPerOrder?: true
   imageExtension?: true
   active?: true
   createdAt?: true
@@ -172,6 +181,7 @@ export type ProductCountAggregateInputType = {
   bulkPrice?: true
   stockQuantity?: true
   shippingWeightGrams?: true
+  maxPerOrder?: true
   images?: true
   imageExtension?: true
   tags?: true
@@ -281,6 +291,7 @@ export type ProductGroupByOutputType = {
   bulkPrice: number
   stockQuantity: number
   shippingWeightGrams: number
+  maxPerOrder: number | null
   images: string[]
   imageExtension: string
   tags: string[]
@@ -326,6 +337,7 @@ export type ProductWhereInput = {
   bulkPrice?: Prisma.FloatFilter<"Product"> | number
   stockQuantity?: Prisma.IntFilter<"Product"> | number
   shippingWeightGrams?: Prisma.IntFilter<"Product"> | number
+  maxPerOrder?: Prisma.IntNullableFilter<"Product"> | number | null
   images?: Prisma.StringNullableListFilter<"Product">
   imageExtension?: Prisma.StringFilter<"Product"> | string
   tags?: Prisma.StringNullableListFilter<"Product">
@@ -349,6 +361,7 @@ export type ProductOrderByWithRelationInput = {
   bulkPrice?: Prisma.SortOrder
   stockQuantity?: Prisma.SortOrder
   shippingWeightGrams?: Prisma.SortOrder
+  maxPerOrder?: Prisma.SortOrderInput | Prisma.SortOrder
   images?: Prisma.SortOrder
   imageExtension?: Prisma.SortOrder
   tags?: Prisma.SortOrder
@@ -375,6 +388,7 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
   bulkPrice?: Prisma.FloatFilter<"Product"> | number
   stockQuantity?: Prisma.IntFilter<"Product"> | number
   shippingWeightGrams?: Prisma.IntFilter<"Product"> | number
+  maxPerOrder?: Prisma.IntNullableFilter<"Product"> | number | null
   images?: Prisma.StringNullableListFilter<"Product">
   imageExtension?: Prisma.StringFilter<"Product"> | string
   tags?: Prisma.StringNullableListFilter<"Product">
@@ -398,6 +412,7 @@ export type ProductOrderByWithAggregationInput = {
   bulkPrice?: Prisma.SortOrder
   stockQuantity?: Prisma.SortOrder
   shippingWeightGrams?: Prisma.SortOrder
+  maxPerOrder?: Prisma.SortOrderInput | Prisma.SortOrder
   images?: Prisma.SortOrder
   imageExtension?: Prisma.SortOrder
   tags?: Prisma.SortOrder
@@ -428,6 +443,7 @@ export type ProductScalarWhereWithAggregatesInput = {
   bulkPrice?: Prisma.FloatWithAggregatesFilter<"Product"> | number
   stockQuantity?: Prisma.IntWithAggregatesFilter<"Product"> | number
   shippingWeightGrams?: Prisma.IntWithAggregatesFilter<"Product"> | number
+  maxPerOrder?: Prisma.IntNullableWithAggregatesFilter<"Product"> | number | null
   images?: Prisma.StringNullableListFilter<"Product">
   imageExtension?: Prisma.StringWithAggregatesFilter<"Product"> | string
   tags?: Prisma.StringNullableListFilter<"Product">
@@ -450,6 +466,7 @@ export type ProductCreateInput = {
   bulkPrice: number
   stockQuantity?: number
   shippingWeightGrams?: number
+  maxPerOrder?: number | null
   images?: Prisma.ProductCreateimagesInput | string[]
   imageExtension: string
   tags?: Prisma.ProductCreatetagsInput | string[]
@@ -473,6 +490,7 @@ export type ProductUncheckedCreateInput = {
   bulkPrice: number
   stockQuantity?: number
   shippingWeightGrams?: number
+  maxPerOrder?: number | null
   images?: Prisma.ProductCreateimagesInput | string[]
   imageExtension: string
   tags?: Prisma.ProductCreatetagsInput | string[]
@@ -496,6 +514,7 @@ export type ProductUpdateInput = {
   bulkPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   stockQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   shippingWeightGrams?: Prisma.IntFieldUpdateOperationsInput | number
+  maxPerOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   images?: Prisma.ProductUpdateimagesInput | string[]
   imageExtension?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.ProductUpdatetagsInput | string[]
@@ -519,6 +538,7 @@ export type ProductUncheckedUpdateInput = {
   bulkPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   stockQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   shippingWeightGrams?: Prisma.IntFieldUpdateOperationsInput | number
+  maxPerOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   images?: Prisma.ProductUpdateimagesInput | string[]
   imageExtension?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.ProductUpdatetagsInput | string[]
@@ -542,6 +562,7 @@ export type ProductCreateManyInput = {
   bulkPrice: number
   stockQuantity?: number
   shippingWeightGrams?: number
+  maxPerOrder?: number | null
   images?: Prisma.ProductCreateimagesInput | string[]
   imageExtension: string
   tags?: Prisma.ProductCreatetagsInput | string[]
@@ -564,6 +585,7 @@ export type ProductUpdateManyMutationInput = {
   bulkPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   stockQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   shippingWeightGrams?: Prisma.IntFieldUpdateOperationsInput | number
+  maxPerOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   images?: Prisma.ProductUpdateimagesInput | string[]
   imageExtension?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.ProductUpdatetagsInput | string[]
@@ -586,6 +608,7 @@ export type ProductUncheckedUpdateManyInput = {
   bulkPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   stockQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   shippingWeightGrams?: Prisma.IntFieldUpdateOperationsInput | number
+  maxPerOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   images?: Prisma.ProductUpdateimagesInput | string[]
   imageExtension?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.ProductUpdatetagsInput | string[]
@@ -616,6 +639,7 @@ export type ProductCountOrderByAggregateInput = {
   bulkPrice?: Prisma.SortOrder
   stockQuantity?: Prisma.SortOrder
   shippingWeightGrams?: Prisma.SortOrder
+  maxPerOrder?: Prisma.SortOrder
   images?: Prisma.SortOrder
   imageExtension?: Prisma.SortOrder
   tags?: Prisma.SortOrder
@@ -630,6 +654,7 @@ export type ProductAvgOrderByAggregateInput = {
   bulkPrice?: Prisma.SortOrder
   stockQuantity?: Prisma.SortOrder
   shippingWeightGrams?: Prisma.SortOrder
+  maxPerOrder?: Prisma.SortOrder
 }
 
 export type ProductMaxOrderByAggregateInput = {
@@ -645,6 +670,7 @@ export type ProductMaxOrderByAggregateInput = {
   bulkPrice?: Prisma.SortOrder
   stockQuantity?: Prisma.SortOrder
   shippingWeightGrams?: Prisma.SortOrder
+  maxPerOrder?: Prisma.SortOrder
   imageExtension?: Prisma.SortOrder
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -664,6 +690,7 @@ export type ProductMinOrderByAggregateInput = {
   bulkPrice?: Prisma.SortOrder
   stockQuantity?: Prisma.SortOrder
   shippingWeightGrams?: Prisma.SortOrder
+  maxPerOrder?: Prisma.SortOrder
   imageExtension?: Prisma.SortOrder
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -676,6 +703,7 @@ export type ProductSumOrderByAggregateInput = {
   bulkPrice?: Prisma.SortOrder
   stockQuantity?: Prisma.SortOrder
   shippingWeightGrams?: Prisma.SortOrder
+  maxPerOrder?: Prisma.SortOrder
 }
 
 export type ProductScalarRelationFilter = {
@@ -702,6 +730,14 @@ export type ProductUpdatedetailsInput = {
 
 export type FloatFieldUpdateOperationsInput = {
   set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
   increment?: number
   decrement?: number
   multiply?: number
@@ -746,6 +782,7 @@ export type ProductCreateWithoutOrderItemsInput = {
   bulkPrice: number
   stockQuantity?: number
   shippingWeightGrams?: number
+  maxPerOrder?: number | null
   images?: Prisma.ProductCreateimagesInput | string[]
   imageExtension: string
   tags?: Prisma.ProductCreatetagsInput | string[]
@@ -768,6 +805,7 @@ export type ProductUncheckedCreateWithoutOrderItemsInput = {
   bulkPrice: number
   stockQuantity?: number
   shippingWeightGrams?: number
+  maxPerOrder?: number | null
   images?: Prisma.ProductCreateimagesInput | string[]
   imageExtension: string
   tags?: Prisma.ProductCreatetagsInput | string[]
@@ -806,6 +844,7 @@ export type ProductUpdateWithoutOrderItemsInput = {
   bulkPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   stockQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   shippingWeightGrams?: Prisma.IntFieldUpdateOperationsInput | number
+  maxPerOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   images?: Prisma.ProductUpdateimagesInput | string[]
   imageExtension?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.ProductUpdatetagsInput | string[]
@@ -828,6 +867,7 @@ export type ProductUncheckedUpdateWithoutOrderItemsInput = {
   bulkPrice?: Prisma.FloatFieldUpdateOperationsInput | number
   stockQuantity?: Prisma.IntFieldUpdateOperationsInput | number
   shippingWeightGrams?: Prisma.IntFieldUpdateOperationsInput | number
+  maxPerOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   images?: Prisma.ProductUpdateimagesInput | string[]
   imageExtension?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.ProductUpdatetagsInput | string[]
@@ -881,6 +921,7 @@ export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   bulkPrice?: boolean
   stockQuantity?: boolean
   shippingWeightGrams?: boolean
+  maxPerOrder?: boolean
   images?: boolean
   imageExtension?: boolean
   tags?: boolean
@@ -905,6 +946,7 @@ export type ProductSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   bulkPrice?: boolean
   stockQuantity?: boolean
   shippingWeightGrams?: boolean
+  maxPerOrder?: boolean
   images?: boolean
   imageExtension?: boolean
   tags?: boolean
@@ -927,6 +969,7 @@ export type ProductSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   bulkPrice?: boolean
   stockQuantity?: boolean
   shippingWeightGrams?: boolean
+  maxPerOrder?: boolean
   images?: boolean
   imageExtension?: boolean
   tags?: boolean
@@ -949,6 +992,7 @@ export type ProductSelectScalar = {
   bulkPrice?: boolean
   stockQuantity?: boolean
   shippingWeightGrams?: boolean
+  maxPerOrder?: boolean
   images?: boolean
   imageExtension?: boolean
   tags?: boolean
@@ -957,7 +1001,7 @@ export type ProductSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "shortName" | "brand" | "category" | "description" | "details" | "originalPrice" | "promoPrice" | "bulkPrice" | "stockQuantity" | "shippingWeightGrams" | "images" | "imageExtension" | "tags" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "name" | "shortName" | "brand" | "category" | "description" | "details" | "originalPrice" | "promoPrice" | "bulkPrice" | "stockQuantity" | "shippingWeightGrams" | "maxPerOrder" | "images" | "imageExtension" | "tags" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
 export type ProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   orderItems?: boolean | Prisma.Product$orderItemsArgs<ExtArgs>
   _count?: boolean | Prisma.ProductCountOutputTypeDefaultArgs<ExtArgs>
@@ -984,6 +1028,7 @@ export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     bulkPrice: number
     stockQuantity: number
     shippingWeightGrams: number
+    maxPerOrder: number | null
     images: string[]
     imageExtension: string
     tags: string[]
@@ -1427,6 +1472,7 @@ export interface ProductFieldRefs {
   readonly bulkPrice: Prisma.FieldRef<"Product", 'Float'>
   readonly stockQuantity: Prisma.FieldRef<"Product", 'Int'>
   readonly shippingWeightGrams: Prisma.FieldRef<"Product", 'Int'>
+  readonly maxPerOrder: Prisma.FieldRef<"Product", 'Int'>
   readonly images: Prisma.FieldRef<"Product", 'String[]'>
   readonly imageExtension: Prisma.FieldRef<"Product", 'String'>
   readonly tags: Prisma.FieldRef<"Product", 'String[]'>

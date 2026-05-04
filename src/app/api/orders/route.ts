@@ -129,6 +129,33 @@ export async function POST(request: NextRequest) {
         { status: 400 },
       );
     }
+
+    // Valida limite por produto (configurado individualmente em cada produto)
+    const quantityByProductId = new Map<string, number>();
+    for (const item of validItems) {
+      quantityByProductId.set(
+        item.product.id,
+        (quantityByProductId.get(item.product.id) ?? 0) + item.quantity,
+      );
+    }
+    for (const [productId, quantity] of quantityByProductId) {
+      const product = productByIdentifier.get(productId);
+      if (
+        product &&
+        typeof product.maxPerOrder === "number" &&
+        product.maxPerOrder > 0 &&
+        quantity > product.maxPerOrder
+      ) {
+        return NextResponse.json(
+          {
+            error: `O produto "${product.shortName || product.name}" tem limite de ${product.maxPerOrder} ${
+              product.maxPerOrder === 1 ? "unidade" : "unidades"
+            } por pedido.`,
+          },
+          { status: 400 },
+        );
+      }
+    }
     const subtotal = validItems.reduce(
       (sum, item) =>
         sum + item.quantity * getProductUnitPrice(item.product, totalQuantity),

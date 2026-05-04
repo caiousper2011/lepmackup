@@ -13,6 +13,7 @@ interface Product {
   promoPrice: number;
   stockQuantity: number;
   shippingWeightGrams: number;
+  maxPerOrder: number | null;
   active: boolean;
   createdAt: string;
 }
@@ -37,6 +38,7 @@ export default function AdminProductsPage() {
     bulkPrice: "",
     stockQuantity: "",
     shippingWeightGrams: "50",
+    maxPerOrder: "",
     tags: "",
   };
   const [form, setForm] = useState(emptyForm);
@@ -86,6 +88,8 @@ export default function AdminProductsPage() {
           bulkPrice: product.bulkPrice.toString(),
           stockQuantity: (product.stockQuantity ?? 0).toString(),
           shippingWeightGrams: (product.shippingWeightGrams ?? 50).toString(),
+          maxPerOrder:
+            product.maxPerOrder == null ? "" : product.maxPerOrder.toString(),
           tags: (product.tags || []).join(", "),
         });
         setEditingId(id);
@@ -100,6 +104,7 @@ export default function AdminProductsPage() {
     e.preventDefault();
     setSaving(true);
     try {
+      const trimmedMaxPerOrder = form.maxPerOrder.trim();
       const body = {
         ...form,
         originalPrice: parseFloat(form.originalPrice),
@@ -107,6 +112,10 @@ export default function AdminProductsPage() {
         bulkPrice: parseFloat(form.bulkPrice),
         stockQuantity: parseInt(form.stockQuantity || "0", 10),
         shippingWeightGrams: parseInt(form.shippingWeightGrams || "50", 10),
+        maxPerOrder:
+          trimmedMaxPerOrder === ""
+            ? null
+            : parseInt(trimmedMaxPerOrder, 10),
         details: form.details.filter(Boolean),
         tags: form.tags
           .split(",")
@@ -239,6 +248,12 @@ export default function AdminProductsPage() {
                   onChange={(v) => setForm({ ...form, shippingWeightGrams: v })}
                   required
                 />
+                <Input
+                  label="Limite por pedido (vazio = sem limite)"
+                  type="number"
+                  value={form.maxPerOrder}
+                  onChange={(v) => setForm({ ...form, maxPerOrder: v })}
+                />
               </div>
               <div>
                 <label className="block text-xs text-gray-500 mb-1">
@@ -315,6 +330,7 @@ export default function AdminProductsPage() {
               <th className="px-5 py-3 text-left">Promo</th>
               <th className="px-5 py-3 text-left">Estoque</th>
               <th className="px-5 py-3 text-left">Peso (g)</th>
+              <th className="px-5 py-3 text-left">Limite/Pedido</th>
               <th className="px-5 py-3 text-left">Ativo</th>
               <th className="px-5 py-3 text-left">Ações</th>
             </tr>
@@ -323,7 +339,7 @@ export default function AdminProductsPage() {
             {loading ? (
               <tr>
                 <td
-                  colSpan={9}
+                  colSpan={10}
                   className="px-5 py-8 text-center text-sm text-gray-400"
                 >
                   Carregando...
@@ -332,7 +348,7 @@ export default function AdminProductsPage() {
             ) : products.length === 0 ? (
               <tr>
                 <td
-                  colSpan={9}
+                  colSpan={10}
                   className="px-5 py-8 text-center text-sm text-gray-400"
                 >
                   Nenhum produto cadastrado.
@@ -362,6 +378,9 @@ export default function AdminProductsPage() {
                   </td>
                   <td className="px-5 py-3 text-sm text-gray-600">
                     {p.shippingWeightGrams ?? 50}
+                  </td>
+                  <td className="px-5 py-3 text-sm text-gray-600">
+                    {p.maxPerOrder ?? "—"}
                   </td>
                   <td className="px-5 py-3">
                     <button
