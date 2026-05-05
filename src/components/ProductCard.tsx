@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Product, formatPrice } from "@/data/products";
 import { useCart } from "@/context/CartContext";
+import ViewerCounter from "@/components/ViewerCounter";
 
 export default function ProductCard({ product }: { product: Product }) {
   const { addToCart, getItemUnitPrice, totalQuantity, maxItemsPerOrder } =
@@ -46,6 +47,9 @@ export default function ProductCard({ product }: { product: Product }) {
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               className="object-cover group-hover:scale-110 transition-transform duration-500"
             />
+            <div className="absolute bottom-2 left-2 z-10 pointer-events-none">
+              <ViewerCounter productId={product.id} variant="compact" />
+            </div>
           </div>
         </Link>
       </div>

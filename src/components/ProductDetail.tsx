@@ -7,6 +7,7 @@ import { Product, formatPrice } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import ShareButton from "@/components/ShareButton";
 import ProductCard from "@/components/ProductCard";
+import ViewerCounter from "@/components/ViewerCounter";
 
 interface ProductDetailProps {
   product: Product;
@@ -145,6 +146,10 @@ export default function ProductDetail({
             {/* Category pill */}
             <div className="absolute top-5 right-5 z-10 inline-flex items-center rounded-full border border-rose-200 bg-white/95 px-4 py-2 text-[11px] font-semibold text-berry-600 shadow-[0_8px_20px_-8px_rgba(155,27,90,0.22)] backdrop-blur-sm">
               {product.category}
+            </div>
+            {/* Viewer counter — bottom-left overlay */}
+            <div className="absolute bottom-5 left-5 z-10">
+              <ViewerCounter productId={product.id} variant="default" />
             </div>
           </div>
 

@@ -114,6 +114,18 @@ export default function Header() {
             >
               Ofertas
             </Link>
+            <Link
+              href="/outlet"
+              className="relative px-3.5 py-2 rounded-xl text-sm font-bold text-berry-700 hover:text-berry-600 transition-all inline-flex items-center gap-1.5 group/outlet"
+            >
+              <span>Outlet</span>
+              <span
+                aria-hidden="true"
+                className="inline-flex items-center rounded-full px-1.5 py-0.5 text-[9px] font-black tracking-[0.06em] gradient-cta text-white shadow-[0_4px_10px_-2px_rgba(225,29,72,0.45)] group-hover/outlet:scale-105 transition-transform"
+              >
+                -65%
+              </span>
+            </Link>
             <div className="relative" ref={categoriesRef}>
               <button
                 type="button"
@@ -412,6 +424,19 @@ export default function Header() {
               className="flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-semibold text-gray-700 hover:text-berry-600 hover:bg-rose-50/60 transition-all"
             >
               Ofertas
+            </Link>
+            <Link
+              href="/outlet"
+              onClick={() => setMobileOpen(false)}
+              className="flex items-center justify-between gap-3 px-3 py-2.5 rounded-2xl text-sm font-bold text-berry-700 hover:bg-rose-50/60 transition-all"
+            >
+              <span>Outlet</span>
+              <span
+                aria-hidden="true"
+                className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-black tracking-[0.06em] gradient-cta text-white shadow-[0_4px_10px_-2px_rgba(225,29,72,0.45)]"
+              >
+                -65% OFF
+              </span>
             </Link>
             <div className="px-3 py-2">
               <p className="text-[10px] uppercase tracking-[0.15em] text-gold-500 font-semibold mb-2 px-1">
