@@ -45,6 +45,13 @@ export async function GET() {
       changefreq: "daily",
       priority: "1.0",
     },
+    // Outlet — catálogo completo, alta prioridade para SEO
+    {
+      loc: `${BASE_URL}/outlet`,
+      lastmod: today,
+      changefreq: "daily",
+      priority: "0.95",
+    },
     // Categorias — alta prioridade para SEO
     ...CATEGORIES.map((c) => ({
       loc: `${BASE_URL}/categoria/${c.slug}`,

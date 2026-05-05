@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Product, formatPrice } from "@/data/products";
+import ViewerCounter from "@/components/ViewerCounter";
 
 const SLIDE_DURATION_MS = 5000;
 const SWIPE_THRESHOLD_PX = 50;
@@ -225,6 +226,15 @@ function MainHeroSlide({
                 <span>⚡</span>
                 <span>OFERTA RELÂMPAGO</span>
               </span>
+              {heroProduct && (
+                <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-20">
+                  <ViewerCounter
+                    productId={heroProduct.id}
+                    variant="hero"
+                    tone="dark"
+                  />
+                </div>
+              )}
               {heroProduct ? (
                 <Image
                   src={heroProduct.images[0]}
@@ -281,6 +291,7 @@ interface ProductSlideTheme {
   imageGlow: string;
   starsTone: string;
   starsLabel: string;
+  viewerTone: "light" | "dark";
 }
 
 const THEME_RUBY: ProductSlideTheme = {
@@ -300,6 +311,7 @@ const THEME_RUBY: ProductSlideTheme = {
   imageGlow: "from-rose-300/40 via-transparent to-gold-300/30",
   starsTone: "text-berry-600",
   starsLabel: "text-gray-700",
+  viewerTone: "light",
 };
 
 const THEME_NOIR: ProductSlideTheme = {
@@ -320,6 +332,7 @@ const THEME_NOIR: ProductSlideTheme = {
   imageGlow: "from-rose-500/40 via-transparent to-gold-400/30",
   starsTone: "text-gold-300",
   starsLabel: "text-rose-100/90",
+  viewerTone: "dark",
 };
 
 const THEME_GOLD: ProductSlideTheme = {
@@ -339,6 +352,7 @@ const THEME_GOLD: ProductSlideTheme = {
   imageGlow: "from-gold-300/50 via-transparent to-rose-300/30",
   starsTone: "text-gold-500",
   starsLabel: "text-gray-700",
+  viewerTone: "light",
 };
 
 interface ProductSlideProps {
@@ -426,6 +440,15 @@ function ProductSlide({
               -{offPercent}% OFF
             </div>
           </Link>
+
+          {/* Live viewer counter */}
+          <div className="mb-4 sm:mb-5 flex justify-center">
+            <ViewerCounter
+              productId={product.id}
+              variant="hero"
+              tone={theme.viewerTone}
+            />
+          </div>
 
           {/* Price block */}
           <div className="mb-4 sm:mb-6 flex flex-wrap items-center justify-center gap-3">

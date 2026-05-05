@@ -128,6 +128,14 @@ export default async function HomePage() {
           },
         ],
       },
+      // Outlet — referência principal de navegação (catálogo completo)
+      {
+        "@type": "SiteNavigationElement",
+        name: "Outlet",
+        url: `${siteUrl}/outlet`,
+        description:
+          "Catálogo completo da L&PMakeUp em outlet a partir de R$ 6,99.",
+      },
       // Cada categoria como CollectionPage referenciada — força indexação
       ...CATEGORIES.map((c) => ({
         "@type": "SiteNavigationElement",
