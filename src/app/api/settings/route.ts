@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import { getOrCreateShippingSettings } from "@/lib/shipping-settings";
+import {
+  getOrCreateShippingSettings,
+  parseFreeShippingTiers,
+} from "@/lib/shipping-settings";
 
 /**
  * GET /api/settings
@@ -11,10 +14,18 @@ export async function GET() {
     const settings = await getOrCreateShippingSettings();
     return NextResponse.json({
       maxItemsPerOrder: settings.maxItemsPerOrder,
+      freeShipping: {
+        enabled: settings.freeShippingEnabled,
+        threshold: settings.freeShippingThreshold,
+        tiers: parseFreeShippingTiers(settings.freeShippingTiers),
+      },
     });
   } catch (error) {
     console.error("GET /api/settings error:", error);
     // Fallback seguro: limite padrão
-    return NextResponse.json({ maxItemsPerOrder: 6 });
+    return NextResponse.json({
+      maxItemsPerOrder: 6,
+      freeShipping: { enabled: false, threshold: 0, tiers: [] },
+    });
   }
 }

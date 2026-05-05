@@ -13,7 +13,11 @@ import {
 } from "@/lib/shipping";
 import { sendOrderConfirmationEmail } from "@/lib/email";
 import { getProductUnitPrice } from "@/data/products";
-import { getOrCreateShippingSettings } from "@/lib/shipping-settings";
+import {
+  applyFreeShippingDiscount,
+  evaluateFreeShipping,
+  getOrCreateShippingSettings,
+} from "@/lib/shipping-settings";
 
 export async function POST(request: NextRequest) {
   try {
@@ -201,6 +205,14 @@ export async function POST(request: NextRequest) {
     }
 
     discount = Math.round(discount * 100) / 100;
+
+    // Avalia o programa de frete grátis (independente do frete escolhido)
+    const freeShippingApplication = evaluateFreeShipping(subtotal, {
+      freeShippingEnabled: shippingSettings.freeShippingEnabled,
+      freeShippingThreshold: shippingSettings.freeShippingThreshold,
+      freeShippingTiers: shippingSettings.freeShippingTiers,
+    });
+
     let normalizedShippingMethod = shippingMethod;
     let validatedShippingPrice = isPickup
       ? 0
@@ -243,6 +255,37 @@ export async function POST(request: NextRequest) {
       validatedMelhorEnvioServiceId = selectedServiceId;
       normalizedShippingMethod = `MELHOR_ENVIO_${selectedServiceId}`;
       validatedShippingPrice = Math.round(selectedQuote.price * 100) / 100;
+    }
+
+    // Aplica desconto do programa de frete grátis (não acumula com cupom de frete)
+    let freeShippingDiscountAmount = 0;
+    if (
+      !isPickup &&
+      freeShippingApplication.enabled &&
+      freeShippingApplication.discountPercent > 0 &&
+      couponAppliesTo !== "SHIPPING"
+    ) {
+      const { finalPrice, discountAmount } = applyFreeShippingDiscount(
+        validatedShippingPrice,
+        freeShippingApplication,
+      );
+      validatedShippingPrice = finalPrice;
+      freeShippingDiscountAmount = discountAmount;
+    }
+
+    // Se cupom de frete tenta acumular com programa de frete grátis ativo, rejeita
+    if (
+      couponAppliesTo === "SHIPPING" &&
+      freeShippingApplication.enabled &&
+      freeShippingApplication.discountPercent > 0
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            "Cupom de frete não pode ser combinado com o desconto do programa de frete grátis.",
+        },
+        { status: 400 },
+      );
     }
 
     const shipping = isPickup ? 0 : validatedShippingPrice;
@@ -332,6 +375,13 @@ export async function POST(request: NextRequest) {
                     : {}),
                   ...(melhorEnvioCompanyId ? { melhorEnvioCompanyId } : {}),
                   ...(shippingDescription ? { shippingDescription } : {}),
+                  ...(freeShippingDiscountAmount > 0
+                    ? {
+                        freeShippingDiscountAmount,
+                        freeShippingDiscountPercent:
+                          freeShippingApplication.discountPercent,
+                      }
+                    : {}),
                 },
             items: {
               create: validItems.map((item) => ({
