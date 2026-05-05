@@ -220,14 +220,14 @@ export default function LoginModal() {
               </span>
             </div>
             <p className="text-[11px] font-black tracking-[0.18em] uppercase text-gold-500 mb-1.5">
-              {step === "email" ? "Entrar" : "Verificar código"}
+              {step === "email" ? "Entrar ou cadastrar" : "Verificar código"}
             </p>
             <h2 className="text-2xl font-extrabold text-gray-900 font-[family-name:var(--font-heading)] tracking-tight">
               {step === "email" ? (
                 <>
-                  Bem-vinda{" "}
+                  Bem-vinda à{" "}
                   <em className="italic font-medium bg-gradient-to-r from-berry-600 to-rose-500 bg-clip-text text-transparent">
-                    de volta
+                    L&amp;P
                   </em>{" "}
                   💕
                 </>
@@ -237,10 +237,32 @@ export default function LoginModal() {
             </h2>
             <p className="text-sm text-gray-500 mt-2">
               {step === "email"
-                ? "Enviaremos um código para seu e-mail."
+                ? "Apenas com seu e-mail. Sem senha."
                 : `Código enviado para ${email}`}
             </p>
           </div>
+
+          {step === "email" && (
+            <div className="flex items-stretch rounded-2xl border border-rose-100 bg-blush-50/50 mb-5 overflow-hidden">
+              <div className="flex-1 px-3 py-2.5 text-center">
+                <p className="text-[10px] font-black uppercase tracking-[0.12em] text-berry-600">
+                  Já tem conta
+                </p>
+                <p className="text-[11px] text-gray-600 mt-0.5 leading-snug">
+                  Login automático
+                </p>
+              </div>
+              <div className="w-px bg-rose-100 my-2" />
+              <div className="flex-1 px-3 py-2.5 text-center">
+                <p className="text-[10px] font-black uppercase tracking-[0.12em] text-berry-600">
+                  Primeira vez
+                </p>
+                <p className="text-[11px] text-gray-600 mt-0.5 leading-snug">
+                  Cadastro na hora
+                </p>
+              </div>
+            </div>
+          )}
 
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-2xl p-3 mb-4">
@@ -279,7 +301,7 @@ export default function LoginModal() {
                 disabled={loading || !email}
                 className="w-full gradient-cta text-white font-extrabold py-[14px] rounded-full shadow-[0_8px_24px_-4px_rgba(225,29,72,0.4)] hover:shadow-[0_12px_28px_-4px_rgba(225,29,72,0.55)] transition-all transform hover:scale-[1.02] active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? "Enviando..." : "Enviar Código"}
+                {loading ? "Enviando..." : "Enviar código de acesso"}
               </button>
             </form>
           ) : (
