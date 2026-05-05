@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import { getOrCreateShippingSettings } from "@/lib/shipping-settings";
+import {
+  getOrCreateShippingSettings,
+  parseFreeShippingTiers,
+} from "@/lib/shipping-settings";
 
 export async function GET() {
   try {
@@ -10,6 +13,11 @@ export async function GET() {
         pickupEnabled: settings.pickupEnabled,
         pickupAddress: settings.pickupAddress,
         pickupInstructions: settings.pickupInstructions,
+        freeShipping: {
+          enabled: settings.freeShippingEnabled,
+          threshold: settings.freeShippingThreshold,
+          tiers: parseFreeShippingTiers(settings.freeShippingTiers),
+        },
       },
     });
   } catch (error) {

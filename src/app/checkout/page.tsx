@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { formatPrice } from "@/data/products";
+import FreeShippingProgress from "@/components/FreeShippingProgress";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -521,6 +522,10 @@ export default function CheckoutPage() {
             Compra
           </em>
         </h1>
+      </div>
+
+      <div className="mb-6">
+        <FreeShippingProgress subtotal={totalPrice} variant="checkout" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

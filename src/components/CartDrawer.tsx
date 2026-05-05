@@ -4,6 +4,7 @@ import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/data/products";
 import { useAuth } from "@/context/AuthContext";
 import { useLoginModal } from "@/components/LoginModal";
+import FreeShippingProgress from "@/components/FreeShippingProgress";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -90,6 +91,13 @@ export default function CartDrawer() {
             </svg>
           </button>
         </div>
+
+        {/* Free shipping progress */}
+        {items.length > 0 && (
+          <div className="px-6 pt-4">
+            <FreeShippingProgress subtotal={totalPrice} variant="drawer" />
+          </div>
+        )}
 
         {/* Items */}
         <div className="flex-1 overflow-y-auto px-6 py-4">

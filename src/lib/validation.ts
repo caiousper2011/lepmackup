@@ -90,11 +90,26 @@ export const shippingPackageRuleSchema = z.object({
   active: z.boolean().optional(),
 });
 
+export const freeShippingTierSchema = z.object({
+  minValue: z.number().min(0, "Valor mínimo deve ser maior ou igual a zero"),
+  discountPercent: z
+    .number()
+    .min(1, "Desconto deve ser maior que zero")
+    .max(100, "Desconto máximo de 100%"),
+  label: z.string().max(80).optional().nullable(),
+});
+
 export const shippingSettingsSchema = z.object({
   pickupEnabled: z.boolean(),
   pickupAddress: z.string().min(5, "Endereço de retirada obrigatório").max(255),
   pickupInstructions: z.string().max(500).optional().nullable(),
   maxItemsPerOrder: z.number().int().min(1, "Limite mínimo de 1 item").max(999).optional(),
+  freeShippingEnabled: z.boolean().optional(),
+  freeShippingThreshold: z
+    .number()
+    .min(0, "Valor mínimo deve ser maior ou igual a zero")
+    .optional(),
+  freeShippingTiers: z.array(freeShippingTierSchema).max(10).optional().nullable(),
 });
 
 // ============================================

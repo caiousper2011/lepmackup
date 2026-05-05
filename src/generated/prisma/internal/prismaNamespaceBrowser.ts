@@ -205,6 +205,9 @@ export const ShippingSettingsScalarFieldEnum = {
   pickupAddress: 'pickupAddress',
   pickupInstructions: 'pickupInstructions',
   maxItemsPerOrder: 'maxItemsPerOrder',
+  freeShippingEnabled: 'freeShippingEnabled',
+  freeShippingThreshold: 'freeShippingThreshold',
+  freeShippingTiers: 'freeShippingTiers',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

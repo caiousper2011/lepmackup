@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { couponValidateSchema } from "@/lib/validation";
+import {
+  evaluateFreeShipping,
+  getOrCreateShippingSettings,
+} from "@/lib/shipping-settings";
 
 export async function POST(request: NextRequest) {
   try {
@@ -70,6 +74,25 @@ export async function POST(request: NextRequest) {
         },
         { status: 400 },
       );
+    }
+
+    // Cupons de frete não acumulam com o programa de frete grátis
+    if (coupon.appliesTo === "SHIPPING") {
+      const settings = await getOrCreateShippingSettings();
+      const freeShipping = evaluateFreeShipping(subtotal, {
+        freeShippingEnabled: settings.freeShippingEnabled,
+        freeShippingThreshold: settings.freeShippingThreshold,
+        freeShippingTiers: settings.freeShippingTiers,
+      });
+      if (freeShipping.enabled && freeShipping.discountPercent > 0) {
+        return NextResponse.json(
+          {
+            error:
+              "Cupom de frete não pode ser combinado com o desconto do programa de frete grátis.",
+          },
+          { status: 400 },
+        );
+      }
     }
 
     // Calculate discount based on appliesTo
